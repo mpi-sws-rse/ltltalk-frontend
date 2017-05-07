@@ -17,7 +17,7 @@ Specification language consists of *actions*, *locations*, *items*.
   - `A -> if I A1` = if I current A1
   - `A -> (A1)` grouping actions for precedence
 
-  ## Items
+## Items
 Item description function as filters. One can say _pick_ with the meaning pick whatever there is at your current location, or _pick has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue.
 
   - `I -> e` *empty string*
@@ -25,7 +25,7 @@ Item description function as filters. One can say _pick_ with the meaning pick w
   - `I -> I1 has type T` _T is from finite set of types_
   - `I -> I1 has id ID` _ID unique identifier of an item_
 
-  ## Locations
+## Locations
 A 2D-grid consists of (x,y)-denoted fields. When describing locations we are always using sets of fields.
   - `L -> [x, y]` *a set consisting of a single field, {(x,y)}*
   - `L -> current` *current location of a robot*
@@ -36,7 +36,7 @@ A 2D-grid consists of (x,y)-denoted fields. When describing locations we are alw
   - `L -> L1 bounded spread s`  *spread that respects room borders - same as spread, but stop spreading once door or wall was hit*
   - `L -> location with item I` *location consisting of fields that contain item I*
 
-  ## Examples
+## Examples
   - *visit bounded spread has id 5*: visit the room in which there is the item with id 5
   - *visit has id 5 and pick has id 5*: come to the field with item5 and pick it up
   - *visit [4,5] spread 4 and avoid location with item has color blue* 
