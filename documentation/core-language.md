@@ -1,37 +1,50 @@
 # Specification language (Phase 1)
-Specification language consists of *actions*, *locations*, *items*.
- ## Actions
- 
-  - `A -> visit L`  *robot should visit location L (any of the fields)* 
-  - `A -> avoid L` *robot should never visit location L (none of the fields)*
-  - `A -> A1 and A2` *do A1 and A2 simultaneously*
-  - `A -> A1 and then A2` _do A1 and **afterwards** do A2_
-  - `A -> A1 for duration t` _do action A1 for t time units_
-  - `A -> A1 within t` _do action A1 within t time units (for less than or equal to t)_
-  - `A -> no-op`  _do nothing_
-  - `A -> repeat A1 every t` _do A1 every t time units (if not possible, the task fails)_ 
-  - `A -> repeat N A1` *repeat action A1 N times*
-  - `A -> pick all I` *pick all items I (from your current field)*
-  - `A -> pick single I` *pick nondeterministically chosen one item I. if there is none, the task fails*
-  - `A -> drop all I` *the robot should drop all items I that it currently has on its location*
-  - `A -> drop single I` *the robot should drop one nondeterministically chosen item I on its current location. If it doesn't have one, the task fails*
-  - `A -> if (self I A1)` *do action A1 if at location L there is item I*
-  - `A -> if (self I A1)` *do action A1 if the robot currently has item I*
-  - `A -> if I A1` = if I current A1
-  - `A -> (A1)` *grouping actions for precedence*
-  - `A -> foreach l in L (A1)` *foreach field in location L do action A1*
-  - ~~`A -> while I A1` *while I matches anything, do action A1*~~
+Specification language consists of specifications, items and locations. Program is consecutive execution of specifications with addition of simple control flow operations - iteration and branching. 
 
-## Items
+ ## Program ( P )
+  - `P -> ST`
+
+ 
+ ## Statement (ST)
+ - `ST -> Spec`
+ - `ST -> ST1; ST2` *ST1 gets executed and it is finished ST2 gets executed*
+ - `ST -> ST1 and then ST2` *means the same as ST1; ST2* 
+ - `ST -> if (Sit) then (ST1)` 
+ - `ST -> foreach var in Iterable do (ST1)`
+
+ ## Situations (Sit)
+ - `Sit -> I at L` *true if item I is at location L*
+ - `Sit -> I at self` *true if robot carries item I*
+ - `Sit -> at L` *true if robot is at location L*
+ - `Sit -> possible(Spec)` *if specification Spec is realizable, return true, otherwise false*
+
+ ## Specifications (Spec)
+If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
+ 
+  - `Spec -> visit L1 while avoiding L2`  *robot should visit location L1 (any of the closest fields), and while doing this not enter any of the fields of location L2* 
+  - `Spec -> visit L1`  *syntactic sugar for visit L1 while avoiding $`\emptyset`$* 
+  - `Spec -> visit periodically (L, p, N) while avoiding L2` *visit location L every p timesteps, while avoiding L2, all together N times*
+  - `Spec -> visit periodically (L, p, N)` *syntactic sugar for visit location L every p timesteps, while avoiding $`\emptyset`$*
+  - `Spec -> pick all I` *pick all items I (from your current field)*
+  - `Spec -> pick single I` *pick nondeterministically chosen one item I. if there is none, the task fails*
+  - `Spec -> drop all I` *the robot should drop all items I that it currently has on its location*
+  - `Spec -> drop single I` *the robot should drop one nondeterministically chosen item I on its current location. If it doesn't have one, the task fails*
+  - `Spec -> Spec1 within t` _do action A1 within t time units (for less than or equal to t)_
+  - `Spec -> no-op`  _do nothing for one timestep_
+
+## Iterables 
+ - `Iterable -> L` *each location is iterable: the iterations happens over fields of the location in a non-determined order*
+ - `Iterable -> [k..l]` *the iteration happens over numbers k, k+1, ..., l*
+
+## Items (I)
 Item description function as filters. One can say _pick_ with the meaning pick whatever there is at your current location, or _pick has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue.
 
   - `I -> e` *empty string*
   - `I -> I1 has color C` _C is from finite set of colors_
   - `I -> I1 has type T` _T is from finite set of types_
   - `I -> I1 has id ID` _ID unique identifier of an item_
-  - ~~`I -> I1 at location L` _matches all items at location L_~~
 
-## Locations
+## Locations (L)
 A 2D-grid consists of (x,y)-denoted fields. When describing locations we are always using sets of fields.
   - `L->[[x1,y1], [x2, y2],...,[xn,yn]]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
   - `L -> [x, y]` *syntactic sugar for a set consisting of a single field, {(x,y)}*
@@ -40,29 +53,28 @@ A 2D-grid consists of (x,y)-denoted fields. When describing locations we are alw
   - `L -> L1 + L2` *a union of L1 and L2*
   - `L -> L1 * L2` *an intersection of L1 and L2*
   - `L -> L1 - L2` *a difference between L1 and L2*
-  - `L -> L1 spread s` $`\{(p_x+i,p_y+j): i,j \in \{1,...,s\}, p \in L\}`$
-  - `L -> L1 bounded spread s`  *spread that respects room borders - same as spread, but stop spreading once door or wall was hit. if s = -1, then spread as far as possible before hitting the wall*
+  - `L -> L1 spread (u, v)` $`\{(p_x+i,p_y+j): i\in \{-u,...,u\},j\in \{-v,...,v\}, p \in L\}`$
+  - `L -> L1 bounded spread (u, v)`  *spread that respects room borders - same as spread, but stop spreading once door or wall was hit. if u = -1 or v = -1, then spread as far as possible before hitting the wall*
   - `L -> L1 with item I` *location consisting of fields that contain item I*
 
 ## Examples
   - visit the room in which there is the item with id 5: 
-    - *visit bounded spread -1 has id 5*
+    - *visit bounded spread( -1,-1) has id 5*
   - come to the field with item5 and pick it up:
-    - *visit has id 5 and then pick has id 5*
+    - *visit has id 5 and then pick single has id 5*
   - come to the field with item5 and pick up all the items from that field:
-    - *visit has id 5 and then pick* 
+    - *visit has id 5 and then pick all*
   - visit any field in 4-vicinity of [4,5] but during getting there avoid stepping on the fields with blue items
-    - *visit [4,5] spread 4 and avoid world has color blue* 
+    - *visit [4,5] spread (4,4) and avoid world has color blue*
   - visit any field in the 4-vicinity of [4,5], spend 3 time-units there and then repeat 10 times: picking from [2,3] and dropping at [0,0]
-    - *visit [4,5] spread 4 and then no-op for duration 3 and then repeat (visit [2,3] and then pick and then visit [0,0] and then drop) 10 times*
+    - *visit [4,5] spread (4,4) and then foreach i in [1..3] do (no-op) and then foreach j in [1..10] (visit [2,3] and then pick and then visit [0,0] and then drop)
   - robot should drop whatever items it carries if its current field has item with red color
     - *if has color red drop  all*
   - robot should pick all red objects in the current room 
-    - *foreach l in current bounded spread -1 (if l has color red (visit l and then pick has color red))*
-    - *foreach l in (current bounded spread -1 with item has color red) (pick has color red)*
+    - *foreach l in current bounded spread -1 (if has color red at l (visit l and then pick all has color red))*
+    - *foreach l in (current bounded spread -1 with item has color red) (pick all has color red)*
   - visit location (2,2) or (2,3) only if it is possible to reach it within 10 time units (if arrived earlier, action is finished. if not possible, abort)
-    - *visit [2,2]+[2,3] within 10* 
-  - visit location (2,2) or (2,3). spend exactly 10 time units visiting (if arrived earlier, stay at place. if not possible, abort)
-    - *visit [2,2]+[2,3] for 10*  
+    - *if possible(visit [2,2]+[2,3] within 10) visit [2,2]+[2,3]*
   - bring three red objects to the location (2,2)
-    - *repeat 3 (visit world with item has color red and then pick single has color red) and then visit [2,2] and then drop all*
+    - *foreach i in [1..3] (visit world with item has color red and then pick single has color red) and then visit [2,2] and then drop all* : here we can't check if there are three objects at all!
+
