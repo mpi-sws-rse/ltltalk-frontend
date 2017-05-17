@@ -75,7 +75,7 @@ A 2D-grid consists of (x,y)-denoted fields. When describing locations we are alw
     - *if has color red drop  all*
   - robot should pick all red objects in the current room 
     - *foreach l in current bounded spread -1 (if has color red at l (visit l and then pick all has color red))*
-    - *foreach l in (current bounded spread -1 with item has color red) (pick all has color red)*
+    - *foreach l in (current bounded spread -1 with item has color red) (visit l and then pick all has color red)*
   - visit location (2,2) or (2,3) only if it is possible to reach it within 10 time units (if arrived earlier, action is finished. if not possible, abort)
     - *if possible(visit [2,2]+[2,3] within 10) visit [2,2]+[2,3]*
   - bring three red objects to the location (2,2)
