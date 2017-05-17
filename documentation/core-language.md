@@ -1,24 +1,27 @@
 # Specification language (Phase 1)
 Specification language consists of specifications, items and locations. Program is consecutive execution of specifications with addition of simple control flow operations - iteration and branching. 
 
- ## Program ( P )
+## Program ( P )
+ 
   - `P -> ST`
 
  
- ## Statement (ST)
+## Statement (ST)
+ 
  - `ST -> Spec`
- - `ST -> ST1; ST2` *ST1 gets executed and it is finished ST2 gets executed*
+ - `ST -> ST1; ST2` *ST1 gets executed and once it is finished ST2 gets executed*
  - `ST -> ST1 and then ST2` *means the same as ST1; ST2* 
- - `ST -> if (Sit) then (ST1)` 
+ - `ST -> if (Sit) then (ST1)`  *If Sit evaluates to true, ST1 gets executed*
  - `ST -> foreach var in Iterable do (ST1)`
 
- ## Situations (Sit)
- - `Sit -> I at L` *true if item I is at location L*
- - `Sit -> I at self` *true if robot carries item I*
- - `Sit -> at L` *true if robot is at location L*
+## Situations (Sit)
+ 
+ - `Sit -> I at L` *true if at least one item described by I is at location L*
+ - `Sit -> I at self` *true if robot carries at least one item described by I*
+ - `Sit -> at L` *true if robot is at location L (any of the fields)*
  - `Sit -> possible(Spec)` *if specification Spec is realizable, return true, otherwise false*
 
- ## Specifications (Spec)
+## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
   - `Spec -> visit L1 while avoiding L2`  *robot should visit location L1 (any of the closest fields), and while doing this not enter any of the fields of location L2* 
