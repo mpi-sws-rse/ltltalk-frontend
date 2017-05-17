@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=0.5in]{geometry}
+
+%\newcommand{\IG}[1]{{\textcolor{purple}{\textbf{IG:} \textsc{#1}}}}
+\newcommand{\IG}[1]{{\textcolor{blue}{IG: \textbf{#1}}}}
+\newcommand{\fieldItems}[1]{\sigma({#1}).M[\text{current}].\text{fieldItems}}
+\newcommand{\robotItems}[1]{\sigma({#1}).R.\text{robotItems}}
+\begin{document}
+\subsection*{Items}
+
+There is a given set of items, $\mathcal{I} \subset \mathcal{C} \times \mathcal{T} \times \mathbb{N}$, $\mathcal{C}$ is a finite set of colors, $\mathcal{T}$ is a finite set of types and the third component is a unique identifier from $\mathbb{N}$.
+
+\subsection*{Locations}
+The robot operates on a square grid of size $m \times n$. With $\mathcal{L} = \{1, \ldots, m\} \times \{1, \ldots, n\}$, location $L$ is any subset of $\mathcal{L}$. A single element of $\mathcal{L}$ is called a \emph{field}.
+
+\subsection*{Specifications}
+Specifications are given in terms of temporal formulas (defined in the syntax section) and they use items and locations as their arguments. 
+
+\subsection*{Programs}
+Program is a sequence of specifications - they are executed one after another. 
+
+\subsection*{Model}
+Specifications are evaluated on traces of states. State is given as a pair $(M, R)$. $M = (m)_{i,j}$ is a matrix of size $m\times n$ where each element corresponds to the field of the grid. $m_{i,j} = (\text{fieldItems}, \text{obs})$ with $\text{fieldItems} \subset \mathcal{I}$ and $\text{obs} \subset \{\text{free, wall, door} \}$. In other words, $M$ gives information of what kind of field (i,j) is (free or one of the two kinds of obstacles - doors and walls) and which items are present at each field. Aforementioned $R$, on the other hand, tells about robot's current position and the items it carries. Formally, $R = (f, \text{robotItems})$, with $f = (i,j) \in \mathcal{L}$ and $\text{robotItems} \subset \mathcal{I}$ (with reasonable assumptions such as $m_{i,j}.\text{fieldItems} \cap m_{k,l}.\text{fieldItems} \neq \emptyset$ iff $i=k$ and $j = l$)
+
+\subsection*{Items definitions}
+$\epsilon \subset \mathcal{I} = \mathcal{I}$\\
+$\forall I \subset \mathcal{I}, I \text{ has color C} = \{ i \in \mathcal{I}: i.\text{color}=C \}$\\
+$\forall I \subset \mathcal{I}, I \text{ has type T} = \{ i \in \mathcal{I}: i.\text{type}=T \}$\\
+$\forall I \subset \mathcal{I}, I \text{ has id ID} = \{ i \in \mathcal{I}: i.\text{id}=\text{ID} \}$
+
+\subsection*{Locations definitions}
+Some of the locations that we refer to depend on the state. Therefore, the meaning of equality symbol ($=$) here is "interpreted as"\\
+\begin{itemize}
+\item $[[ x_1, y_1 ],[ x_2, y_2 ], \ldots, [ x_n, y_n]] = \{(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n) \}$
+\item $[x,y] \equiv [[x,y]]$
+\item world = $\mathcal{L}$
+\item current=$\{ \sigma(t).R.f\}$
+\item $L_1 + L_2 = L_1 \cup L_2$
+\item $L_1 * L_2 = L_2 \cap L_2$
+\item $L_1 - L_2 = L_1 \backslash L_2$
+\item $L \text{ spread}(u, v) = \{ (p_x+i, p_y+j): i \in \{-u, \ldots, u \}, j \in \{-v, \ldots, v \}, p \in L \}$
+\item $L \text{ spread}(s) \equiv L \text{ spread}(s,s)$
+\item $L \text{ bounded spread}(u,v)$ = $\bigcup\limits_{\substack{i \in \{1,\ldots, u\} \\j \in \{1, \ldots, v \}}}B_{i,j}, \text{where } f \in B_{i,j} \text{iff } \sigma.M[f].\text{obs} = \text{free } \text{and }  \exists k \in \text{neighbours(f) such that } k \in B_{i', j'},  \text{with } i' < i, j'<j$
+\item $L \text{ with item } I = \{f \in L: \exists {it} \in \sigma.M[f].\text{fieldItems} \text{ such that } it \in I\}$
+\end{itemize}
+
+\subsection*{Situations evaluation}
+Situations are specifications that can not be executed.
+\begin{itemize}
+\item for item description $I \subset \mathcal{I}$ and location $L \subset \mathcal{L}$ we define $\sigma, t \models I \text{ at } L$ iff $I \cap \bigcup\limits_{f \in L}\sigma(t).M[f].\text{fieldItems} \neq \emptyset$
+\item for item description $I \subset \mathcal{I}$  we define $\sigma, t \models I \text{ at self}$ iff $I \cap \robotItems{t} \neq \emptyset$
+\item for location $L \subset \mathcal{L}$ we define $\sigma, t \models \text{at}(L)$ iff $\sigma(t).R.f \in L$
+\item for a specification $S$ we define $\sigma, t \models \text{possible}(S)$ iff $\sigma, t \models S$
+\end{itemize}
+
+\subsection*{Specifications evaluation}
+For a specification $S$ we define its evaluation and the state that completes the specification, $\zeta(S)$.
+\begin{itemize}
+\item $\sigma, t \models \text{visit }(L_1) \text{ while avoiding } L_2$ iff $\exists k > t$ :  $\sigma, k \models \text(at)(L_1)$ and $\forall l \leq k$:  $\neg \text(at)(L_2)$.\\ $\zeta(\text{visit }(L)) = \sigma(k)$
+\item $\sigma, t \models \text{visit periodically }(L_1, p, N) \text{ while avoiding }L_2$ iff $\exists k$ such that  $\sigma, t+k \models \text{at}(L) \text{ and } \sigma, t+k+p\cdot i \models \text{at}(L)$, for $i \in \{ 1,\ldots,N\}$ and $\forall l \leq t+k+p\cdot N$: $\sigma, l \models \neg \text(at)(L_2)$ .\\ $\zeta(\text{visit periodically }(L_1, p, N) \text{ while avoiding } L_2) = \sigma(t+k+p\cdot N)$
+\item $\sigma, t \models \text{pick single }I$ iff $\exists {it} \in I$ such that $it \in \fieldItems{t})\land (\robotItems{t+1} = \robotItems{t} \cup \{it\}) \land (\fieldItems{t+1}=\fieldItems{t} \backslash \{it\})$\\ $\zeta(\text{pick single }I) = \sigma(t+1)$
+\item $\sigma, t \models \text{pick all } I$ iff $\fieldItems{t+1} = (\fieldItems{t} \backslash I) \land \\ (\robotItems{t+1}=\robotItems{t} \cup (\fieldItems{t} \cap I)$\\$\zeta(\text{pick all } I)=\sigma(t+1)$
+\item $\sigma, t \models \text{drop single }I$ iff $\exists it \in I$ such that $(it \in \robotItems{t}) \land (\robotItems{t+1} = \robotItems{t} \backslash \{it\} \land (\fieldItems{t+1} = \fieldItems{t}) \cup \{it\}))$\\ $\zeta(\text{drop single }I) = \sigma(t+1)$
+\item $\sigma, t \models \text{drop all }I$ iff $(\fieldItems{t+1}= \fieldItems{t} \cup (\robotItems{t}\cap I)) \\ \land(\robotItems{t+1} = \robotItems{t} \backslash I)$
+\item $\sigma, t \models S \text{ within }d$ for specification S iff $\exists k \leq d$ such that $\zeta(S) = \sigma(k)$. \\$\zeta(S \text{ within }d)=\sigma(k)$
+\item $\sigma, t \models \text{no-op}$ iff $\sigma(t) = \sigma(t+1)$\\$\zeta(\text{no-op}) = \sigma(t+1)$
+\subsection*{Execution of specifications}
+If a specification S evaluates to true, then a path is synthesized that leads to state $\zeta(S)$ (and a user confirms whether he is happy with such a decision, given the simulation of the result). If it evaluates to false, the system stays in the same state and the user is warned that the spec is not realizable so he can change it.
+
+
+\end{itemize}
+\end{document}
