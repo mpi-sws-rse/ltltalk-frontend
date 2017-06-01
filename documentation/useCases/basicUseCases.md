@@ -16,3 +16,11 @@ Below is a list of basic use cases (basic in the natural language, not necessari
 - Divide all boxes in this room evenly between room A and room B
 - Move all boxes in room A against the wall
 - Line up all blue boxes [here]
+- Move 5 (n) fields to the left (right, forward, backward)
+- Move box in front of you 5 (n) fields to the left (right, forward, backward)
+- Collect all green boxes and all red boxes and bring them to the storage.
+- Patrol over all the rooms.
+- Every morning bring me a green box.
+- Bring me coffee. (coffee = a box of type coffee from the kitchen)
+- Take me to the meeting room.
+
