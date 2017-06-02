@@ -72,23 +72,19 @@ const Actions = {
       const { history, current_history_idx } = getState().world
       const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
       const currentValue = history[idx].value
+      const robot = history[idx].robot;
 
       const path = findPath(to, from, currentValue);
-
-      const formval = [{value: currentValue.concat(path)}]
-      console.log(formval);
-
-      const responses = formval;
-      //const responses = formval.filter((a) => {
-        //return !blocksEqual(a.value, currentValue)
-      //})
+      const responses = [{
+        path: path,
+        value: currentValue,
+        robot: robot}];
 
       dispatch({
         type: Constants.FIND_PATH,
         responses: responses
       })
 
-      // Maybe in the future we do not want to accept right away.
       const selected = responses[0];
       let text = "Path";
 

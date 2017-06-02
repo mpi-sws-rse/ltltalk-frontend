@@ -1,22 +1,31 @@
+export const worldAngle = Math.PI / 12;
+const zScale = -Math.sin(Math.PI / 4);
+const yScale = Math.cos(Math.PI/4 + worldAngle);
+const xScale = Math.cos(Math.PI/4 - worldAngle);
+
 export function sortBlocks(blocks) {
   return blocks.sort((a, b) => {
-    if (a.z > b.z) {
-      return 1;
-    } else if (a.z < b.z) {
-      return -1;
+    let ax = a.x,
+      ay = a.y,
+      az = a.z,
+      bx = b.x,
+      by = b.y,
+      bz = b.z;
+
+    if (a.names.includes("robot") || a.names.includes("carriedItem")) {
+      ax -= 0.5 * xScale;
+      ay -= 0.5 * yScale;
+    } else if (b.names.includes("robot") || b.names.includes("carriedItem")) {
+      bx -= 0.5 * xScale;
+      by -= 0.5 * yScale;
     }
 
-    if (a.x > b.x) {
+    const aNear = ax*xScale + ay*yScale + az*zScale;
+    const bNear = bx*xScale + by*yScale + bz*zScale;
+    if (aNear > bNear)
       return -1;
-    } else if (a.x < b.x) {
+    else (aNear < bNear)
       return 1;
-    }
-
-    if (a.y > b.y) {
-      return -1;
-    } else if (a.y < b.y) {
-      return 1;
-    }
 
     return 0;
   });

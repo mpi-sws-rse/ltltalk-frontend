@@ -6,7 +6,7 @@ import Isomer,
   Color,
   Path
 } from "isomer";
-import { sortBlocks, rotateBlock, findZs } from "helpers/blocks"
+import { sortBlocks, rotateBlock, findZs, worldAngle } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
 
@@ -59,6 +59,8 @@ export const computeEquality = (struct1, struct2) => {
 class Blocks extends React.Component {
   static propTypes = {
     blocks: React.PropTypes.array,
+    path: React.PropTypes.array,
+    robot: React.PropTypes.object,
     isoConfig: React.PropTypes.object,
     width: React.PropTypes.number,
     height: React.PropTypes.number
@@ -74,7 +76,7 @@ class Blocks extends React.Component {
     /* Default Isomer config */
     const defaultIsoConfig = {
       centerPoint: Point(0, 0, 0),
-      rotation: (Math.PI / 12),
+      rotation: worldAngle,
       scale: 1,
 
       blockWidthScale: 0.9,
@@ -139,15 +141,70 @@ class Blocks extends React.Component {
   }
 
   componentDidUpdate() {
-    this.renderEverything();
+    //this.renderEverything();
+    window.requestAnimationFrame(() => this.renderEverything(0));
+    //console.log(this.props.path);
+  }
+
+  removeItem(x, y, color, blocks) {
+    for (let i = 0; i < blocks.length; ++i) {
+      if (blocks[i].x == x && blocks[i].y == y && blocks[i].color === color) {
+        blocks.splice(i, 1);
+        this.props.robot.items.push("red");
+        return true;
+      }
+    }
+    return false;
+  }
+
+  removeRobot(blocks) {
+    for (let i = 0; i < blocks.length; ++i) {
+      if (blocks[i].names.includes("robot")
+          || blocks[i].names.includes("carriedItem")) {
+        blocks.splice(i, 1);
+      }
+    }
+  }
+
+  updateRobot(blocks, step, path, factor) {
+    const robot = this.props.robot;
+    const c = Math.ceil(1.0*step/factor);
+    const f = Math.floor(1.0*step/factor);
+    if (path[c] && path[c].names.includes("pickup") && !path[c].completed) {
+      let res = this.removeItem(path[c].x, path[c].y, path[c].spec, blocks);
+      console.log(res);
+      path[c].completed = true;
+    } if (path[f] && path[c]) {
+      const d = 1.0*step/factor - f;
+      robot.x = ((1-d)*path[f].x + (d)*path[c].x);
+      robot.y = ((1-d)*path[f].y + (d)*path[c].y);
+    } else if (path[step]) {
+      robot.x = path[step].x;
+      robot.y = path[step].y;
+    }
+    blocks.push(robot);
+    for (let i = 0; i < robot.items.length; ++i) {
+      // 4 is the height of the robot
+      blocks.push({
+        x: robot.x, y: robot.y, z:(4),
+        color: robot.items[i],
+        names: ["carriedItem"]
+      });
+    }
+    return blocks;
+  }
+
+  resetRobotPosition() {
+    // Reset the robot position in the way it should be
   }
 
   renderEverything(robotStep = 0) {
-    const allBlocks = this.props.blocks.map((b) => rotateBlock(b, this.state.rotational));
+    // Robot speed factor
+    const factor = 10;
+    const updatedBlocks = this.updateRobot(this.props.blocks, robotStep, this.props.path, factor);
+    //const allBlocks = this.props.blocks.map((b) => rotateBlock(b, this.state.rotational));
     //const blocks = sortBlocks(this.props.blocks.map((b) => rotateBlock(b, this.state.rotational)));
-    const blocks = sortBlocks(allBlocks.filter((b) => {
-      return !(b.names.includes("path") || b.names.includes("destination"));
-    }));
+    const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
     const scalars = blocks.map((b) => this.getBlockScale(b));
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
 
@@ -157,10 +214,13 @@ class Blocks extends React.Component {
     this.renderBlocks(blocks.filter((b) => b.z < 0), minScalar)
     this.renderGrid(minScalar)
     this.renderBlocks(blocks.filter((b) => b.z >= 0), minScalar)
+    this.removeRobot(this.props.blocks);
 
-    this.renderPath(allBlocks.filter((b) => {
-      return b.names.includes("path") || b.names.includes("destination");
-    }));
+    if (robotStep < this.props.path.length * factor)
+      window.requestAnimationFrame(() => this.renderEverything(robotStep + 1));
+    else {
+      this.resetRobotPosition();
+    }
   }
 
   getBlockScale(b) {
@@ -219,16 +279,10 @@ class Blocks extends React.Component {
     }
   }
 
-  renderPath(blocks) {
-    let renderOne = (blocks, i) => {
-      if (blocks.length == i)
-        return;
-      console.log(blocks[i]);
-      this.renderBlocks(blocks[i]);
-      //this.renderEverything(i);
-      setTimeout(() => renderOne(blocks, i+1), 100);
-    };
-    renderOne(blocks, 0);
+  renderPath(blocks, i) {
+    this.renderBlocks(blocks[i]);
+    if (i+1 < blocks.length)
+      window.requestAnimationFrame(() => this.renderPath(blocks, i+1));
   }
 
   renderBlocks(blocks, scale = this.config.scale) {
@@ -255,7 +309,7 @@ class Blocks extends React.Component {
         //this.state.iso.add(this.makeBlock(block.x, block.y, block.z), blockColor);
       } else if (block.names && block.names.includes("robot")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
-      } else if (block.names && block.names.includes("item")) {
+      } else if (block.names && block.names.includes("item") || block.names.includes("carriedItem")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
       } else if (block.names && block.names.includes("path")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
@@ -286,24 +340,24 @@ class Blocks extends React.Component {
     const cubesize = highlighted ? this.config.selectWidthScale : this.config.blockWidthScale;
 
     let cScale = 1;
-    if (type == "path")
+    if (type === "path")
       cScale = 0.25;
-    else if (type == "item")
+    else if (type === "item")
       cScale = 0.75;
-    else if (type == "destination")
+    else if (type === "destination")
       cScale = 0.5;
 
     let zScale = heightScaling;
-    if (type == "robot")
+    if (type === "robot")
       zScale = 1;
-    else if (type == "destination")
+    else if (type === "destination")
       zScale = 0.5;
 
     const shift = (1 - cubesize*cScale) / 2;
     const zShift = (1 - cubesize) / 2;
 
     // Items are rendered as cylinders and must be constructed differently 
-    if (type == "item") {
+    if (type === "item") {
       return Shape.Cylinder(
         Point (x + cubesize/2,
           y +  cubesize/2,
@@ -315,7 +369,7 @@ class Blocks extends React.Component {
       .scale(centerPoint, scale);
     } else {
       let shape = Shape.Prism;
-      if (type == "destination")
+      if (type === "destination")
         shape = Shape.Pyramid;
       return shape(
         Point(x + shift,

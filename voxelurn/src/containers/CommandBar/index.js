@@ -42,7 +42,7 @@ class CommandBar extends Component {
     // This commented-out line preserves the standard way of adding blocks to Voxelurn
     //this.props.onClick(this.props.query)
     // Dummy to/from
-    let result = this.props.dispatch(Actions.findPath([0,0], [3,0]));
+    this.props.dispatch(Actions.findPath([0,0], [3,0]));
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */

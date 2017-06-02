@@ -54,14 +54,24 @@ const initialMap = [
   {x:4,y:0,z:0, names: ["wall"]},
 
   {x:4,y:-4,z:0, color:"red", names: ["item"]},
+  {x:0,y:-2,z:0, color:"red", names: ["item"]},
   {x:4,y:3,z:0, color:"blue", names: ["item"]},
-  {x:-3,y:3,z:0, color:"green", names: ["item"]},
+  {x:-3,y:3,z:0, color:"green", names: ["item"]}
 
-  {x:-3,y:-2,z:0, names: ['S','robot']}
+  //{x:0,y:-2,z:0, names: ['S','robot']}
 ]
 
 const initialState = {
-  history: [{ text: "initial", value: initialMap, path: [], formula: "(initial)" }],
+  history: [{
+    text: "initial",
+    value: initialMap,
+    robot: {
+      x:-3, y:-2, z:0,
+      items: [],
+      names: ["robot"]
+    },
+    path: [],
+    formula: "(initial)" }],
   responses: [],
   current_history_idx: -1,
   status: STATUS.TRY,
@@ -82,11 +92,11 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, current_history_idx: action.idx, responses: initialState.responses, status: initialState.status, query: initialState.query }
 
     case Constants.FIND_PATH:
-      let myHistory = state.history
+      let myHistory = state.history;
       if (state.current_history_idx >= 0) {
         myHistory = myHistory.slice(0, state.current_history_idx + 1)
       }
-      return { ...state, responses: action.responses, history: myHistory, current_history_idx: -1, status: STATUS.PATH }
+      return { ...state,responses: action.responses, history: myHistory, current_history_idx: -1, status: STATUS.PATH }
     case Constants.TRY_QUERY:
       let history = state.history
       if (state.current_history_idx >= 0) {

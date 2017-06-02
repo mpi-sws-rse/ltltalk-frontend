@@ -185,9 +185,14 @@ class Build extends Component {
     let idx = current_history_idx >= 0 ? current_history_idx : history.length - 1
     if (idx > history.length - 1) idx = history.length - 1
     let currentState = history[idx].value
+    // TODO This might be unnecessary
+    let currentPath = history[idx].path;
+    let robot = history[idx].robot;
 
     if (status === STATUS.PATH) { 
-      currentState = diff(currentState, responses[0].value)
+      //currentPath = responses.path;
+      // This shouldn't be necessary with the new way `path` is handled
+      //currentState = diff(currentState, responses[0].value)
     } else if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
       /* If the status is accept, then the current state will be the diff
        * of the previous state and the responded state */
@@ -197,7 +202,7 @@ class Build extends Component {
     return (
       <div className="Build">
         <div className="Build-world">
-          <Setting blocks={currentState} width={1650} height={1200} isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
+          <Setting blocks={currentState} path={currentPath} robot={robot} width={1650} height={1200} isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
         </div>
         <div className="Build-command">
           <History />
