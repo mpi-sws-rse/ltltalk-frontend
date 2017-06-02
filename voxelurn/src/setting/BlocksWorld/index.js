@@ -6,7 +6,7 @@ import Isomer,
   Color,
   Path
 } from "isomer";
-import { sortBlocks, rotateBlock } from "helpers/blocks"
+import { sortBlocks, rotateBlock, findZs } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
 
@@ -139,15 +139,28 @@ class Blocks extends React.Component {
   }
 
   componentDidUpdate() {
-    const blocks = sortBlocks(this.props.blocks.map((b) => rotateBlock(b, this.state.rotational)));
+    this.renderEverything();
+  }
+
+  renderEverything(robotStep = 0) {
+    const allBlocks = this.props.blocks.map((b) => rotateBlock(b, this.state.rotational));
+    //const blocks = sortBlocks(this.props.blocks.map((b) => rotateBlock(b, this.state.rotational)));
+    const blocks = sortBlocks(allBlocks.filter((b) => {
+      return !(b.names.includes("path") || b.names.includes("destination"));
+    }));
     const scalars = blocks.map((b) => this.getBlockScale(b));
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
+
 
     this.state.iso.canvas.clear()
     // this.state.iso._calculateTransformation();
     this.renderBlocks(blocks.filter((b) => b.z < 0), minScalar)
     this.renderGrid(minScalar)
     this.renderBlocks(blocks.filter((b) => b.z >= 0), minScalar)
+
+    this.renderPath(allBlocks.filter((b) => {
+      return b.names.includes("path") || b.names.includes("destination");
+    }));
   }
 
   getBlockScale(b) {
@@ -206,15 +219,33 @@ class Blocks extends React.Component {
     }
   }
 
+  renderPath(blocks) {
+    let renderOne = (blocks, i) => {
+      if (blocks.length == i)
+        return;
+      console.log(blocks[i]);
+      this.renderBlocks(blocks[i]);
+      //this.renderEverything(i);
+      setTimeout(() => renderOne(blocks, i+1), 100);
+    };
+    renderOne(blocks, 0);
+  }
+
   renderBlocks(blocks, scale = this.config.scale) {
+    if (!(blocks instanceof Array)) {
+      blocks = [blocks];
+    }
     for (const block of blocks) {
       // let selectedBlockYes = false;
-      const color = this.colorMap[block.color.toLowerCase()];
+      let color = null;
+      if (block.color)
+        color = this.colorMap[block.color.toLowerCase()];
       let blockColor = new Color();
+      // TODO Determine if this should be kept
       if (block.names && block.names.includes("_new")) {
         blockColor = new Color(color[0], color[1], color[2], 0.2);
 
-      } else {
+      } else if (color) {
         blockColor = new Color(color[0], color[1], color[2], 0.88);
       }
 
@@ -223,7 +254,7 @@ class Blocks extends React.Component {
         //blockColor = new Color(244,244,244, 0.2);
         //this.state.iso.add(this.makeBlock(block.x, block.y, block.z), blockColor);
       } else if (block.names && block.names.includes("robot")) {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), blockColor);
+        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
       } else if (block.names && block.names.includes("item")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
       } else if (block.names && block.names.includes("path")) {
@@ -231,7 +262,7 @@ class Blocks extends React.Component {
       } else if (block.names && block.names.includes("destination")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "destination"), blockColor);
       } else {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale), blockColor);
+        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale), new Color(0, 0, 0, 0.88));
       }
 
       if (block.names && block.names.includes("S")) {

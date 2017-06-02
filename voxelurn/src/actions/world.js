@@ -73,12 +73,16 @@ const Actions = {
       const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
       const currentValue = history[idx].value
 
-      const value = findPath(to, from, currentValue);
-      const formval = [{value: value}]
+      const path = findPath(to, from, currentValue);
 
-      const responses = formval.filter((a) => {
-        return !blocksEqual(a.value, currentValue)
-      })
+      const formval = [{value: currentValue.concat(path)}]
+      console.log(formval);
+
+      const responses = formval;
+      //const responses = formval.filter((a) => {
+        //return !blocksEqual(a.value, currentValue)
+      //})
+
       dispatch({
         type: Constants.FIND_PATH,
         responses: responses
@@ -89,8 +93,10 @@ const Actions = {
       let text = "Path";
 
       dispatch({
+        // TODO Change this to a different flag?
         type: Constants.ACCEPT,
-        el: { ...selected, text }
+        el: { ...selected, text },
+        path: true
       })
 
       return true;

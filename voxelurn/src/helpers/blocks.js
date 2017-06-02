@@ -67,3 +67,7 @@ export function rotateBlock (b, rotational, width = 1) {
 	}
 	return { ...b, x: x, y: y };
 }
+
+// TODO Turn this into findConflicts
+export function findZs(blocks) {
+}
