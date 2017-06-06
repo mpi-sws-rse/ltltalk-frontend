@@ -6,6 +6,8 @@ import { STATUS, COMMAND_BAR_DEFINE_PLACEHOLDER, COMMAND_BAR_PLACEHOLDER } from 
 
 import "./styles.css"
 
+import Constants from "constants/actions"
+
 class CommandBar extends Component {
   static propTypes = {
     /* Callback function when the CommandBar button clicks clicked */
@@ -25,7 +27,8 @@ class CommandBar extends Component {
     if (prevProps.query !== this.props.query) {
       /* If the query changed and we were in ACCEPT mode, move us back to TRY mode */
       if (this.props.status === STATUS.ACCEPT)
-        this.props.dispatch(Actions.setStatus(STATUS.TRY))
+        //this.props.dispatch(Actions.setStatus(STATUS.TRY))
+        this.props.dispatch(Actions.setStatus(STATUS.PATH))
     }
   }
 
@@ -42,7 +45,13 @@ class CommandBar extends Component {
     // This commented-out line preserves the standard way of adding blocks to Voxelurn
     //this.props.onClick(this.props.query)
     // Dummy to/from
-    this.props.dispatch(Actions.findPath([0,0], [3,0]));
+    //this.props.dispatch(Actions.findPath([0,0], [3,0]));
+    this.props.dispatch({
+      type: Constants.SET_STATUS,
+      status: STATUS.PATH
+    })
+    console.log(this.props.status);
+    this.props.onClick("");
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */

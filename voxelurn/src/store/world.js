@@ -75,7 +75,7 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   current_history_idx: -1,
-  status: STATUS.TRY,
+  status: STATUS.PATH,
   query: "",
   defining: false,
   exampleQuery: "add red 3 times",
@@ -97,7 +97,7 @@ export default function reducer(state = initialState, action = {}) {
       if (state.current_history_idx >= 0) {
         myHistory = myHistory.slice(0, state.current_history_idx + 1)
       }
-      return { ...state,responses: action.responses, history: myHistory, current_history_idx: -1, status: STATUS.PATH }
+      return { ...state,responses: action.responses, history: myHistory, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.TRY_QUERY:
       let history = state.history
       if (state.current_history_idx >= 0) {

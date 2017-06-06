@@ -82,18 +82,20 @@ const Actions = {
 
       dispatch({
         type: Constants.FIND_PATH,
-        responses: responses
+        responses: [responses[0], responses[0]]
       })
 
       const selected = responses[0];
       let text = "Path";
 
+      /*
       dispatch({
         // TODO Change this to a different flag?
         type: Constants.ACCEPT,
         el: { ...selected, text },
         path: true
       })
+       */
 
       return true;
     }

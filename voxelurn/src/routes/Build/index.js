@@ -86,7 +86,12 @@ class Build extends Component {
   }
 
   handleQuery(query) {
+    console.log(this.props.status);
     switch (this.props.status) {
+      case STATUS.PATH:
+        this.props.dispatch(Actions.findPath([3,3],[4,4]));
+        this.setState({ selectedResp: 0 })
+        break;
       case STATUS.TRY:
         /* Try the query */
         this.props.dispatch(Actions.tryQuery(query))
@@ -186,8 +191,8 @@ class Build extends Component {
     if (idx > history.length - 1) idx = history.length - 1
     let currentState = history[idx].value
     // TODO This might be unnecessary
-    let currentPath = history[idx].path;
     let robot = history[idx].robot;
+    let currentPath = [];// = history[idx].path;
 
     if (status === STATUS.PATH) { 
       //currentPath = responses.path;
@@ -196,7 +201,8 @@ class Build extends Component {
     } else if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
       /* If the status is accept, then the current state will be the diff
        * of the previous state and the responded state */
-      currentState = diff(currentState, responses[this.state.selectedResp].value)
+      //currentState = diff(currentState, responses[this.state.selectedResp].value)
+      currentPath = JSON.parse(JSON.stringify(responses[this.state.selectedResp].path));
     }
 
     return (

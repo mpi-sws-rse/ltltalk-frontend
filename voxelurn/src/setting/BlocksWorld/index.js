@@ -145,7 +145,6 @@ class Blocks extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log(this.props.path);
     window.requestAnimationFrame(() =>
         this.renderEverything(this.props.blocks.slice(), this.clone(this.props.robot), 0));
   }
@@ -203,20 +202,25 @@ class Blocks extends React.Component {
   updateRobot(blocks, robot, step, path, factor) {
     const c = Math.ceil(1.0*step/factor);
     const f = Math.floor(1.0*step/factor);
-    if (path[c] && path[c].names.includes("pickup") && !path[c].completed) {
-      this.pickupItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
-      path[c].completed = true;
-    } else if (path[c] && path[c].names.includes("putdown") && !path[c].completed) {
-      this.putdownItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
-      path[c].completed = true;
-    } else if (path[f] && path[c]) {
-      const d = 1.0*step/factor - f;
-      robot.x = ((1-d)*path[f].x + (d)*path[c].x);
-      robot.y = ((1-d)*path[f].y + (d)*path[c].y);
-    } else if (path[step]) {
-      robot.x = path[step].x;
-      robot.y = path[step].y;
+    if (typeof path === "undefined") {
+      // Should something be here?
+    } else {
+      if (path[c] && path[c].names.includes("pickup") && !path[c].completed) {
+        this.pickupItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
+        path[c].completed = true;
+      } else if (path[c] && path[c].names.includes("putdown") && !path[c].completed) {
+        this.putdownItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
+        path[c].completed = true;
+      } else if (path[f] && path[c]) {
+        const d = 1.0*step/factor - f;
+        robot.x = ((1-d)*path[f].x + (d)*path[c].x);
+        robot.y = ((1-d)*path[f].y + (d)*path[c].y);
+      } else if (path[step]) {
+        robot.x = path[step].x;
+        robot.y = path[step].y;
+      }
     }
+
     blocks.push(robot);
     for (let i = 0; i < robot.items.length; ++i) {
       // 4 is the height of the robot
@@ -251,7 +255,8 @@ class Blocks extends React.Component {
     this.renderBlocks(blocks.filter((b) => b.z >= 0), minScalar)
     this.removeRobot(blocks);
 
-    if (robotStep < this.props.path.length * factor)
+    if (typeof this.props.path === "undefined") {
+    } else if (robotStep < this.props.path.length * factor)
       window.requestAnimationFrame(() => this.renderEverything(blocks, robot, robotStep + 1));
     else {
       this.resetRobotPosition();

@@ -1,6 +1,6 @@
 export function findPath(from, to, world) {
   // Placeholder code until path finding is fully implemented
-  const path =  [
+  const path1 =  [
     {x:-3,y:-2,z:0,color:"fuchsia",names:["path"]},
     {x:-2,y:-2,z:0,color:"fuchsia",names:["path"]},
     {x:-1,y:-2,z:0,color:"fuchsia",names:["path"]},
@@ -21,7 +21,17 @@ export function findPath(from, to, world) {
     {x:2,y:3,z:0,color:"fuchsia",names:["path"]},
     {x:1,y:3,z:0,color:"fuchsia",names:["destination"]}
   ];
-  // THIS MAY BE INEFFICIENT
+  /*
+  const path2 =  [
+    {x:-3,y:-2,z:0,names:["path"]},
+    {x:-2,y:-2,z:0,names:["path"]},
+    {x:-1,y:-2,z:0,names:["path"]},
+    {x:0,y:-2,z:0,names:["path"]},
+    {x:0,y:-2,z:0, names:["pickup"], spec: "green", completed: false},
+    {x:2,y:-4,z:0,names:["destination"]}
+  ]
+   */
+  /*
   // Check if there are any conflicts with respect to x,y coordinates
   for (let a = 0; a < path.length; ++a) {
     let z = 0;
@@ -33,5 +43,7 @@ export function findPath(from, to, world) {
     path[a]['z'] = z;
   }
   //return world.concat(path);
-  return path;
+   */
+  //return [path1, path2];
+  return path1;
 }
