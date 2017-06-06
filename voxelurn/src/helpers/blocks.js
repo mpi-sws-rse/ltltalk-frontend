@@ -24,7 +24,7 @@ export function sortBlocks(blocks) {
     const bNear = bx*xScale + by*yScale + bz*zScale;
     if (aNear > bNear)
       return -1;
-    else (aNear < bNear)
+    else if (aNear < bNear)
       return 1;
 
     return 0;

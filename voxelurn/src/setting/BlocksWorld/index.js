@@ -6,7 +6,7 @@ import Isomer,
   Color,
   Path
 } from "isomer";
-import { sortBlocks, rotateBlock, findZs, worldAngle } from "helpers/blocks"
+import { sortBlocks, rotateBlock, worldAngle } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
 
@@ -140,17 +140,21 @@ class Blocks extends React.Component {
     return !deepEqual(this.props, prevProps) || !deepEqual(prevState, this.state)
   }
 
-  componentDidUpdate() {
-    //this.renderEverything();
-    window.requestAnimationFrame(() => this.renderEverything(0));
-    //console.log(this.props.path);
+  clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
   }
 
-  removeItem(x, y, color, blocks) {
+  componentDidUpdate() {
+    console.log(this.props.robot);
+    window.requestAnimationFrame(() =>
+        this.renderEverything(this.props.blocks.slice(), this.clone(this.props.robot), 0));
+  }
+
+  removeItem(x, y, color, blocks, robot) {
     for (let i = 0; i < blocks.length; ++i) {
-      if (blocks[i].x == x && blocks[i].y == y && blocks[i].color === color) {
+      if (blocks[i].x === x && blocks[i].y === y && blocks[i].color === color) {
         blocks.splice(i, 1);
-        this.props.robot.items.push("red");
+        robot.items.push("red");
         return true;
       }
     }
@@ -166,13 +170,11 @@ class Blocks extends React.Component {
     }
   }
 
-  updateRobot(blocks, step, path, factor) {
-    const robot = this.props.robot;
+  updateRobot(blocks, robot, step, path, factor) {
     const c = Math.ceil(1.0*step/factor);
     const f = Math.floor(1.0*step/factor);
     if (path[c] && path[c].names.includes("pickup") && !path[c].completed) {
-      let res = this.removeItem(path[c].x, path[c].y, path[c].spec, blocks);
-      console.log(res);
+      this.removeItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
       path[c].completed = true;
     } if (path[f] && path[c]) {
       const d = 1.0*step/factor - f;
@@ -197,11 +199,11 @@ class Blocks extends React.Component {
   resetRobotPosition() {
     // Reset the robot position in the way it should be
   }
-
-  renderEverything(robotStep = 0) {
+  
+  renderEverything(argBlocks, robot, robotStep = 0) {
     // Robot speed factor
     const factor = 10;
-    const updatedBlocks = this.updateRobot(this.props.blocks, robotStep, this.props.path, factor);
+    const updatedBlocks = this.updateRobot(argBlocks, robot, robotStep, this.props.path, factor);
     //const allBlocks = this.props.blocks.map((b) => rotateBlock(b, this.state.rotational));
     //const blocks = sortBlocks(this.props.blocks.map((b) => rotateBlock(b, this.state.rotational)));
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
@@ -214,10 +216,10 @@ class Blocks extends React.Component {
     this.renderBlocks(blocks.filter((b) => b.z < 0), minScalar)
     this.renderGrid(minScalar)
     this.renderBlocks(blocks.filter((b) => b.z >= 0), minScalar)
-    this.removeRobot(this.props.blocks);
+    this.removeRobot(blocks);
 
     if (robotStep < this.props.path.length * factor)
-      window.requestAnimationFrame(() => this.renderEverything(robotStep + 1));
+      window.requestAnimationFrame(() => this.renderEverything(blocks, robot, robotStep + 1));
     else {
       this.resetRobotPosition();
     }
@@ -309,7 +311,7 @@ class Blocks extends React.Component {
         //this.state.iso.add(this.makeBlock(block.x, block.y, block.z), blockColor);
       } else if (block.names && block.names.includes("robot")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
-      } else if (block.names && block.names.includes("item") || block.names.includes("carriedItem")) {
+      } else if (block.names && (block.names.includes("item") || block.names.includes("carriedItem"))) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
       } else if (block.names && block.names.includes("path")) {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
