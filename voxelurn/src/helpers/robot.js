@@ -14,7 +14,12 @@ export function findPath(from, to, world) {
     {x:1,y:3,z:0,color:"fuchsia",names:["path"]},
     {x:2,y:3,z:0,color:"fuchsia",names:["path"]},
     {x:3,y:3,z:0,color:"fuchsia",names:["path"]},
-    {x:4,y:3,z:0,color:"fuchsia",names:["destination"]}
+    {x:4,y:3,z:0,color:"fuchsia",names:["path"]},
+    //{x:4,y:3,z:0, names:["putdown"], spec: "red", completed: false},
+    {x:4,y:3,z:0, names:["pickup"], spec: "blue", completed: false},
+    {x:3,y:3,z:0,color:"fuchsia",names:["path"]},
+    {x:2,y:3,z:0,color:"fuchsia",names:["path"]},
+    {x:1,y:3,z:0,color:"fuchsia",names:["destination"]}
   ];
   // THIS MAY BE INEFFICIENT
   // Check if there are any conflicts with respect to x,y coordinates

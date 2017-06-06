@@ -55,6 +55,7 @@ const initialMap = [
 
   {x:4,y:-4,z:0, color:"red", names: ["item"]},
   {x:0,y:-2,z:0, color:"red", names: ["item"]},
+  {x:0,y:-2,z:1, color:"green", names: ["item"]},
   {x:4,y:3,z:0, color:"blue", names: ["item"]},
   {x:-3,y:3,z:0, color:"green", names: ["item"]}
 
