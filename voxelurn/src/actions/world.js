@@ -74,15 +74,15 @@ const Actions = {
       const currentValue = history[idx].value
       const robot = history[idx].robot;
 
-      const path = findPath(to, from, currentValue);
-      const responses = [{
-        path: path,
-        value: currentValue,
-        robot: robot}];
+      const paths = findPath(to, from, currentValue);
+      const responses = [
+        {path: paths[0], value: currentValue, robot: robot},
+        {path: paths[1], value: currentValue, robot: robot},
+      ];
 
       dispatch({
         type: Constants.FIND_PATH,
-        responses: [responses[0], responses[0]]
+        responses: responses
       })
 
       const selected = responses[0];
@@ -159,6 +159,32 @@ const Actions = {
         type: Constants.ACCEPT,
         el: el
       })
+    }
+  },
+
+  acceptPath: (selectedResp) => {
+    return (dispatch, getState) => {
+      const { responses } = getState().world
+
+      const selected = responses[selectedResp]
+
+      if (selected.error) {
+        alert("You can't accept a response with an error in it. Please accept another response or try a different query.")
+        dispatch({
+          type: Constants.SET_STATUS,
+          status: STATUS.TRY
+        })
+        return
+      }
+
+      //dispatch(Logger.log({ type: "accept", msg: { query: text, rank: selected.rank, formula: selected.formula } }))
+
+      dispatch({
+        type: Constants.ACCEPT,
+        el: { ...selected}
+      })
+
+      return true
     }
   },
 
