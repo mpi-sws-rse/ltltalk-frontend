@@ -40,12 +40,14 @@ If a specification is realizable, a controller is synthesized and the spec is ex
  - `Iterable -> [k..l]` *the iteration happens over numbers k, k+1, ..., l*
 
 ## Items (I)
-Item description function as filters. One can say _pick_ with the meaning pick whatever there is at your current location, or _pick has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue.
+Item description function as logical filters. One can say _pick_ with the meaning pick whatever there is at your current location, or _pick has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue.
 
-  - `I -> e` *empty string*
-  - `I -> I1 has color C` _C is from finite set of colors_
-  - `I -> I1 has type T` _T is from finite set of types_
-  - `I -> I1 has id ID` _ID unique identifier of an item_
+  - `I -> *` _no filter, everything that there is_
+  - `I -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
+  - `I -> has type T` _T is from finite set of types, everything that has type C passes the filter_
+  - `I -> I1 && I2`  _a conjunction of two items_
+  - `I -> I1 || I2` _a disjunction of two items_
+  - `I -> !I1` _a negation of an item_
 
 ## Locations (L)
 A 2D-grid consists of (x,y)-denoted fields. When describing locations we are always using sets of fields.

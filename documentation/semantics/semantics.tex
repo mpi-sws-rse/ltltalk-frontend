@@ -28,10 +28,13 @@ Program is a sequence of specifications - they are executed one after another.
 Specifications are evaluated on traces of states. State is given as a pair $(M, R)$. $M = (m)_{i,j}$ is a matrix of size $m\times n$ where each element corresponds to the field of the grid. $m_{i,j} = (\text{fieldItems}, \text{obs})$ with $\text{fieldItems} \subset \mathcal{I}$ and $\text{obs} \subset \{\text{free, wall, door} \}$. In other words, $M$ gives information of what kind of field (i,j) is (free or one of the two kinds of obstacles - doors and walls) and which items are present at each field. Aforementioned $R$, on the other hand, tells about robot's current position and the items it carries. Formally, $R = (f, \text{robotItems})$, with $f = (i,j) \in \mathcal{L}$ and $\text{robotItems} \subset \mathcal{I}$ (with reasonable assumptions such as $m_{i,j}.\text{fieldItems} \cap m_{k,l}.\text{fieldItems} \neq \emptyset$ iff $i=k$ and $j = l$)
 
 \subsection*{Items definitions}
-$\epsilon \subset \mathcal{I} = \mathcal{I}$\\
-$\forall I \subset \mathcal{I}, I \text{ has color C} = \{ i \in \mathcal{I}: i.\text{color}=C \}$\\
-$\forall I \subset \mathcal{I}, I \text{ has type T} = \{ i \in \mathcal{I}: i.\text{type}=T \}$\\
-$\forall I \subset \mathcal{I}, I \text{ has id ID} = \{ i \in \mathcal{I}: i.\text{id}=\text{ID} \}$
+\begin{itemize}
+\item $* \subset \mathcal{I} = \mathcal{I}$
+\item $ \text{has color C} = \{ i \in \mathcal{I}: i.\text{color}=C \}$
+\item $ \text{has type T} = \{ i \in \mathcal{I}: i.\text{type}=T \}$
+\item $\forall I_1, I_2 \subset \mathcal{I},  I_1 \& I_2 = I_1 \cap I_2$
+\item $\forall I_1, I_2 \subset \mathcal{I}, I_1 | I_2 = I_2 \cup I_2$
+\end{itemize}
 
 \subsection*{Locations definitions}
 Some of the locations that we refer to depend on the state. Therefore, the meaning of equality symbol ($=$) here is "interpreted as"\\
