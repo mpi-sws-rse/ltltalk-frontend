@@ -50,7 +50,6 @@ class CommandBar extends Component {
       type: Constants.SET_STATUS,
       status: STATUS.PATH
     })
-    console.log(this.props.status);
     this.props.onClick("");
 
 

@@ -5,7 +5,7 @@ import UserActions from "actions/user"
 import { connect } from "react-redux"
 import Mousetrap from "mousetrap"
 import History from "containers/History"
-import Setting, { diff, equalityCheck } from "setting"
+import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
@@ -86,7 +86,6 @@ class Build extends Component {
   }
 
   handleQuery(query) {
-    console.log(this.props.status);
     switch (this.props.status) {
       case STATUS.PATH:
         this.props.dispatch(Actions.findPath([3,3],[4,4]));

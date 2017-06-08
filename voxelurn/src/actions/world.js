@@ -1,7 +1,7 @@
 import Constants from "constants/actions"
 import { SEMPREquery, parseSEMPRE } from "helpers/sempre"
 import Logger from "actions/logger"
-import { blocksEqual } from "helpers/blocks"
+import { blocksEqual, updateRobot, removeRobot } from "helpers/blocks"
 import { findPath } from "helpers/robot"
 import { persistStore } from "redux-persist"
 import { getStore } from "../"
@@ -85,18 +85,6 @@ const Actions = {
         responses: responses
       })
 
-      const selected = responses[0];
-      let text = "Path";
-
-      /*
-      dispatch({
-        // TODO Change this to a different flag?
-        type: Constants.ACCEPT,
-        el: { ...selected, text },
-        path: true
-      })
-       */
-
       return true;
     }
   },
@@ -164,7 +152,7 @@ const Actions = {
 
   acceptPath: (selectedResp) => {
     return (dispatch, getState) => {
-      const { responses } = getState().world
+      const { responses, history } = getState().world
 
       const selected = responses[selectedResp]
 
@@ -179,9 +167,18 @@ const Actions = {
 
       //dispatch(Logger.log({ type: "accept", msg: { query: text, rank: selected.rank, formula: selected.formula } }))
 
+      // Apply history; maybe I need to identify the history I need to apply to in a different way.
+      let currentState = history[history.length - 1];
+      let path = selected.path;
+      for (let i = 0; i < path.length; ++i) {
+        updateRobot(currentState.value, currentState.robot, i, selected.path, 1);
+        removeRobot(currentState.value);
+      }
+
+      let text = "Path";
       dispatch({
         type: Constants.ACCEPT,
-        el: { ...selected}
+        el: { ...selected, text}
       })
 
       return true
