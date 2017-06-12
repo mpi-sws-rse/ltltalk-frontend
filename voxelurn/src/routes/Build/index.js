@@ -88,7 +88,8 @@ class Build extends Component {
   handleQuery(query) {
     switch (this.props.status) {
       case STATUS.PATH:
-        this.props.dispatch(Actions.findPath([3,3],[4,4]));
+        //this.props.dispatch(Actions.findPath(query));
+        this.props.dispatch(Actions.tryQuery(query));
         this.setState({ selectedResp: 0 })
         break;
       case STATUS.TRY:
@@ -189,7 +190,7 @@ class Build extends Component {
      * the one selected by the current_history_idx */
     let idx = current_history_idx >= 0 ? current_history_idx : history.length - 1
     if (idx > history.length - 1) idx = history.length - 1
-    let currentState = history[idx].value
+    let currentState = history[idx].worldMap;
     // TODO This might be unnecessary
     let robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;

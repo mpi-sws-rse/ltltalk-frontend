@@ -19,6 +19,8 @@ import cssColors from "color-name"
 // Default z-axis scaling for blocks
 const heightScaling = 0.25;
 
+var counter = 0;
+
 function stateIncludes(state, obj) {
   for (const c of state) {
     if (c.x === obj.x &&
@@ -110,24 +112,14 @@ class Blocks extends React.Component {
       return p;
     })(this.config);
 
-    // this.colorMap = {
-    //   Red: [209, 0, 0],
-    //   Orange: [255, 102, 34],
-    //   Yellow: [255, 218, 33],
-    //   Green: [51, 221, 0],
-    //   Blue: [17, 51, 204],
-    //   Black: [10, 10, 10],
-    //   White: [255, 255, 240],
-    //   Pink: [255, 20, 147],
-    //   Brown: [139, 69, 19],
-    //   Anchor: [0, 160, 176],
-    //   Fake: [255, 255, 255],
-    //   Gray: [144, 144, 144]
-    // }
     this.colorMap = cssColors;
     this.colorMap['fake'] = [255, 255, 255];
 
-    this.state = { iso: null, rotational: -1 }
+    this.state = {
+      iso: null,
+      rotational: -1,
+      animationId: null
+    }
   }
 
   componentDidMount() {
@@ -151,11 +143,18 @@ class Blocks extends React.Component {
   }
 
   componentDidUpdate() {
+    counter++;
+    //console.log(this.props.robot);
     window.requestAnimationFrame(() =>
-        this.renderEverything(this.props.blocks.slice(), this.clone(this.props.robot), 0));
+        this.renderEverything(this.props.blocks.slice(), this.clone(this.props.robot), 0, this.props.selectionNumber));
   }
 
-  renderEverything(argBlocks, robot, robotStep = 0) {
+  renderEverything(argBlocks, robot, robotStep, selectionNumber) {
+    if (counter > 1) {
+      counter--;
+      return;
+    }
+
     // Robot speed factor
     const factor = 5;
     const updatedBlocks = updateRobot(argBlocks, robot, robotStep, this.props.path, factor);
@@ -174,6 +173,8 @@ class Blocks extends React.Component {
 
     if (this.props.path && robotStep < this.props.path.length * factor) {
       window.requestAnimationFrame(() => this.renderEverything(blocks, robot, robotStep + 1));
+    } else {
+      counter--;
     }
   }
 
@@ -250,10 +251,7 @@ class Blocks extends React.Component {
         color = this.colorMap[block.color.toLowerCase()];
       let blockColor = new Color();
       // TODO Determine if this should be kept
-      if (block.names && block.names.includes("_new")) {
-        blockColor = new Color(color[0], color[1], color[2], 0.2);
-
-      } else if (color) {
+      if (color) {
         blockColor = new Color(color[0], color[1], color[2], 0.88);
       }
 

@@ -134,10 +134,10 @@ export function rotateBlock (b, rotational, width = 1) {
     if (typeof path === "undefined") {
       // Should something be here?
     } else {
-      if (path[c] && path[c].names.includes("pickitem") && !path[c].completed) {
+      if (path[c] && path[c].action === "pickitem" && !path[c].completed) {
         pickItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
         path[c].completed = true;
-      } else if (path[c] && path[c].names.includes("dropitem") && !path[c].completed) {
+      } else if (path[c] && path[c].action === "dropitem" && !path[c].completed) {
         dropItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
         path[c].completed = true;
       } else if (path[f] && path[c]) {

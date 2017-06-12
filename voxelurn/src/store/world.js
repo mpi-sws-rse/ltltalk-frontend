@@ -65,7 +65,7 @@ const initialMap = [
 const initialState = {
   history: [{
     text: "initial",
-    value: initialMap,
+    worldMap: initialMap,
     robot: {
       x:-3, y:-2, z:0,
       items: [],
@@ -108,6 +108,7 @@ export default function reducer(state = initialState, action = {}) {
       const newHistory = [...state.history, action.el]
       return { ...state, history: newHistory, responses: [], status: STATUS.PATH/*TRY*/, query: "" }
     case Constants.DEFINE:
+      // TODO The "value" here will have to be changed
       let collapsedHistory = [...state.history.slice(0, action.idx), { text: action.text, value: state.history[state.history.length - 1].value, formula: action.formula }]
       if (collapsedHistory.length === 0) collapsedHistory = initialState.history
       else if (collapsedHistory.length === 1) collapsedHistory = [...initialState.history, ...collapsedHistory]
@@ -124,6 +125,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.SET_DEFINE_N:
       return { ...state, defineN: action.defineN }
     case Constants.SET_PIN:
+      // TODO Change "value"
       let newHistoryWithPin = [...state.history, { text: state.query, type: "pin", value: state.history[state.history.length - 1].value, formula: "()" }]
       return { ...state, history: newHistoryWithPin, query: initialState.query, responses: initialState.responses, status: initialState.status, defining: initialState.defining, defineN: initialState.defineN }
     case Constants.REMOVE_PIN:
@@ -137,6 +139,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, history: markedHistory }
     case Constants.INJECT_PIN:
       let injectedHistory = state.history.slice(0)
+      // TODO Change "value"
       injectedHistory.splice(action.idx, 0, { text: "", type: "pin", value: [], formula: "false" })
       return { ...state, history: injectedHistory }
     case Constants.REMOVE_LAST:

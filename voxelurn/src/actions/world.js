@@ -12,7 +12,7 @@ function sendContext(history, current_history_idx, sessionId) {
 
   if (history.length > 0) {
     const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-    const currentState = history[idx].value
+    const currentState = history[idx].worldMap;
     const prevState = JSON.stringify(JSON.stringify(currentState.map(c => ([c.x, c.y, c.z, c.color, c.names]))))
     contextCommand = `(:context ${prevState})`
   }
@@ -67,14 +67,16 @@ const Actions = {
     }
   },
 
-  findPath: (to, from) => {
+  // Deprecated, I hope
+  findPath: (query) => {
     return (dispatch, getState) => {
+      const { sessionId } = getState().user
       const { history, current_history_idx } = getState().world
       const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
       const currentValue = history[idx].value
       const robot = history[idx].robot;
 
-      const paths = findPath(to, from, currentValue);
+      const paths = findPath([], [], currentValue);
       const responses = [
         {path: paths[0], value: currentValue, robot: robot},
         {path: paths[1], value: currentValue, robot: robot},
@@ -106,6 +108,7 @@ const Actions = {
 
           return SEMPREquery(cmds)
             .then((response) => {
+
               if (response.lines && response.lines.length > 0) {
                 /* Alert any errors in the query */
                 alert(response.lines.join("; "))
@@ -119,17 +122,26 @@ const Actions = {
               } else {
                 /* Remove no-ops */
                 const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-
+                const robot = history[idx].robot;
                 const currentValue = history[idx].value
-                const responses = formval.filter((a) => {
-                  return !blocksEqual(a.value, currentValue)
-                })
+
+                //const responses = formval.filter((a) => {
+                  //return !blocksEqual(a.value, currentValue)
+                //})
+                const responses = formval;
+                console.log(responses);
 
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
+                dispatch({
+                  type: Constants.FIND_PATH,
+                  responses: responses
+                })
+                /*
                 dispatch({
                   type: Constants.TRY_QUERY,
                   responses: responses
                 })
+                 */
                 return true
               }
             })
@@ -168,12 +180,16 @@ const Actions = {
       //dispatch(Logger.log({ type: "accept", msg: { query: text, rank: selected.rank, formula: selected.formula } }))
 
       // Apply history; maybe I need to identify the history I need to apply to in a different way.
-      let currentState = history[history.length - 1];
+      let currentState = JSON.parse(JSON.stringify(history[history.length - 1]));
       let path = selected.path;
+      //console.log(currentState);
       for (let i = 0; i < path.length; ++i) {
-        updateRobot(currentState.value, currentState.robot, i, selected.path, 1);
-        removeRobot(currentState.value);
+        updateRobot(currentState.worldMap, currentState.robot, i, selected.path, 1);
+        removeRobot(currentState.worldMap);
       }
+
+      selected.worldMap = currentState.worldMap;
+      selected.robot = currentState.robot;
 
       let text = "Path";
       dispatch({

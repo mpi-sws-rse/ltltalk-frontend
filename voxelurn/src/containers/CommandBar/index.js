@@ -38,7 +38,7 @@ class CommandBar extends Component {
       /* Alert informatively if we are in define mode */
       if (this.props.status === "define")
         alert("You cannot define something as an empty string.")
-      //return
+      return
     }
 
     /* Fire off the callback */
@@ -50,7 +50,7 @@ class CommandBar extends Component {
       type: Constants.SET_STATUS,
       status: STATUS.PATH
     })
-    this.props.onClick("");
+    this.props.onClick(this.props.query)
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */

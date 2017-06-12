@@ -48,62 +48,25 @@ function formatValue(value) {
   const valueArray = JSON.parse(value);
 
   // const valueArray = [[1, 1, 0, "Red", []], [1, 1, 1, "Orange", []]];
+  //
+  // [ x , y , action , spec ]
 
   return valueArray.map((c) => (
     {
       x: c[0],
       y: c[1],
-      z: c[2],
-      color: c[3],
-      names: c[4],
+      action: c[2],
+      spec: c[3]
     }
   ));
-
-  // const head = value[0];
-  // let str = "";
-  // switch (head) {
-  //   case "list": {
-  //     const elements = [];
-  //     for (let i = 1; i < value.length; i++) {
-  //       elements.push(this.formatValue(value[i], value.length));
-  //     }
-  //     str = `[${elements.join(", ")}]`;
-  //     break;
-  //   }
-  //   case "table": {
-  //     const headers = value[1];
-  //     for (let j = 0; j < headers.length; j++) {
-  //       str += `{${value[1][j]}\t `;
-  //     }
-  //     str += "\n";
-  //     for (let i = 2; i < value.length; i++) {
-  //       for (let j = 0; j < headers.length; j++) {
-  //         str += `${this.formatValue(value[i][j], value.length)}\t `;
-  //       }
-  //       str += "\n";
-  //     }
-  //     break;
-  //   }
-  //   case "number": {
-  //     str = this.cleanValue(value[1]);
-  //     break;
-  //   }
-  //   case "name": {
-  //     str = this.cleanValue(value[1]);
-  //     break;
-  //   }
-  //   default: {
-  //     str = this.cleanValue(value[1]);
-  //   }
-  // }
-  // return str;
 }
 
 function combine(vsTmp, v) {
   let vs = vsTmp;
   if (vs === undefined) {
     vs = {};
-    vs.value = v.value;
+    //vs.value = v.value;
+    vs.path = v.path;
     vs.formula = v.formula;
     vs.formulas = [vs.formula];
     vs.prob = parseFloat(v.prob);
@@ -142,7 +105,7 @@ export function parseSEMPRE(valid) {
   for (let i = 0; i < valid.length; i++) {
     const qapair = {};
     try {
-      qapair.value = formatValue(valid[i].value);
+      qapair.path = formatValue(valid[i].value);
       qapair.formula = valid[i].formula;
       qapair.score = valid[i].score.toFixed(7);
       qapair.rank = i;
@@ -150,7 +113,7 @@ export function parseSEMPRE(valid) {
       qapair.pprob = valid[i].pprob;
       lstqapairs.push(qapair);
     } catch (e) {
-      lstqapairs.push({ value: [], formula: "", rank: i, error: valid[i].value, score: 0, prob: 0, pprob: 0 })
+      lstqapairs.push({ path: [], formula: "", rank: i, error: valid[i].value, score: 0, prob: 0, pprob: 0 })
       alert("This response resulted in an error with our server. Please scroll to another intepretation or try another query. The error message was: " + valid[i].value)
       console.log("ERROR!", e, valid[i].value);
     }
@@ -158,10 +121,12 @@ export function parseSEMPRE(valid) {
 
   const nbestdict = lstqapairs.reduce((nbd, nbest) => {
     const mynbd = nbd;
-    const key = JSON.stringify(nbest.value);
+    //const key = JSON.stringify(nbest.value);
+    const key = JSON.stringify(nbest.path);
     mynbd[key] = combine(nbd[key], nbest);
     return mynbd;
   }, {});
+
 
   const listqadedup = [];
   for (const key in nbestdict) {
