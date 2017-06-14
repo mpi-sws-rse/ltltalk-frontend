@@ -10,3 +10,7 @@ A user is given a map with walls and doors shown in it and the rewards somewhere
 The rewards can appear and disappear and the walls can open and close. He has to specify what the robot has to do and his goal is to maximize the reward. 
 User also has to specify the environment behavior for the robot (such as - if the doors would open or close, if the rewards would appear or disappear etc.) If the 
 specification is unrealizable, the system warns the user about the root cause (and then the user has to change environment assumptions or change the specification.)
+
+#Technical details
+The system is inspired by the [Voxelurn system](https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md), that performs the same naturalization process for a simple world of Voxels.
+The semantic parser is developed in a [separate branch](https://gitlab.mpi-sws.org/gavran/sempre-interactive).
