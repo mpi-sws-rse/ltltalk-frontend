@@ -102,6 +102,7 @@ export function parseSEMPRE(valid) {
   const lstqapairs = [];
   if (valid.length === 0) return undefined;
 
+  console.log(valid);
   for (let i = 0; i < valid.length; i++) {
     const qapair = {};
     try {

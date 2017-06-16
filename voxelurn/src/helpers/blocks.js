@@ -12,10 +12,10 @@ export function sortBlocks(blocks) {
       by = b.y,
       bz = b.z;
 
-    if (a.names.includes("robot") || a.names.includes("carriedItem")) {
+    if (a.type === "robot" || a.type === "carriedItem") {
       ax -= 0.5 * xScale;
       ay -= 0.5 * yScale;
-    } else if (b.names.includes("robot") || b.names.includes("carriedItem")) {
+    } else if (b.type === "robot" || b.type === "carriedItem") {
       bx -= 0.5 * xScale;
       by -= 0.5 * yScale;
     }
@@ -31,6 +31,7 @@ export function sortBlocks(blocks) {
   });
 }
 
+/*
 export function blocksEqual(struct1, struct2) {
   const a = sortBlocks(struct1);
   const b = sortBlocks(struct2);
@@ -44,13 +45,14 @@ export function blocksEqual(struct1, struct2) {
         a[i].y !== b[i].y ||
         a[i].z !== b[i].z ||
         a[i].color !== b[i].color ||
-        a[i].names !== b[i].names) {
+        a[i].type !== b[i].type) {
       return false;
     }
   }
 
   return true;
 }
+ */
 
 export function rotateBlock (b, rotational, width = 1) {
 	let x = b.x;
@@ -110,7 +112,7 @@ export function rotateBlock (b, rotational, width = 1) {
     if (index !== -1) {
       robot.items.splice(index, 1);
       // z value does not mean anything, it is just very high so it is on top of the stack
-      blocks.push({x:x, y:y, z:0xffff, names:["item"], color:color});
+      blocks.push({x:x, y:y, z:0xffff, type:"item", color:color});
       resolveZ(x, y, blocks);
       return true;
     }
@@ -119,8 +121,8 @@ export function rotateBlock (b, rotational, width = 1) {
 
   export function removeRobot(blocks) {
     for (let i = 0; i < blocks.length; ++i) {
-      if (blocks[i].names.includes("robot")
-          || blocks[i].names.includes("carriedItem")) {
+      if (blocks[i].type === "robot"
+          || blocks[i].type === "carriedItem") {
         blocks.splice(i, 1);
         --i;
       }

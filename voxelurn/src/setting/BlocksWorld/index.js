@@ -11,6 +11,7 @@ import {
   rotateBlock,
   worldAngle,
   removeRobot,
+  resolveZ,
   updateRobot
 } from "helpers/blocks"
 import deepEqual from "deep-equal"
@@ -157,7 +158,18 @@ class Blocks extends React.Component {
 
     // Robot speed factor
     const factor = 5;
-    const updatedBlocks = updateRobot(argBlocks, robot, robotStep, this.props.path, factor);
+    let updatedBlocks = updateRobot(argBlocks, robot, robotStep, this.props.path, factor);
+    if (robotStep === 0) {
+      updatedBlocks.slice().forEach((b) => {
+        if (b.type === "item")
+          resolveZ(b.x, b.y, updatedBlocks);
+        else if (b.type === "wall")
+          b.z = 0;
+        else if (b.type === "robot")
+        robot.z = 0;
+      });
+    }
+    
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
     const scalars = blocks.map((b) => this.getBlockScale(b));
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
@@ -244,6 +256,7 @@ class Blocks extends React.Component {
     if (!(blocks instanceof Array)) {
       blocks = [blocks];
     }
+    
     for (const block of blocks) {
       // let selectedBlockYes = false;
       let color = null;
@@ -259,21 +272,16 @@ class Blocks extends React.Component {
       if (block.color === "fake") {
         //blockColor = new Color(244,244,244, 0.2);
         //this.state.iso.add(this.makeBlock(block.x, block.y, block.z), blockColor);
-      } else if (block.names && block.names.includes("robot")) {
+      } else if (block.type === "robot") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
-      } else if (block.names && (block.names.includes("item") || block.names.includes("carriedItem"))) {
+      } else if (block.type === "item" || block.type === "carriedItem") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
-      } else if (block.names && block.names.includes("path")) {
+      } else if (block.type === "path") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
-      } else if (block.names && block.names.includes("destination")) {
+      } else if (block.type === "destination") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "destination"), blockColor);
       } else {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale), new Color(0, 0, 0, 0.88));
-      }
-
-      if (block.names && block.names.includes("S")) {
-        //this.state.iso.add(this.makeBlock(block.x, block.y, block.z, basicUnit, true), new Color(0, 160, 176, 0.125));
-        //this.state.iso.add(this.makeBlock(block.x, block.y, block.z, true, scale), new Color(0, 0, 0, 1));
       }
     }
   }
