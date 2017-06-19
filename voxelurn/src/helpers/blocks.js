@@ -1,5 +1,5 @@
 export const worldAngle = Math.PI / 12;
-const zScale = -Math.sin(Math.PI / 4);
+const zScale = -Math.atan(1/Math.sqrt(2));
 const yScale = Math.cos(Math.PI/4 + worldAngle);
 const xScale = Math.cos(Math.PI/4 - worldAngle);
 
@@ -12,13 +12,36 @@ export function sortBlocks(blocks) {
       by = b.y,
       bz = b.z;
 
-    if (a.type === "robot" || a.type === "carriedItem") {
-      ax -= 0.5 * xScale;
-      ay -= 0.5 * yScale;
-    } else if (b.type === "robot" || b.type === "carriedItem") {
-      bx -= 0.5 * xScale;
-      by -= 0.5 * yScale;
+    /*
+    if (a.type === "robot") {
+      az += 3;
+      //ax -= 0.4;
+      //ay -= 0.3;
+    } else if (b.type === "robot") {
+      bz += 3;
+      //bx -= 0.4;
+      //by -= 0.3;
+    } else if (a.type === "item") {
+      //ax += 0.4;
+      //ay += 0.3;
+    } else if (b.type === "item") {
+      //bx += 0.4;
+      //by += 0.3;
+    } 
+    // This condition ensures that the robot renders on top of items
+    // 4 is the height of the robot
+    if (Math.abs(a.x - b.x) < 1
+        && Math.abs(a.y - b.y) < 1) {
+      if (a.type === "robot" && b.type === "item" && b.z < 4) {
+        console.log(b);
+        return 1;
+      }
+      else if (a.type === "item" && b.type === "robot" && a.z < 4) {
+        console.log(a);
+        return -1;
+      }
     }
+     */
 
     const aNear = ax*xScale + ay*yScale + az*zScale;
     const bNear = bx*xScale + by*yScale + bz*zScale;
@@ -29,6 +52,18 @@ export function sortBlocks(blocks) {
 
     return 0;
   });
+}
+
+export function adjustRobot(blocks) {
+  let swap;
+  for (let i = 1; i < blocks.length; ++i) {
+    // This might need location-based conditions as well
+    if (blocks[i-1].type === "robot" && blocks[i].type === "item") {
+      swap = blocks[i-1];
+      blocks[i-1] = blocks[i];
+      blocks[i] = swap;
+    }
+  }
 }
 
 /*
@@ -79,11 +114,12 @@ export function rotateBlock (b, rotational, width = 1) {
 	return { ...b, x: x, y: y };
 }
 
+  // Might need to adapt this for carried items as well
   export function resolveZ(x, y, blocks) {
     //const filtered = blocks.filter((b) => {return b.x === x && b.y === y});
     const filtered = [];
     for (let i = 0; i < blocks.length; ++i) {
-      if (blocks[i].x === x && blocks[i].y === y) {
+      if (blocks[i].type == "item" && blocks[i].x === x && blocks[i].y === y) {
         filtered.push(blocks[i]);
         blocks.splice(i, 1);
       }
@@ -158,7 +194,7 @@ export function rotateBlock (b, rotational, width = 1) {
       blocks.push({
         x: robot.x, y: robot.y, z:(4+i),
         color: robot.items[i],
-        names: ["carriedItem"]
+        type: "carriedItem"
       });
     }
     return blocks;

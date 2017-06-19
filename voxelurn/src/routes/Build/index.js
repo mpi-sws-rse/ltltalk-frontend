@@ -118,7 +118,7 @@ class Build extends Component {
 
         /* Otherwise, just accept normally */
         //const r = this.props.dispatch(Actions.accept(query, this.state.selectedResp))
-        const r = this.props.dispatch(Actions.acceptPath(this.state.selectedResp))
+        const r = this.props.dispatch(Actions.acceptPath(query, this.state.selectedResp))
         if (r)
           this.setState({ selectedResp: 0 })
 

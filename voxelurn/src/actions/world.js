@@ -2,7 +2,6 @@ import Constants from "constants/actions"
 import { SEMPREquery, parseSEMPRE } from "helpers/sempre"
 import Logger from "actions/logger"
 import { updateRobot, removeRobot } from "helpers/blocks"
-import { findPath } from "helpers/robot"
 import { persistStore } from "redux-persist"
 import { getStore } from "../"
 import { STATUS } from "constants/strings"
@@ -69,30 +68,6 @@ const Actions = {
     }
   },
 
-  // Deprecated, I hope
-  findPath: (query) => {
-    return (dispatch, getState) => {
-      const { sessionId } = getState().user
-      const { history, current_history_idx } = getState().world
-      const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-      const currentValue = history[idx].value
-      const robot = history[idx].robot;
-
-      const paths = findPath([], [], currentValue);
-      const responses = [
-        {path: paths[0], value: currentValue, robot: robot},
-        {path: paths[1], value: currentValue, robot: robot},
-      ];
-
-      dispatch({
-        type: Constants.FIND_PATH,
-        responses: responses
-      })
-
-      return true;
-    }
-  },
-
   tryQuery: (q) => {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
@@ -125,13 +100,12 @@ const Actions = {
                 /* Remove no-ops */
                 const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
                 const robot = history[idx].robot;
-                const currentValue = history[idx].value
+                const worldMap = history[idx].worldMap
 
                 //const responses = formval.filter((a) => {
                   //return !blocksEqual(a.value, currentValue)
                 //})
                 const responses = formval;
-                console.log(responses);
 
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
                 dispatch({
@@ -164,7 +138,7 @@ const Actions = {
     }
   },
 
-  acceptPath: (selectedResp) => {
+  acceptPath: (text, selectedResp) => {
     return (dispatch, getState) => {
       const { responses, history } = getState().world
 
@@ -190,10 +164,13 @@ const Actions = {
         removeRobot(currentState.worldMap);
       }
 
+      //console.log(currentState.worldMap.filter((b) => b.color === "red"));
+      //console.log(currentState.robot);
+
       selected.worldMap = currentState.worldMap;
       selected.robot = currentState.robot;
 
-      let text = "Path";
+      console.log(selected);
       dispatch({
         type: Constants.ACCEPT,
         el: { ...selected, text}

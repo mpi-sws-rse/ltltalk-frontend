@@ -1,47 +1,5 @@
 import { SEMPRE_SERVER_URL } from "constants/strings"
 
-// function cleanValue(valueString) {
-//   if (!valueString) return "";
-//
-//   return valueString
-//     .replace(/edu.stanford.nlp.sempre.cubeworld.CubeWorld./g, "")
-//     .replace(/edu.stanford.nlp.sempre.cubeworld..*\./g, "")
-//     .replace(/edu.stanford.nlp.sempre./g, "")
-//     .replace(/context:root/g, "")
-//     .toLowerCase();
-// }
-
-// function formatFormula(formula) {
-//   if (typeof formula === "undefined") return "";
-//   if (typeof formula === "string") return cleanValue(formula);
-//
-//   const head = formula[0];
-//   let str = "";
-//   if (head === "call") {
-//     const op = formatFormula(formula[1]);
-//
-//     if (op === ".concat") {
-//       str = `${formatFormula(formula[2])} ${formatFormula(formula[3])}`;
-//     } else if (op === ".tostring") {
-//       str = formatFormula(formula[2]);
-//     } else {
-//       // Default behavior just exposes the function call
-//       const arglist = [];
-//       for (let i = -2; i < formula.length; i++) {
-//         arglist.push(formatFormula(formula[i]));
-//       }
-//       str = `${op}(${arglist.join(",")})`;
-//     }
-//   } else if (head === "number") {
-//     str = formula[1];
-//   } else if (head === "name" || head === "string") {
-//     str = cleanValue(formula[1]);
-//   } else {
-//     str = cleanValue(formula[0]);
-//   }
-//   return str;
-// }
-
 function formatValue(value) {
   if (typeof value === "undefined") return "";
   // "[[5,5,1,\"Blue\",[]],[5,5,2,\"Red\",[]],[5,4,2,\"Green\",[]]]"
@@ -56,7 +14,8 @@ function formatValue(value) {
       x: c[0],
       y: c[1],
       action: c[2],
-      spec: c[3]
+      spec: c[3],
+      possible: c[4]
     }
   ));
 }
@@ -102,7 +61,6 @@ export function parseSEMPRE(valid) {
   const lstqapairs = [];
   if (valid.length === 0) return undefined;
 
-  console.log(valid);
   for (let i = 0; i < valid.length; i++) {
     const qapair = {};
     try {
@@ -138,27 +96,6 @@ export function parseSEMPRE(valid) {
   listqadedup.sort((a, b) => b.score - a.score + 1e-3 * (a.rank - b.rank));
   return listqadedup;
 }
-
-// function sempreFormat(ques) {
-//   return ques.replace(/\+/g, " __+ ")
-//     .replace(/\(/g, " [ ")
-//     .replace(/\)/g, " ] ")
-//     .replace(/\+/g, " + ")
-//     .replace(/-/g, " - ")
-//     .replace(/\*/g, " * ")
-//     .replace(/\//g, " / ");
-// }
-//
-// export function formatQuery(ques) {
-//   const sanity = ques.replace(/(\+|-|%|;)/g, " $1 ")
-//     .replace(/(\(|\))/g, "") // disables commands
-//     .replace(/"/g, "")
-//     .replace(/=/g, "= ")
-//     .replace(/(>|<)/g, " $1")
-//     .replace(/(>|<)(?!=)/g, "$1 ")
-//     .replace(/([^><])=/g, "$1 =");
-//   return sanity;
-// }
 
 export function SEMPREquery(cmds, callback) {
   const cmdstr = []

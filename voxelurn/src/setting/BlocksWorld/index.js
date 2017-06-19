@@ -8,6 +8,7 @@ import Isomer,
 } from "isomer";
 import {
   sortBlocks,
+  adjustRobot,
   rotateBlock,
   worldAngle,
   removeRobot,
@@ -171,6 +172,7 @@ class Blocks extends React.Component {
     }
     
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
+    adjustRobot(blocks);
     const scalars = blocks.map((b) => this.getBlockScale(b));
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
 
@@ -220,7 +222,11 @@ class Blocks extends React.Component {
   renderGrid(scale) {
     const { groundRadius, rotation, groundColor, centerPoint } = this.config;
     const groundwidth = 2 * groundRadius + 1;
+
+
     for (let x = 0; x < groundwidth + 1; x++) {
+      
+
       this.state.iso.add(new Path([
         new Point((x - groundRadius), -groundRadius, 0),
         new Point((x - groundRadius), (groundRadius + 1), 0),
@@ -266,6 +272,9 @@ class Blocks extends React.Component {
       // TODO Determine if this should be kept
       if (color) {
         blockColor = new Color(color[0], color[1], color[2], 0.88);
+      }
+      if (!block.type) {
+        console.log(block);
       }
 
       // Determine what sort of block to construct
