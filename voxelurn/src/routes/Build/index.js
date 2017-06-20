@@ -127,7 +127,7 @@ class Build extends Component {
         this.props.dispatch(Actions.define(this.props.defineN))
         break
       case STATUS.LOADING:
-        this.props.dispatch(Actions.setStatus(STATUS.TRY))
+        this.props.dispatch(Actions.setStatus(STATUS.PATH/*TRY*/))
         break
       default:
         console.log("uh oh... unknown status!", this.props.status)

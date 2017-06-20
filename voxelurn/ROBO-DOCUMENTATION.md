@@ -2,6 +2,32 @@
 
 Name to be determined
 
+## Usage
+
+Sometimes if things are acting strangely, open the right side menu (with the
+arrow) and hit "Clear". Here are some example commands; they can be ran
+separately or all at once.
+
+``` 
+visit[0,-2];
+pick all;
+visit [4,-4];
+pick all;
+visit[4,3];
+pick all;
+visit[-3,3];
+pick all;
+drop all has color red;
+visit[-3,2];
+drop all has color green;
+visit[-3,1];
+drop all;
+visit [0,0]
+```
+
+
+## Important Files
+
 - `actions/world.js` - holds methods dealing with dispatching changes to the
 world and communicating with SEMPRE 
 - `constants/strings.js` - holds configuration strings such as the URL of the

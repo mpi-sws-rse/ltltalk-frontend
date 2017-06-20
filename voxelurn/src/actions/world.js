@@ -95,6 +95,13 @@ const Actions = {
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
+
+                dispatch({
+                  type: Constants.SET_STATUS,
+                  status: STATUS.PATH
+                })
+                alert("No valid parses received from server. (likely syntax error)");
+
                 return false
               } else {
                 /* Remove no-ops */
@@ -102,9 +109,6 @@ const Actions = {
                 const robot = history[idx].robot;
                 const worldMap = history[idx].worldMap
 
-                //const responses = formval.filter((a) => {
-                  //return !blocksEqual(a.value, currentValue)
-                //})
                 const responses = formval;
 
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
@@ -112,12 +116,7 @@ const Actions = {
                   type: Constants.FIND_PATH,
                   responses: responses
                 })
-                /*
-                dispatch({
-                  type: Constants.TRY_QUERY,
-                  responses: responses
-                })
-                 */
+
                 return true
               }
             })
@@ -148,7 +147,7 @@ const Actions = {
         alert("You can't accept a response with an error in it. Please accept another response or try a different query.")
         dispatch({
           type: Constants.SET_STATUS,
-          status: STATUS.TRY
+          status: STATUS.PATH/*TRY*/
         })
         return
       }
@@ -158,19 +157,14 @@ const Actions = {
       // Apply history; maybe I need to identify the history I need to apply to in a different way.
       let currentState = JSON.parse(JSON.stringify(history[history.length - 1]));
       let path = selected.path;
-      //console.log(currentState);
       for (let i = 0; i < path.length; ++i) {
         updateRobot(currentState.worldMap, currentState.robot, i, selected.path, 1);
         removeRobot(currentState.worldMap);
       }
 
-      //console.log(currentState.worldMap.filter((b) => b.color === "red"));
-      //console.log(currentState.robot);
-
       selected.worldMap = currentState.worldMap;
       selected.robot = currentState.robot;
 
-      console.log(selected);
       dispatch({
         type: Constants.ACCEPT,
         el: { ...selected, text}

@@ -110,11 +110,11 @@ export default function reducer(state = initialState, action = {}) {
       let collapsedHistory = [...state.history.slice(0, action.idx), { text: action.text, value: state.history[state.history.length - 1].value, formula: action.formula }]
       if (collapsedHistory.length === 0) collapsedHistory = initialState.history
       else if (collapsedHistory.length === 1) collapsedHistory = [...initialState.history, ...collapsedHistory]
-      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.TRY }
+      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.PATH/*TRY*/ }
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
     case Constants.RESET_RESPONSES:
-      return { ...state, status: STATUS.TRY, query: "", responses: [] }
+      return { ...state, status: STATUS.PATH/*TRY*/, query: "", responses: [] }
     case Constants.OPEN_DEFINE:
       return { ...state, defining: true, defineN: action.defineN }
     case Constants.CLOSE_DEFINE:
