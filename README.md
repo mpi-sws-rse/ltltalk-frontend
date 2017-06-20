@@ -12,5 +12,6 @@ User also has to specify the environment behavior for the robot (such as - if th
 specification is unrealizable, the system warns the user about the root cause (and then the user has to change environment assumptions or change the specification.)
 
 #Technical details
+The setup of the system is described [here](/voxelurn).
 The system is inspired by the [Voxelurn system](https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md), that performs the same naturalization process for a simple world of Voxels.
 The semantic parser is developed in a [separate branch](https://gitlab.mpi-sws.org/gavran/sempre-interactive).

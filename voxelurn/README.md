@@ -12,7 +12,7 @@ Currently in progress, and focuses on a blocks world.
 
 #### Installation
 
-To install, simply run `yarn install`. This will install all the needed node dependencies.
+To install, simply run `yarn install`. This will install all the needed node dependencies. (Install yarn as described [here](https://yarnpkg.com/lang/en/docs/install/)
 
 #### Development
 
@@ -43,6 +43,10 @@ All javascript and CSS source code is the "src" folder. Generally, anything that
 
 The setting (BlocksWorld) lives in the "src/setting". Here is the only logic that is blocks world dependent.
 
-### Build Your Own Setting!
+## RobotWorld 
 
 Interested in expanding this client to handle a different setting? Everything should be setting agnostic except for the code in "src/setting". All you have to do is implement all the same props as "src/setting/BlocksWorld" does and then export the new setting as the App's setting by changing what gets imported in "src/setting/index.js". Then, everything should work as intended!
+The RobotWorld file structure is described [here](/voxelurn/ROBO-DOCUMENTATION.md).
+
+### Known bugs
+ - if a system behaves nonsensically, make sure to clear the cached commands (an error on the right-hand side of the screen and then the clear button).
