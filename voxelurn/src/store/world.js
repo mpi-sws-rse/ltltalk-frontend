@@ -72,6 +72,7 @@ const initialState = {
     path: [],
     formula: "(initial)" }],
   responses: [],
+  markers: [], // Not sure if this is being set
   current_history_idx: -1,
   status: STATUS.PATH,
   query: "",
@@ -113,6 +114,10 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.PATH/*TRY*/ }
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
+    ///////
+    case Constants.UPDATE_MARKERS:
+      return { ...state, markers: action.markers }
+    ///////
     case Constants.RESET_RESPONSES:
       return { ...state, status: STATUS.PATH/*TRY*/, query: "", responses: [] }
     case Constants.OPEN_DEFINE:

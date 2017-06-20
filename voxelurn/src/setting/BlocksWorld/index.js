@@ -70,6 +70,7 @@ class Blocks extends React.Component {
   static propTypes = {
     blocks: React.PropTypes.array,
     path: React.PropTypes.array,
+    markers: React.PropTypes.array,
     robot: React.PropTypes.object,
     isoConfig: React.PropTypes.object,
     width: React.PropTypes.number,
@@ -170,6 +171,20 @@ class Blocks extends React.Component {
         robot.z = 0;
       });
     }
+
+    
+    // TODO Move this to its own function
+    let m = this.props.markers;
+    for (let i = 0; i < updatedBlocks.length; ++i) {
+      if (updatedBlocks[i].type === "marker") {
+        updatedBlocks.splice(i,1);
+        --i;
+      }
+    }
+    for (let i = 0; i < this.props.markers.length; ++i) {
+      updatedBlocks.push({x:parseInt(m[i][0]), y:parseInt(m[i][1]), z:0, color: "fuchsia", type: "marker"});
+    }
+    //console.log(updatedBlocks.filter(b => b.type === "marker"));
     
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
     adjustRobot(blocks);
@@ -252,6 +267,7 @@ class Blocks extends React.Component {
     }
   }
 
+  // I believe this is deprecated
   renderPath(blocks, i) {
     this.renderBlocks(blocks[i]);
     if (i+1 < blocks.length)
@@ -271,7 +287,10 @@ class Blocks extends React.Component {
       let blockColor = new Color();
       // TODO Determine if this should be kept
       if (color) {
-        blockColor = new Color(color[0], color[1], color[2], 0.88);
+        let alpha = 0.88;
+        if (block.type === "marker")
+          alpha = 0.5;
+        blockColor = new Color(color[0], color[1], color[2], alpha);
       }
       if (!block.type) {
         console.log(block);
@@ -287,8 +306,8 @@ class Blocks extends React.Component {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
       } else if (block.type === "path") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
-      } else if (block.type === "destination") {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "destination"), blockColor);
+      } else if (block.type === "marker") {
+        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "marker"), blockColor);
       } else {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale), new Color(0, 0, 0, 0.88));
       }
@@ -313,13 +332,13 @@ class Blocks extends React.Component {
       cScale = 0.25;
     else if (type === "item")
       cScale = 0.75;
-    else if (type === "destination")
-      cScale = 0.5;
+    else if (type === "marker")
+      cScale = 1;
 
     let zScale = heightScaling;
     if (type === "robot")
       zScale = 1;
-    else if (type === "destination")
+    else if (type === "marker")
       zScale = 0.5;
 
     const shift = (1 - cubesize*cScale) / 2;
@@ -338,15 +357,16 @@ class Blocks extends React.Component {
       .scale(centerPoint, scale);
     } else {
       let shape = Shape.Prism;
-      if (type === "destination")
+      let yRotation = 0;
+      if (type === "marker") {
         shape = Shape.Pyramid;
-      return shape(
-        Point(x + shift,
-          y + shift,
-          z * heightScaling + zShift
-        ),
+        //yRotation = Math.PI;
+      }
+      let objectPoint = Point(x + shift, y + shift, z * heightScaling + zShift);
+      return shape(objectPoint ,
         cubesize*cScale, cubesize*cScale, cubesize*zScale
       )
+        .rotateY(objectPoint, yRotation)
         .rotateZ(centerPoint, rotation)
         .scale(centerPoint, scale)
       //.translate(gridWidth*offset, gridWidth*offset, 0);

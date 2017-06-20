@@ -20,7 +20,7 @@ class CommandBar extends Component {
     /* injected by Redux */
     status: PropTypes.string,
     query: PropTypes.string,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   }
 
   componentDidUpdate(prevProps) {
@@ -41,11 +41,6 @@ class CommandBar extends Component {
       return
     }
 
-    /* Fire off the callback */
-    // This commented-out line preserves the standard way of adding blocks to Voxelurn
-    //this.props.onClick(this.props.query)
-    // Dummy to/from
-    //this.props.dispatch(Actions.findPath([0,0], [3,0]));
     this.props.dispatch({
       type: Constants.SET_STATUS,
       status: STATUS.PATH
@@ -54,8 +49,13 @@ class CommandBar extends Component {
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */
-    if (this.props.status === STATUS.ACCEPT)
+    if (this.props.status === STATUS.ACCEPT) {
       this.props.dispatch(Actions.setQuery(""))
+      this.props.dispatch({
+        type: Constants.UPDATE_MARKERS,
+        markers: []
+      })
+    }
   }
 
   handleKeyDown(e) {
@@ -82,6 +82,22 @@ class CommandBar extends Component {
     const newValue = e.target.value
     if (newValue !== this.props.query)
       this.props.dispatch(Actions.setQuery(newValue))
+
+    let locRe = /\[\s*(\-?\d+)\s*,\s*(\-?\d+)\s*\]/g;
+    let result = locRe.exec(newValue);
+    let cursor = e.target.selectionStart;
+    let locs = [];
+    while (result) {
+      //console.log(result.index);
+      //if (cursor >= result.index && cursor < (result.index + result[0].length))
+        //console.log(result[0]);
+      locs.push([result[1], result[2]]);
+      result = locRe.exec(newValue);
+    }
+    this.props.dispatch({
+      type: Constants.UPDATE_MARKERS,
+      markers: locs
+    })
   }
 
   render() {

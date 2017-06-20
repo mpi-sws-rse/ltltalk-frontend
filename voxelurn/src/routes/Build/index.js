@@ -23,7 +23,9 @@ class Build extends Component {
     historyLen: PropTypes.number,
     responses: PropTypes.array,
     dispatch: PropTypes.func,
-    task: PropTypes.string
+    task: PropTypes.string,
+
+    markers: PropTypes.array
   }
 
   constructor(props) {
@@ -184,7 +186,7 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, history, current_history_idx, task } = this.props
+    const { status, responses, markers, history, current_history_idx, task } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -209,7 +211,14 @@ class Build extends Component {
     return (
       <div className="Build">
         <div className="Build-world">
-          <Setting blocks={currentState} path={currentPath} robot={robot} width={1650} height={1200} isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
+          <Setting
+            blocks={currentState}
+            path={currentPath}
+            robot={robot}
+            markers={markers}
+            width={1650}
+            height={1200}
+            isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
         </div>
         <div className="Build-command">
           <History />
@@ -252,6 +261,7 @@ const mapStateToProps = (state) => ({
   history: state.world.history,
   task: state.user.task,
   responses: state.world.responses,
+  markers: state.world.markers,
   defineN: state.world.defineN,
   current_history_idx: state.world.current_history_idx
 })

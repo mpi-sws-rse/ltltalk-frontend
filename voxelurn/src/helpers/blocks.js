@@ -1,50 +1,12 @@
-export const worldAngle = Math.PI / 12;
+export const worldAngle = -Math.PI / 12;
 const zScale = -Math.atan(1/Math.sqrt(2));
-const yScale = Math.cos(Math.PI/4 + worldAngle);
-const xScale = Math.cos(Math.PI/4 - worldAngle);
+const yScale = Math.cos(Math.PI/4 - worldAngle);
+const xScale = Math.cos(Math.PI/4 + worldAngle);
 
 export function sortBlocks(blocks) {
   return blocks.sort((a, b) => {
-    let ax = a.x,
-      ay = a.y,
-      az = a.z,
-      bx = b.x,
-      by = b.y,
-      bz = b.z;
-
-    /*
-    if (a.type === "robot") {
-      az += 3;
-      //ax -= 0.4;
-      //ay -= 0.3;
-    } else if (b.type === "robot") {
-      bz += 3;
-      //bx -= 0.4;
-      //by -= 0.3;
-    } else if (a.type === "item") {
-      //ax += 0.4;
-      //ay += 0.3;
-    } else if (b.type === "item") {
-      //bx += 0.4;
-      //by += 0.3;
-    } 
-    // This condition ensures that the robot renders on top of items
-    // 4 is the height of the robot
-    if (Math.abs(a.x - b.x) < 1
-        && Math.abs(a.y - b.y) < 1) {
-      if (a.type === "robot" && b.type === "item" && b.z < 4) {
-        console.log(b);
-        return 1;
-      }
-      else if (a.type === "item" && b.type === "robot" && a.z < 4) {
-        console.log(a);
-        return -1;
-      }
-    }
-     */
-
-    const aNear = ax*xScale + ay*yScale + az*zScale;
-    const bNear = bx*xScale + by*yScale + bz*zScale;
+    const aNear = a.x*xScale + a.y*yScale + a.z*zScale;
+    const bNear = b.x*xScale + b.y*yScale + b.z*zScale;
     if (aNear > bNear)
       return -1;
     else if (aNear < bNear)
@@ -54,14 +16,16 @@ export function sortBlocks(blocks) {
   });
 }
 
-export function adjustRobot(blocks) {
+export function adjustRobot(b) {
+  // b for blocks
   let swap;
-  for (let i = 1; i < blocks.length; ++i) {
+  for (let i = 1; i < b.length; ++i) {
     // This might need location-based conditions as well
-    if (blocks[i-1].type === "robot" && blocks[i].type === "item") {
-      swap = blocks[i-1];
-      blocks[i-1] = blocks[i];
-      blocks[i] = swap;
+    if ((b[i-1].type === "robot" && (b[i].type === "item" || b[i].type === "marker"))
+        || (b[i-1].type === "marker" && (b[i].type === "item"))) {
+      swap = b[i-1];
+      b[i-1] = b[i];
+      b[i] = swap;
     }
   }
 }
