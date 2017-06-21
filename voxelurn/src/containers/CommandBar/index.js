@@ -83,7 +83,7 @@ class CommandBar extends Component {
     if (newValue !== this.props.query)
       this.props.dispatch(Actions.setQuery(newValue))
 
-    let locRe = /\[\s*(\-?\d+)\s*,\s*(\-?\d+)\s*\]/g;
+    let locRe = /\[\s*(\-?\d+)\s*,\s*(\-?\d+)\s*(\]|$)/g;
     let result = locRe.exec(newValue);
     let cursor = e.target.selectionStart;
     let locs = [];

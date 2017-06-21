@@ -5,8 +5,9 @@ const xScale = Math.cos(Math.PI/4 + worldAngle);
 
 export function sortBlocks(blocks) {
   return blocks.sort((a, b) => {
-    const aNear = a.x*xScale + a.y*yScale + a.z*zScale;
-    const bNear = b.x*xScale + b.y*yScale + b.z*zScale;
+    let aNear = a.x*xScale + a.y*yScale + a.z*zScale;
+    let bNear = b.x*xScale + b.y*yScale + b.z*zScale;
+
     if (aNear > bNear)
       return -1;
     else if (aNear < bNear)
@@ -16,42 +17,30 @@ export function sortBlocks(blocks) {
   });
 }
 
-export function adjustRobot(b) {
-  // b for blocks
+export function adjustRobot(r, b) {
+  // r for robot, b for blocks
   let swap;
-  for (let i = 1; i < b.length; ++i) {
-    // This might need location-based conditions as well
-    if ((b[i-1].type === "robot" && (b[i].type === "item" || b[i].type === "marker"))
+  let robotIndex = -1;
+  for (let i = 0; i < b.length; ++i) {
+    if (b[i].type === "robot") {
+      robotIndex = i;
+    } else if (robotIndex === -1) {
+      continue;
+    } else if (b[i].x === r.x && b[i].y === r.y && b[i].z < 4) {
+      swap = b[i];
+      b[i] = b[robotIndex];
+      b[robotIndex] = swap;
+      robotIndex = i;
+    } /*else if ((b[i-1].type === "robot" && (b[i].type === "item" || b[i].type === "marker"))
         || (b[i-1].type === "marker" && (b[i].type === "item"))) {
       swap = b[i-1];
       b[i-1] = b[i];
       b[i] = swap;
     }
+    */
+     
   }
 }
-
-/*
-export function blocksEqual(struct1, struct2) {
-  const a = sortBlocks(struct1);
-  const b = sortBlocks(struct2);
-
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
-
-  for (let i = 0; i < a.length; ++i) {
-    if (a[i].x !== b[i].x ||
-        a[i].y !== b[i].y ||
-        a[i].z !== b[i].z ||
-        a[i].color !== b[i].color ||
-        a[i].type !== b[i].type) {
-      return false;
-    }
-  }
-
-  return true;
-}
- */
 
 export function rotateBlock (b, rotational, width = 1) {
 	let x = b.x;
@@ -80,12 +69,12 @@ export function rotateBlock (b, rotational, width = 1) {
 
   // Might need to adapt this for carried items as well
   export function resolveZ(x, y, blocks) {
-    //const filtered = blocks.filter((b) => {return b.x === x && b.y === y});
     const filtered = [];
     for (let i = 0; i < blocks.length; ++i) {
       if (blocks[i].type == "item" && blocks[i].x === x && blocks[i].y === y) {
         filtered.push(blocks[i]);
         blocks.splice(i, 1);
+        --i;
       }
     }
     const sorted = filtered.sort((a,b) => {return a.z > b.z});
@@ -99,6 +88,7 @@ export function rotateBlock (b, rotational, width = 1) {
     for (let i = 0; i < blocks.length; ++i) {
       if (blocks[i].x === x && blocks[i].y === y && blocks[i].color === color) {
         blocks.splice(i, 1);
+        --i;
         robot.items.push(color);
         resolveZ(x, y, blocks);
         return true;

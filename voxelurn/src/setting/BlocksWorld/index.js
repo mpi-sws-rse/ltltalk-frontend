@@ -187,7 +187,7 @@ class Blocks extends React.Component {
     //console.log(updatedBlocks.filter(b => b.type === "marker"));
     
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
-    adjustRobot(blocks);
+    adjustRobot(robot, blocks);
     const scalars = blocks.map((b) => this.getBlockScale(b));
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
 
@@ -309,7 +309,7 @@ class Blocks extends React.Component {
       } else if (block.type === "marker") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "marker"), blockColor);
       } else {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale), new Color(0, 0, 0, 0.88));
+        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "wall"), new Color(0, 0, 0, 0.88));
       }
     }
   }
@@ -340,6 +340,8 @@ class Blocks extends React.Component {
       zScale = 1;
     else if (type === "marker")
       zScale = 0.5;
+    else if (type === "wall")
+      zScale = 0.125;
 
     const shift = (1 - cubesize*cScale) / 2;
     const zShift = (1 - cubesize) / 2;
