@@ -6,8 +6,9 @@ Specification language consists of statements that can be either Specifications 
   - `P -> ST`
 
 ## Variable names (V)
-Variables are only used in iterations: elsewhere they are implicitly given through naming certain object, location or action in previous commands
-V -> $[a-zA-Z]+
+Variables are only used in iterations: elsewhere they are implicitly given through naming certain object, location or specification in previous commands
+
+  - `V -> $[a-zA-Z]+`
 
 ## Statement (ST)
  
@@ -22,7 +23,7 @@ V -> $[a-zA-Z]+
  
  - `Sit -> F at A` *true if at least one item passing the item filter F is at area A*
  - `Sit -> F at robot` *true if the robot carries at least one item described by item filter F*
- - `Sit -> at L` *true if the robot is at location L (any of the fields)*
+ - `Sit -> robot at L` *true if the robot is at location L (any of the fields)*
  - `Sit -> possible(Spec)` *if specification Spec is realizable, return true, otherwise false*
 
 ## Specifications (Spec)
@@ -31,8 +32,8 @@ If a specification is realizable, a controller is synthesized and the spec is ex
   - `Spec -> visit P while avoiding A`  *robot should visit point P , and while doing this not enter any point of area A* 
   - `Spec -> visit P`  *syntactic sugar for visit P while avoiding $`\emptyset`$* 
   - `Spec -> visit A1 while avoiding A2` *syntactic sugar for visit any A1 while avoiding A2*
-  - `Spec -> pick  I` *pick items defined by item definition I (from your current field)*
-  - `Spec -> drop I` *the robot should drop items defined by item definition I that it currently has (it should drop it on its location)*
+  - `Spec -> pick  I` *pick items defined by item definition I (from your current field). If nothing can be picked, the specification is considered unrealizable*
+  - `Spec -> drop I` *the robot should drop items defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
 
 ## Iterables 
  - `Iterable -> A` *each area is iterable: the iterations happen over points of the area in a non-determined order*
