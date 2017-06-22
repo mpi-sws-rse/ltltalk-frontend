@@ -182,7 +182,7 @@ class Blocks extends React.Component {
       }
     }
     for (let i = 0; i < this.props.markers.length; ++i) {
-      updatedBlocks.push({x:parseInt(m[i][0]), y:parseInt(m[i][1]), z:0, color: "fuchsia", type: "marker"});
+      updatedBlocks.push({x:parseInt(m[i][0]), y:parseInt(m[i][1]), z:-0.01, color: "fuchsia", type: "marker"});
     }
     //console.log(updatedBlocks.filter(b => b.type === "marker"));
     
@@ -339,7 +339,7 @@ class Blocks extends React.Component {
     if (type === "robot")
       zScale = 1;
     else if (type === "marker")
-      zScale = 0.5;
+      zScale = 0.125;
     else if (type === "wall")
       zScale = 0.125;
 
@@ -361,7 +361,7 @@ class Blocks extends React.Component {
       let shape = Shape.Prism;
       let yRotation = 0;
       if (type === "marker") {
-        shape = Shape.Pyramid;
+        //shape = Shape.Pyramid;
         //yRotation = Math.PI;
       }
       let objectPoint = Point(x + shift, y + shift, z * heightScaling + zShift);

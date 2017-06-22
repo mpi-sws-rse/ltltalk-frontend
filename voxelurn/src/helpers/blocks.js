@@ -26,7 +26,9 @@ export function adjustRobot(r, b) {
       robotIndex = i;
     } else if (robotIndex === -1) {
       continue;
-    } else if (b[i].x === r.x && b[i].y === r.y && b[i].z < 4) {
+    } else if ((b[i].x - r.x) > -0.5
+        && (b[i].y - r.y) > -0.5
+        && b[i].z < 4) {
       swap = b[i];
       b[i] = b[robotIndex];
       b[robotIndex] = swap;
