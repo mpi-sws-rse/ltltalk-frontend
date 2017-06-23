@@ -74,20 +74,51 @@ Item filters function as logical filters. One can say _pick item_ with the meani
 
 # Examples
   - *Collect all red triangles from the point where robot is currently standing*: 
-    ```pick item has color red has shape triangle```
+    ```
+    pick item has color red and has shape triangle
+    ```
+    
   - *Collect two green triangles*
-     ```repeat 2 times pick single item has color green```
+     ```
+    repeat 2 times pick single item has color green
+    ```
+    
   - *Visit kitchen ((xk1, yk1),...,(yk1, ykn)), and living room ((xl1, yl1),...,(xln, yln)). Pick whichever cubes you find there. Repeat the visits 10 times*
 ```    
 repeat 10 times
-      - {foreach $loc in [[xk1, yk1],...,[yk1, ykn]] with item filter has shape cube {visit $loc; pick item has shape cube}; 
-      - foreach $loc in [[xl1, yl1],...,[yl1, yln]] with item filter has shape cube {visit $loc; pick item has shape cube}
-      }```
+       {foreach $loc in [[xk1, yk1],...,[yk1, ykn]] with item filter has shape cube {visit $loc; pick item has shape cube}; 
+       foreach $loc in [[xl1, yl1],...,[yl1, yln]] with item filter has shape cube {visit $loc; pick item has shape cube}
+      }
+```
       
+  - a room in which there is a blue item
+  ```
+  room with point any { world with item filter has color blue }
+  ```
   - all rooms in which there is a blue item:
   **with current grammar, I don't see how to do it. What I would need is something like**
   ```
   [ room with point p for p in world with item filter has color blue ]
   ```
   **is it worth adding additional rule for this?**
+  
+  - all social rooms in the building
+  ```
+  [ [[x11,y11], ...,[x1n, y1n]], ..., [[xm1, ym1],..., [xmk, ymk]] ]
+  ```
+  
+  - assuming that in the previous statement user defined the name for this location *social rooms*: visit all social rooms in the building
+  ```
+  foreach $r in social rooms {visit $r}
+  ```
+  
+  - area of fields in which there is a red triangle or any blue item
+  ```
+  world with item filter {has color red and has type triangle} or has color blue
+  ```
+  
+  -collect all red items from the building
+  ```
+  foreach $p in world with item filter has color red {visit p; pick has item has color red}
+  ```
 
