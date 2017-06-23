@@ -28,13 +28,13 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `P -> any A` *nondeterministically chosen any point from area A*
   - `A->[P1, P2,...,Pn]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
   - `A -> world` *area of the whole map*
-  - `A -> A1 + A2` *a union of areas L1 and L2*
+  - `A -> A1 + A2` *a union of areas A1 and A2*
   - `A -> A1 * A2` *an intersection of areas A1 and A2*
   - `A -> A1 - A2` *a difference between areas A1 and A2*
   - `A -> room with point P` *an area of all points reachable from point P without hitting into doors or walls*
   - `C -> [A1, A2,..., An]` *a set of areas (set of sets of points)*
   - `C -> C1 with item filter F` *subcollection of C1 consisting of areas that contain items defined by item filter F*
-  - `A -> A1 with item filter F` *subarea of A1( consisting of fields that contain item F*
+  - `A -> A1 with item filter F` *subarea of A1 (consisting of fields that contain item F)*
 
 
 ## Situations (Sit)
@@ -63,11 +63,31 @@ If a specification is realizable, a controller is synthesized and the spec is ex
 Item filters function as logical filters. One can say _pick item_ with the meaning pick whatever there is at your current location, or _pick item has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue. The item definition is then either a filter (takes everything that passes through the filter) or a single item (nondeterministically chosen) that passes the filter.
 
   - `F -> item` _no filter, all the item present there_
-  - `F -> item has color C` _C is from finite set of colors, everything that has color C passes the filter_
-  - `F -> has shape T` _T is from finite set of shapes, everything that has type T passes the filter_
+  - `F -> F1 has color C` _C is from finite set of colors, everything that has color C passes the filter_
+  - `F -> F1 has shape T` _T is from finite set of shapes, everything that has type T passes the filter_
   - `F -> F1 && F2`  _a conjunction of two item filters_
   - `F -> F1 || F2` _a disjunction of two item filaters_
   - `F -> !F1` _a negation of an item filter F1_
   - `I -> F` _all items that pass the filter F_
   - `I -> single F` _a single, nondeterministically chosen item of all that pass the filter F_
+ 
+
+# Examples
+  - *Collect all red triangles from the point where robot is currently standing*: 
+    ```pick item has color red has shape triangle```
+  - *Collect two green triangles*
+     ```repeat 2 times pick single item has color green```
+  - *Visit kitchen ((xk1, yk1),...,(yk1, ykn)), and living room ((xl1, yl1),...,(xln, yln)). Pick whichever cubes you find there. Repeat the visits 10 times*
+```    
+repeat 10 times
+      - {foreach $loc in [[xk1, yk1],...,[yk1, ykn]] with item filter has shape cube {visit $loc; pick item has shape cube}; 
+      - foreach $loc in [[xl1, yl1],...,[yl1, yln]] with item filter has shape cube {visit $loc; pick item has shape cube}
+      }```
+      
+  - all rooms in which there is a blue item:
+  **with current grammar, I don't see how to do it. What I would need is something like**
+  ```
+  [ room with point p for p in world with item filter has color blue ]
+  ```
+  **is it worth adding additional rule for this?**
 
