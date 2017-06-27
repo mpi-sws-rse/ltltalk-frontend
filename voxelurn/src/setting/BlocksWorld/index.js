@@ -10,13 +10,17 @@ import {
   sortBlocks,
   adjustRobot,
   rotateBlock,
-  worldAngle,
   removeRobot,
   resolveZ,
   updateRobot
 } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
+
+import {
+  worldAngle,
+  worldRadius
+} from "constants/world"
 
 // Default z-axis scaling for blocks
 const heightScaling = 0.25;
@@ -92,7 +96,7 @@ class Blocks extends React.Component {
 
       blockWidthScale: 0.9,
       selectWidthScale: 0.4,
-      groundRadius: 5,
+      groundRadius: worldRadius,
       gridColor: new Color(50, 50, 50),
       canvasWidth: 2 * 825.0,
       canvasHeight: 2 * 600.0,
@@ -182,7 +186,7 @@ class Blocks extends React.Component {
       }
     }
     for (let i = 0; i < this.props.markers.length; ++i) {
-      updatedBlocks.push({x:parseInt(m[i][0]), y:parseInt(m[i][1]), z:-0.01, color: "fuchsia", type: "marker"});
+      updatedBlocks.push({x:parseInt(m[i][0],10), y:parseInt(m[i][1],10), z:-0.01, color: "fuchsia", type: "marker"});
     }
     //console.log(updatedBlocks.filter(b => b.type === "marker"));
     
@@ -194,9 +198,9 @@ class Blocks extends React.Component {
 
     this.state.iso.canvas.clear()
     // this.state.iso._calculateTransformation();
-    this.renderBlocks(blocks.filter((b) => b.z < 0), minScalar)
+    this.renderBlocks(blocks.filter((b) => b.z < -0.5), minScalar)
     this.renderGrid(minScalar)
-    this.renderBlocks(blocks.filter((b) => b.z >= 0), minScalar)
+    this.renderBlocks(blocks.filter((b) => b.z >= -0.5), minScalar)
 
     removeRobot(blocks);
 

@@ -1,4 +1,5 @@
-export const worldAngle = -Math.PI / 12;
+import { worldAngle } from "constants/world"
+
 const zScale = -Math.atan(1/Math.sqrt(2));
 const yScale = Math.cos(Math.PI/4 - worldAngle);
 const xScale = Math.cos(Math.PI/4 + worldAngle);
@@ -73,7 +74,7 @@ export function rotateBlock (b, rotational, width = 1) {
   export function resolveZ(x, y, blocks) {
     const filtered = [];
     for (let i = 0; i < blocks.length; ++i) {
-      if (blocks[i].type == "item" && blocks[i].x === x && blocks[i].y === y) {
+      if (blocks[i].type === "item" && blocks[i].x === x && blocks[i].y === y) {
         filtered.push(blocks[i]);
         blocks.splice(i, 1);
         --i;

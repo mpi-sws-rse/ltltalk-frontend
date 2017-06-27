@@ -1,6 +1,6 @@
-import io from "socket.io-client"
+//import io from "socket.io-client"
 import Constants from "constants/actions"
-import { COMMUNITY_SERVER_URL, CUBE_MINIMUM } from "constants/strings"
+import { CUBE_MINIMUM } from "constants/strings"
 import { setStore, getStore, genSid, resizePNG } from "helpers/util"
 
 function sendSocket(getState, event, payload) {
@@ -10,6 +10,9 @@ function sendSocket(getState, event, payload) {
   const token = getStore("auth_token", "")
 
   const message = { ...payload, uid: uid, token: token }
+
+  let n = true;
+  if (n) return;
 
   return new Promise((resolve, reject) => {
     if (socket && socket.connected && typeof socket.emit === "function") {
@@ -52,7 +55,10 @@ const Actions = {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
 
-      const socket = io(COMMUNITY_SERVER_URL)
+      //const socket = io(COMMUNITY_SERVER_URL)
+      const socket = null;
+      if (socket === null)
+        return;
       socket.on("connect", () => {
         console.log("logging socket connected")
 

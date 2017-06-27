@@ -1,5 +1,5 @@
 import Constants from "constants/actions"
-import { SEMPREquery, parseSEMPRE } from "helpers/sempre"
+import { SEMPREquery, parseSEMPRE/*, worldToJSON*/ } from "helpers/sempre"
 import Logger from "actions/logger"
 import { updateRobot, removeRobot } from "helpers/blocks"
 import { persistStore } from "redux-persist"
@@ -12,6 +12,7 @@ function sendContext(history, current_history_idx, sessionId) {
   if (history.length > 0) {
     const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
     const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color]));
+    //const currentState = worldToJSON(history[idx].worldMap);
     const robot = history[idx].robot;
     const robotContext = [robot.x, robot.y, robot.items];
     const totalState = JSON.stringify(JSON.stringify([robotContext].concat(currentState)));

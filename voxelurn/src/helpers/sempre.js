@@ -1,4 +1,18 @@
 import { SEMPRE_SERVER_URL } from "constants/strings"
+import { worldRadius } from "constants/world"
+
+// This may not be necessary. Currently unused.
+export function worldToJSON(worldMap) {
+  let fullMap = [];
+  //const openPoint = [
+  
+  //const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color]));
+  //for (let y = -worldRadius; y < worldRadius; ++y) {
+    //fullMap[y + worldRadius] = [];
+    //for (let x = -worldRadius; x < worldRadius; ++x) {
+    //}
+  //}
+}
 
 function formatValue(value) {
   if (typeof value === "undefined") return "";
