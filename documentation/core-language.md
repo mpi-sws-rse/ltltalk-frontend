@@ -1,9 +1,9 @@
 # Specification language (Phase 1)
 Specification language consists of statements that can be either Specifications (telling the robot to go somewhere or to do one of its primitive actions), Locations (defining a set of points of the world), or simple looping or branching.
 
-## Program ( P )
+## Program ( Root )
  
-  - `P -> ST`
+  - `Root -> ST`
 
 ## Variable names
 The only two variables are "point" and "area" which are set inside of loops.
@@ -14,17 +14,17 @@ The only two variables are "point" and "area" which are set inside of loops.
  - `ST -> {ST}` *grouping statements, useful in looping or branching*
  - `ST -> ST1; ST2` *ST1 gets executed and once it is finished ST2 gets executed*
  - `ST -> if Sit then ST1`  *If Sit evaluates to true, ST1 gets executed*
- - `ST -> foreach point in Area do ST1`
- - `ST -> foreach area in Collection do ST1`
+ - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
+ - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
- - `ST -> Location`
+ - `ST -> Location` *(not yet implemented)*
 
 ## Locations: Points, Areas, and Collections of areas
 A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
 
   - `Point -> [x1, y1]`
   - `Point -> current` *a current point on which the robot is standing*
-  - `Point -> any Area` *nondeterministically chosen any point from Area*
+  - `Point -> any point in Area` *nondeterministically chosen any point from Area*
   - `Area -> [Point1, Point2,...,PointN]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
   - `Area -> world` *area of the whole map*
   - `Area -> Area1 + Area2` *a union of areas Area1 and Area2*
@@ -42,14 +42,14 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> Item at Point` *true if at least one item specified by Item is at point P*
  - `Sit -> robot has Item` *true if the robot carries at least one item described by Item*
  - `Sit -> robot at Location` *true if the robot is at Location (any of the fields)*
- - `Sit -> possible { Spec }` *if specification Spec is realizable, return true, otherwise false*
+ - `Sit -> possible { Spec }` *if specification Spec is realizable, return true, otherwise false (not yet implemented)*
 
 ## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
   - `Spec -> visit Point while avoiding Area`  *robot should visit Point , and while doing this not enter any point of Area* 
   - `Spec -> visit Point`  *syntactic sugar for __visit Point while avoiding $`\emptyset`$__* 
-  - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any Area1 while avoiding Area2__*
+  - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any point in Area1 while avoiding Area2__*
   - `Spec -> pick LimitedItem` *pick item(s) defined by item definition I (from your current point). If nothing can be picked, the specification is considered unrealizable*
   - `Spec -> drop LimitedItem` *drop item(s) defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
 
@@ -81,14 +81,14 @@ Item filters function as logical filters. One can say _pick item_ with the meani
   - *Visit kitchen ((xk1, yk1),...,(yk1, ykn)), and living room ((xl1, yl1),...,(xln, yln)). Pick whichever cubes you find there. Repeat the visits 10 times*
 ```    
 repeat 10 times {
-       foreach point in [[xk1, yk1],...,[yk1, ykn]] containing item has shape cube {visit point; pick item has shape cube; 
+       foreach point in [[xk1, yk1],...,[yk1, ykn]] containing item has shape cube {visit point; pick item has shape cube}; 
        foreach point in [[xl1, yl1],...,[yl1, yln]] containing item has shape cube {visit point; pick item has shape cube}
       }
 ```
       
   - a room in which there is a blue item; **currently, `room with point` has been removed**
   ```
-  room with point any { world with item filter has color blue }
+  room with point any point in { world with item filter has color blue }
   ```
   - all rooms in which there is a blue item:
   **with current grammar, I don't see how to do it. What I would need is something like**
@@ -111,9 +111,15 @@ repeat 10 times {
   ```
   world containing item {has color red && has type triangle} || has color blue
   ```
-  
-  - collect all red items from the building
+
+  - collect all red items from the building; two ways are listed: 1st is the "declarative" way, 2nd is the imperative way; note that these ways are both realizable as long as all of the locations are visitible
   ```
   foreach point in world containing item has color red {visit point; pick has item has color red}
+  foreach point in world containing {if item has color red at point {visit point; pick has item has color red}}
+  ```
+
+  - collect a red item from every room in building; note that this action is not realizable if one room does not contain a red item
+  ```
+  foreach area in rooms {visit any point in area containing item has color red; pick has item has color red}
   ```
 
