@@ -118,7 +118,7 @@ repeat 10 times
   world with item filter {has color red and has type triangle} or has color blue
   ```
   
-  - collect all red items from the building
+  -collect all red items from the building
   ```
   foreach $p in world with item filter has color red {visit p; pick has item has color red}
   ```
