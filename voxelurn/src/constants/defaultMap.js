@@ -1,6 +1,8 @@
 const world = `
 XXXXXXXXXXX
 X         X
+X         X
+X         X
 X  a      X
 X        cX
 X  XXXXXXXX
@@ -25,13 +27,15 @@ const items = {
   d: ["purple"]
 }
 
-export function getDefaultMap(config = defaultConfig) {
+  
+function getDefaultMap(config = defaultConfig) {
   //let xMax = config.world.reduce((acc, x) => Math.max(acc, x.length));
   let world = config.world;
   let rowCount = -1; // The string literal starts with a newline
   let rowIndex = 0;
   let array = [];
   let robot;
+  let xMax = 0;
   for (let i = 0; i < world.length; ++i) {
     if (world[i] === 'X') {
       array.push({
@@ -48,6 +52,7 @@ export function getDefaultMap(config = defaultConfig) {
         items: []
       }
     } else if (world[i] === '\n') {
+      xMax = Math.max(xMax, i - rowIndex);
       rowIndex = i + 1;
       rowCount += 1;
     } else if (world[i].match(validNames)) {
@@ -64,6 +69,12 @@ export function getDefaultMap(config = defaultConfig) {
   }
   return {
     worldMap: array,
+    xMin: defaultConfig.xMin,
+    xMax: xMax + defaultConfig.xMin,
+    yMin: defaultConfig.yMax - rowCount - 1,
+    yMax: defaultConfig.yMax,
     robot: robot
   };
 }
+
+export const worldConfig = getDefaultMap();

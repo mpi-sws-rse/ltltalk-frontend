@@ -17,10 +17,8 @@ import {
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
 
-import {
-  worldAngle,
-  worldRadius
-} from "constants/world"
+import { worldConfig } from "constants/defaultMap"
+import { worldAngle } from "constants/world"
 
 // Default z-axis scaling for blocks
 const heightScaling = 0.25;
@@ -96,7 +94,7 @@ class Blocks extends React.Component {
 
       blockWidthScale: 0.9,
       selectWidthScale: 0.4,
-      groundRadius: worldRadius,
+      //groundRadius: worldRadius,
       gridColor: new Color(50, 50, 50),
       canvasWidth: 2 * 825.0,
       canvasHeight: 2 * 600.0,
@@ -239,29 +237,28 @@ class Blocks extends React.Component {
   }
 
   renderGrid(scale) {
-    const { groundRadius, rotation, groundColor, centerPoint } = this.config;
-    const groundwidth = 2 * groundRadius + 1;
+    const { /*groundRadius,*/ rotation, groundColor, centerPoint } = this.config;
 
+    for (let x = 0; x < worldConfig.xMax - worldConfig.xMin  + 1; ++x) {
 
-    for (let x = 0; x < groundwidth + 1; x++) {
-      
 
       this.state.iso.add(new Path([
-        new Point((x - groundRadius), -groundRadius, 0),
-        new Point((x - groundRadius), (groundRadius + 1), 0),
-        new Point((x - groundRadius), -groundRadius, 0)
+        new Point((x + worldConfig.xMin), (worldConfig.yMin + 1), 0),
+        new Point((x + worldConfig.xMin), (worldConfig.yMax + 1), 0),
+        new Point((x + worldConfig.xMin), (worldConfig.yMin + 1), 0)
       ])
         .rotateZ(centerPoint, rotation)
         .scale(centerPoint, scale)
         //.translate(gridwidth*offset, gridwidth*offset, 0)
         , groundColor
       );
+    }
 
-      const y = x;
+    for (let y = 0; y < worldConfig.yMax - worldConfig.yMin + 1; ++y) {
       this.state.iso.add(new Path([
-        new Point(-groundRadius, (y - groundRadius), 0),
-        new Point((groundRadius + 1), (y - groundRadius), 0),
-        new Point(-groundRadius, (y - groundRadius), 0)
+        new Point((worldConfig.xMin), (y + worldConfig.yMin + 1), 0),
+        new Point((worldConfig.xMax), (y + worldConfig.yMin + 1), 0),
+        new Point((worldConfig.xMin), (y + worldConfig.yMin + 1), 0)
       ])
         .rotateZ(centerPoint, rotation)
         .scale(centerPoint, scale)
@@ -271,12 +268,14 @@ class Blocks extends React.Component {
     }
   }
 
+  /*
   // I believe this is deprecated
   renderPath(blocks, i) {
     this.renderBlocks(blocks[i]);
     if (i+1 < blocks.length)
       window.requestAnimationFrame(() => this.renderPath(blocks, i+1));
   }
+   */
 
   renderBlocks(blocks, scale = this.config.scale) {
     if (!(blocks instanceof Array)) {

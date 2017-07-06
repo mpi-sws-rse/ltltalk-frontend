@@ -1,14 +1,12 @@
 import Constants from "constants/actions"
 import { STATUS } from "constants/strings"
-import { getDefaultMap } from "constants/defaultMap"
-
-const config = getDefaultMap();
+import { worldConfig } from "constants/defaultMap"
 
 const initialState = {
   history: [{
     text: "initial",
-    worldMap: config.worldMap,
-    robot: config.robot,
+    worldMap: worldConfig.worldMap,
+    robot: worldConfig.robot,
     path: [],
     formula: "(initial)" }],
   responses: [],
