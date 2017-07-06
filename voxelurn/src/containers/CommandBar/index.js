@@ -85,7 +85,6 @@ class CommandBar extends Component {
 
     let locRe = /\[\s*(\-?\d+)\s*,\s*(\-?\d+)\s*(\]|$)/g;
     let result = locRe.exec(newValue);
-    let cursor = e.target.selectionStart;
     let locs = [];
     while (result) {
       //console.log(result.index);

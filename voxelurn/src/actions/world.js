@@ -106,9 +106,9 @@ const Actions = {
                 return false
               } else {
                 /* Remove no-ops */
-                const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-                const robot = history[idx].robot;
-                const worldMap = history[idx].worldMap
+                //const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
+                //const robot = history[idx].robot;
+                //const worldMap = history[idx].worldMap
 
                 const responses = formval;
 

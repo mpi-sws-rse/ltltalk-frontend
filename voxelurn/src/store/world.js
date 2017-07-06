@@ -1,74 +1,14 @@
 import Constants from "constants/actions"
 import { STATUS } from "constants/strings"
+import { getDefaultMap } from "constants/defaultMap"
 
-const initialMap = [
-  // Border
-  {x:-5,y:-5, type: "wall", color:null},
-  {x:-4,y:-5, type: "wall", color:null},
-  {x:-3,y:-5, type: "wall", color:null},
-  {x:-2,y:-5, type: "wall", color:null},
-  {x:-1,y:-5, type: "wall", color:null},
-  {x:0,y:-5, type: "wall", color:null},
-  {x:1,y:-5, type: "wall", color:null},
-  {x:2,y:-5, type: "wall", color:null},
-  {x:3,y:-5, type: "wall", color:null},
-  {x:4,y:-5, type: "wall", color:null},
-  {x:5,y:-5, type: "wall", color:null},
-  {x:5,y:-4, type: "wall", color:null},
-  {x:5,y:-3, type: "wall", color:null},
-  {x:5,y:-2, type: "wall", color:null},
-  {x:5,y:-1, type: "wall", color:null},
-  {x:5,y:0, type: "wall", color:null},
-  {x:5,y:1, type: "wall", color:null},
-  {x:5,y:2, type: "wall", color:null},
-  {x:5,y:3, type: "wall", color:null},
-  {x:5,y:4, type: "wall", color:null},
-  {x:5,y:5, type: "wall", color:null},
-  {x:4,y:5, type: "wall", color:null},
-  {x:3,y:5, type: "wall", color:null},
-  {x:2,y:5, type: "wall", color:null},
-  {x:1,y:5, type: "wall", color:null},
-  {x:0,y:5, type: "wall", color:null},
-  {x:-1,y:5, type: "wall", color:null},
-  {x:-2,y:5, type: "wall", color:null},
-  {x:-3,y:5, type: "wall", color:null},
-  {x:-4,y:5, type: "wall", color:null},
-  {x:-5,y:5, type: "wall", color:null},
-  {x:-5,y:4, type: "wall", color:null},
-  {x:-5,y:3, type: "wall", color:null},
-  {x:-5,y:2, type: "wall", color:null},
-  {x:-5,y:1, type: "wall", color:null},
-  {x:-5,y:0, type: "wall", color:null},
-  {x:-5,y:-1, type: "wall", color:null},
-  {x:-5,y:-2, type: "wall", color:null},
-  {x:-5,y:-3, type: "wall", color:null},
-  {x:-5,y:-4, type: "wall", color:null},
-  {x:-5,y:-5, type: "wall", color:null},
-
-  {x:-4,y:0, type: "wall", color:null},
-  {x:-3,y:0, type: "wall", color:null},
-  {x:-2,y:0, type: "wall", color:null},
-  {x:-1,y:0, type: "wall", color:null},
-  {x:2,y:0, type: "wall", color:null},
-  {x:3,y:0, type: "wall", color:null},
-  {x:4,y:0, type: "wall", color:null},
-
-  {x:4,y:3,  type: "item", color:"blue"},
-  {x:4,y:-4, type: "item", color:"red"},
-  {x:0,y:-2, type: "item", color:"red"},
-  {x:0,y:-2, type: "item", color:"green"},
-  {x:-3,y:3, type: "item", color:"green"}
-]
+const config = getDefaultMap();
 
 const initialState = {
   history: [{
     text: "initial",
-    worldMap: initialMap,
-    robot: {
-      x:-3, y:-2,
-      type: "robot",
-      items: []
-    },
+    worldMap: config.worldMap,
+    robot: config.robot,
     path: [],
     formula: "(initial)" }],
   responses: [],
@@ -77,7 +17,7 @@ const initialState = {
   status: STATUS.PATH,
   query: "",
   defining: false,
-  exampleQuery: "add red 3 times",
+  //exampleQuery: "add red 3 times",
   defineN: null
 }
 
