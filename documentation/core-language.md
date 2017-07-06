@@ -17,7 +17,7 @@ The only two variables are "point" and "area" which are set inside of loops.
  - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
  - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
- - `ST -> Location` *(not yet implemented)*
+ - ~~`ST -> Location`~~ *(not implemented, see Issue #8)*
 
 ## Locations: Points, Areas, and Collections of areas
 A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
