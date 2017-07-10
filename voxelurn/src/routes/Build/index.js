@@ -90,9 +90,19 @@ class Build extends Component {
   handleQuery(query) {
     switch (this.props.status) {
       case STATUS.PATH:
-        //this.props.dispatch(Actions.findPath(query));
-        this.props.dispatch(Actions.tryQuery(query));
-        this.setState({ selectedResp: 0 })
+        this.props.dispatch(Actions.tryQuery(query))
+          .then(r => {
+            if (!r) {
+              /* The try query was unsuccessful, so set it as a pin */
+              this.props.dispatch(Actions.setPin())
+              this.props.dispatch(Actions.resetResponses())
+              this.props.dispatch(Actions.setQuery(""))
+              this.setState({ selectedResp: 0 })
+            } else {
+              /* Try query successful! Give the user a choice */
+              this.setState({ selectedResp: 0 })
+            }
+          })
         break;
       case STATUS.TRY:
         /* Try the query */

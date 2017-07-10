@@ -1,17 +1,11 @@
 const world = `
-XXXXXXXXXXX
-X         X
-X         X
-X         X
-X  a      X
-X        cX
-X  XXXXXXXX
-X     R  dX
-X         X
-XXXXXXXX  X
-X  b      X
-X         X
-XXXXXXXXXXX `;
+XXXXXXXXXX
+X    R  dX
+X        X
+XXXXXXX  X
+X b      X
+X        X
+XXXXXXXXXX `;
 
 const defaultConfig = {
   world: world,

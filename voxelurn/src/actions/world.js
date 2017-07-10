@@ -97,11 +97,13 @@ const Actions = {
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
 
+                /*
                 dispatch({
                   type: Constants.SET_STATUS,
                   status: STATUS.PATH
                 })
-                alert("No valid parses received from server. (likely syntax error)");
+                 */
+                //alert("No valid parses received from server. (likely syntax error)");
 
                 return false
               } else {
