@@ -1,15 +1,19 @@
 const world = `
-XXXXXXXXXX
-X    R  dX
-X        X
-XXXXXXX  X
-X b      X
-X        X
-XXXXXXXXXX `;
+XXXXXXXXXXXXXX
+X   a  X   b X
+X      X     X
+XX XXXXXXX XXX
+X            X
+X       zR   X
+X        XXXXX
+X  XXXXXXX   X
+X        X  dX
+X    c       X
+XXXXXXXXXXXXXX`;
 
 const defaultConfig = {
   world: world,
-  xMin: -5,
+  xMin: -8,
   yMax: 5
 }
 
@@ -18,7 +22,8 @@ const items = {
   a: ["blue","green"],
   b: ["orange", "red"],
   c: ["red"],
-  d: ["purple"]
+  d: ["purple"],
+  z: ["red","blue","green"]
 }
 
   

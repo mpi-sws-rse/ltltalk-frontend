@@ -17,7 +17,6 @@ export const DEFAULT_SESSIONID = "deadbeef"
 /* Control strings */
 export const STATUS = {
   TRY: "TRY",
-  PATH: "PATH",
   ACCEPT: "ACCEPT",
   DEFINE: "DEFINE",
   LOADING: "LOADING"

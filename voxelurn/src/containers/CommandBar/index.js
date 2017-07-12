@@ -27,8 +27,7 @@ class CommandBar extends Component {
     if (prevProps.query !== this.props.query) {
       /* If the query changed and we were in ACCEPT mode, move us back to TRY mode */
       if (this.props.status === STATUS.ACCEPT)
-        //this.props.dispatch(Actions.setStatus(STATUS.TRY))
-        this.props.dispatch(Actions.setStatus(STATUS.PATH))
+        this.props.dispatch(Actions.setStatus(STATUS.TRY))
     }
   }
 
@@ -43,7 +42,7 @@ class CommandBar extends Component {
 
     this.props.dispatch({
       type: Constants.SET_STATUS,
-      status: STATUS.PATH
+      status: STATUS.TRY
     })
     this.props.onClick(this.props.query)
 

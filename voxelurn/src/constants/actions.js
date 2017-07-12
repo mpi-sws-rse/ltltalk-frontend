@@ -3,9 +3,6 @@ const Actions = {
   ACCEPT: "ACCEPT",
   DEFINE: "DEFINE",
 
-  FIND_PATH: "FIND_PATH",
-  PATH: "PATH",
-
   REVERT: "REVERT",
   SET_STATUS: "SET_STATUS",
   SET_QUERY: "SET_QUERY",

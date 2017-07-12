@@ -100,7 +100,7 @@ const Actions = {
                 /*
                 dispatch({
                   type: Constants.SET_STATUS,
-                  status: STATUS.PATH
+                  status: STATUS.TRY
                 })
                  */
                 //alert("No valid parses received from server. (likely syntax error)");
@@ -116,7 +116,7 @@ const Actions = {
 
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
                 dispatch({
-                  type: Constants.FIND_PATH,
+                  type: Constants.TRY_QUERY,
                   responses: responses
                 })
 
@@ -150,7 +150,7 @@ const Actions = {
         alert("You can't accept a response with an error in it. Please accept another response or try a different query.")
         dispatch({
           type: Constants.SET_STATUS,
-          status: STATUS.PATH/*TRY*/
+          status: STATUS.TRY
         })
         return
       }

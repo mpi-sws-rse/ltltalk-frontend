@@ -12,7 +12,7 @@ const initialState = {
   responses: [],
   markers: [], // Not sure if this is being set
   current_history_idx: -1,
-  status: STATUS.PATH,
+  status: STATUS.TRY,
   query: "",
   defining: false,
   //exampleQuery: "add red 3 times",
@@ -29,12 +29,6 @@ export default function reducer(state = initialState, action = {}) {
       }
       return { ...state, current_history_idx: action.idx, responses: initialState.responses, status: initialState.status, query: initialState.query }
 
-    case Constants.FIND_PATH:
-      let myHistory = state.history;
-      if (state.current_history_idx >= 0) {
-        myHistory = myHistory.slice(0, state.current_history_idx + 1)
-      }
-      return { ...state,responses: action.responses, history: myHistory, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.TRY_QUERY:
       let history = state.history
       if (state.current_history_idx >= 0) {
@@ -43,7 +37,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]
-      return { ...state, history: newHistory, responses: [], status: STATUS.PATH/*TRY*/, query: "" }
+      return { ...state, history: newHistory, responses: [], status: STATUS.TRY, query: "" }
     case Constants.DEFINE:
       // TODO The "value" here will have to be changed
       let collapsedHistory = [...state.history.slice(0, action.idx), {
@@ -56,7 +50,7 @@ export default function reducer(state = initialState, action = {}) {
       }]
       if (collapsedHistory.length === 0) collapsedHistory = initialState.history
       else if (collapsedHistory.length === 1) collapsedHistory = [...initialState.history, ...collapsedHistory]
-      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.PATH/*TRY*/ }
+      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.TRY }
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
     ///////
@@ -64,7 +58,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, markers: action.markers }
     ///////
     case Constants.RESET_RESPONSES:
-      return { ...state, status: STATUS.PATH/*TRY*/, query: "", responses: [] }
+      return { ...state, status: STATUS.TRY, query: "", responses: [] }
     case Constants.OPEN_DEFINE:
       return { ...state, defining: true, defineN: action.defineN }
     case Constants.CLOSE_DEFINE:

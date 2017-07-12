@@ -89,21 +89,6 @@ class Build extends Component {
 
   handleQuery(query) {
     switch (this.props.status) {
-      case STATUS.PATH:
-        this.props.dispatch(Actions.tryQuery(query))
-          .then(r => {
-            if (!r) {
-              /* The try query was unsuccessful, so set it as a pin */
-              this.props.dispatch(Actions.setPin())
-              this.props.dispatch(Actions.resetResponses())
-              this.props.dispatch(Actions.setQuery(""))
-              this.setState({ selectedResp: 0 })
-            } else {
-              /* Try query successful! Give the user a choice */
-              this.setState({ selectedResp: 0 })
-            }
-          })
-        break;
       case STATUS.TRY:
         /* Try the query */
         this.props.dispatch(Actions.tryQuery(query))
@@ -139,7 +124,7 @@ class Build extends Component {
         this.props.dispatch(Actions.define(this.props.defineN))
         break
       case STATUS.LOADING:
-        this.props.dispatch(Actions.setStatus(STATUS.PATH/*TRY*/))
+        this.props.dispatch(Actions.setStatus(STATUS.TRY))
         break
       default:
         console.log("uh oh... unknown status!", this.props.status)
@@ -207,11 +192,7 @@ class Build extends Component {
     let robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;
 
-    if (status === STATUS.PATH) { 
-      //currentPath = responses.path;
-      // This shouldn't be necessary with the new way `path` is handled
-      //currentState = diff(currentState, responses[0].value)
-    } else if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
+    if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
       /* If the status is accept, then the current state will be the diff
        * of the previous state and the responded state */
       //currentState = diff(currentState, responses[this.state.selectedResp].value)

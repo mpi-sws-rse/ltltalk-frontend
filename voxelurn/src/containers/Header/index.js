@@ -9,8 +9,8 @@ import "./styles.css"
 const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
   <div className="Header">
     <div className="Header-logo">
-      <span>Voxelurn</span>
-      <span className="Header-sublogo">a Stanford NLP project</span>
+      <span>LASRE</span>
+      <span className="Header-sublogo">an MPI-SWS project</span>
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/build", query: query }} activeClassName="active"><div>Build</div></Link>
