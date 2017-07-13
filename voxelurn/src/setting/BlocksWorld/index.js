@@ -99,7 +99,7 @@ class Blocks extends React.Component {
       canvasWidth: 2 * 825.0,
       canvasHeight: 2 * 600.0,
       originXratio: 0.5,
-      originYratio: 0.6,
+      originYratio: 0.5,
       numUnits: 30, // default number of cubes from left to right of the canvas
       maxUnits: 200,
       marginCubes: 1, // how far from the border do we keep the cubes, until we reach max zoom
@@ -151,10 +151,15 @@ class Blocks extends React.Component {
     counter++;
     //console.log(this.props.robot);
     window.requestAnimationFrame(() =>
-        this.renderEverything(this.props.blocks.slice(), this.clone(this.props.robot), 0, this.props.selectionNumber));
+        this.renderEverything(
+            this.props.blocks.filter((b) => b.type !== "point"),
+            this.clone(this.props.robot),
+            this.props.path.slice(),
+            0,
+            this.props.selectionNumber));
   }
 
-  renderEverything(argBlocks, robot, robotStep, selectionNumber) {
+  renderEverything(argBlocks, robot, path, robotStep, selectionNumber) {
     if (counter > 1) {
       counter--;
       return;
@@ -162,7 +167,7 @@ class Blocks extends React.Component {
 
     // Robot speed factor
     const factor = 5;
-    let updatedBlocks = updateRobot(argBlocks, robot, robotStep, this.props.path, factor);
+    let updatedBlocks = updateRobot(argBlocks, robot, robotStep, path, factor);
     if (robotStep === 0) {
       updatedBlocks.slice().forEach((b) => {
         if (b.type === "item")
@@ -202,8 +207,8 @@ class Blocks extends React.Component {
 
     removeRobot(blocks);
 
-    if (this.props.path && robotStep < this.props.path.length * factor) {
-      window.requestAnimationFrame(() => this.renderEverything(blocks, robot, robotStep + 1));
+    if (path && robotStep < path.length * factor) {
+      window.requestAnimationFrame(() => this.renderEverything(blocks, robot, path, robotStep + 1));
     } else {
       counter--;
     }
@@ -267,15 +272,6 @@ class Blocks extends React.Component {
       );
     }
   }
-
-  /*
-  // I believe this is deprecated
-  renderPath(blocks, i) {
-    this.renderBlocks(blocks[i]);
-    if (i+1 < blocks.length)
-      window.requestAnimationFrame(() => this.renderPath(blocks, i+1));
-  }
-   */
 
   renderBlocks(blocks, scale = this.config.scale) {
     if (!(blocks instanceof Array)) {

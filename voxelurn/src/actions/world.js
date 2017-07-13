@@ -93,24 +93,14 @@ const Actions = {
               }
 
               const formval = parseSEMPRE(response.candidates)
+              console.log(formval);
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
-
-                /*
-                dispatch({
-                  type: Constants.SET_STATUS,
-                  status: STATUS.TRY
-                })
-                 */
-                //alert("No valid parses received from server. (likely syntax error)");
-
                 return false
               } else {
                 /* Remove no-ops */
                 //const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-                //const robot = history[idx].robot;
-                //const worldMap = history[idx].worldMap
 
                 const responses = formval;
 
@@ -177,6 +167,7 @@ const Actions = {
     }
   },
 
+  /*
   accept: (text, selectedResp) => {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
@@ -206,6 +197,7 @@ const Actions = {
       return true
     }
   },
+   */
 
   acceptNone: (text) => {
     return (dispatch, getState) => {
