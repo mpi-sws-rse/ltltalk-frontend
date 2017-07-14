@@ -1,85 +1,126 @@
 # Specification language (Phase 1)
-Specification language consists of specifications, items and locations. Program is consecutive execution of specifications with addition of simple control flow operations - iteration and branching. 
+Specification language consists of statements that can be either Specifications (telling the robot to go somewhere or to do one of its primitive actions), Locations (defining a set of points of the world), or simple looping or branching.
 
-## Program ( P )
+## Program ( Root )
  
-  - `P -> ST`
+  - `Root -> ST`
 
- 
+## Variable names
+The only two variables are "point" and "area" which are set inside of loops.
+
 ## Statement (ST)
  
  - `ST -> Spec`
+ - `ST -> {ST}` *grouping statements, useful in looping or branching*
  - `ST -> ST1; ST2` *ST1 gets executed and once it is finished ST2 gets executed*
- - `ST -> ST1 and then ST2` *means the same as ST1; ST2* 
- - `ST -> if (Sit) then (ST1)`  *If Sit evaluates to true, ST1 gets executed*
- - `ST -> foreach var in Iterable do (ST1)`
+ - `ST -> if Sit then ST1`  *If Sit evaluates to true, ST1 gets executed*
+ - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
+ - `ST -> foreach area in Collection ST1`
+ - `ST -> repeat n times ST1`
+ - ~~`ST -> Location`~~ *(not implemented, see Issue #8)*
+
+## Locations: Points, Areas, and Collections of areas
+A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
+
+  - `Point -> [x1, y1]`
+  - `Point -> current` *a current point on which the robot is standing*
+  - `Point -> any point in Area` *nondeterministically chosen any point from Area*
+  - `Area -> [Point1, Point2,...,PointN]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
+  - `Area -> world` *area of the whole map*
+  - `Area -> Area1 + Area2` *a union of areas Area1 and Area2*
+  - `Area -> Area1 * Area2` *an intersection of areas Area1 and Area2*
+  - `Area -> Area1 - Area2` *a difference between areas Area1 and Area2*
+  - `Area -> area with corners Point1 and Point2` *an area defined by corners Point1 and Point2*
+  - `Collection -> [Area1, Area2,..., AreaN]` *a set of areas (set of sets of points)*
+  - `Collection -> Collection containing Item` *subcollection of Collection consisting of areas that contain an item as specified by Item*
+  - `Area -> Area containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
+
 
 ## Situations (Sit)
  
- - `Sit -> I at L` *true if at least one item described by I is at location L*
- - `Sit -> I at self` *true if robot carries at least one item described by I*
- - `Sit -> at L` *true if robot is at location L (any of the fields)*
- - `Sit -> possible(Spec)` *if specification Spec is realizable, return true, otherwise false*
+ - `Sit -> Item at Area` *true if at least one item specified by Item is at area A*
+ - `Sit -> Item at Point` *true if at least one item specified by Item is at point P*
+ - `Sit -> robot has Item` *true if the robot carries at least one item described by Item*
+ - `Sit -> robot at Location` *true if the robot is at Location (any of the fields)*
+ - `Sit -> possible Spec`  *if specification Spec is realizable, return true, otherwise false*
 
 ## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
-  - `Spec -> visit L1 while avoiding L2`  *robot should visit location L1 (any of the closest fields), and while doing this not enter any of the fields of location L2* 
-  - `Spec -> visit L1`  *syntactic sugar for visit L1 while avoiding $`\emptyset`$* 
-  - `Spec -> visit periodically (L, p, N) while avoiding L2` *visit location L every p timesteps, while avoiding L2, all together N times*
-  - `Spec -> visit periodically (L, p, N)` *syntactic sugar for visit location L every p timesteps, while avoiding $`\emptyset`$*
-  - `Spec -> pick all I` *pick all items I (from your current field)*
-  - `Spec -> pick single I` *pick nondeterministically chosen one item I. if there is none, the task fails*
-  - `Spec -> drop all I` *the robot should drop all items I that it currently has on its location*
-  - `Spec -> drop single I` *the robot should drop one nondeterministically chosen item I on its current location. If it doesn't have one, the task fails*
-  - `Spec -> Spec1 within t` _do action A1 within t time units (for less than or equal to t)_
-  - `Spec -> no-op`  _do nothing for one timestep_
+  - `Spec -> visit Point while avoiding Area`  *robot should visit Point , and while doing this not enter any point of Area* 
+  - `Spec -> visit Point`  *syntactic sugar for __visit Point while avoiding $`\emptyset`$__* 
+  - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any point in Area1 while avoiding Area2__*
+  - `Spec -> pick LimitedItem` *pick item(s) defined by item definition I (from your current point). If nothing can be picked, the specification is considered unrealizable*
+  - `Spec -> drop LimitedItem` *drop item(s) defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
+  - `Spec -> strict Spec` only perform Spec if all actions can be completed (if one action fails, nothing executes)
 
-## Iterables 
- - `Iterable -> L` *each location is iterable: the iterations happens over fields of the location in a non-determined order*
- - `Iterable -> [k..l]` *the iteration happens over numbers k, k+1, ..., l*
+## Items definitions and item filters
+Item filters function as logical filters. One can say _pick item_ with the meaning pick whatever there is at your current location, or _pick item has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue. The item definition is then either a filter (takes everything that passes through the filter) or a single item (nondeterministically chosen) that passes the filter.
 
-## Items (I)
-Item description function as logical filters. One can say _pick_ with the meaning pick whatever there is at your current location, or _pick has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue.
+  - `LimitedItem -> every Item` _any number of items; set will not be restricted_
+  - `LimitedItem -> Item` _set will be restricted to one item_
+  - `Item -> item` _no filter, any item matches_
+  - `Item -> item Filter` _item with the specified filter_
+  - `Filter -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
+  - `Filter -> has shape T` _T is from finite set of shapes, everything that has type T passes the filter_
+  - `Filter -> Filter1 && Filter2`  _a conjunction of two item filters_
+  - `Filter -> Filter1 || Filter2` _a disjunction of two item filters_
+  - `Filter -> !Filter1` _a negation of an item filter F1_
+ 
 
-  - `I -> *` _no filter, everything that there is_
-  - `I -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
-  - `I -> has type T` _T is from finite set of types, everything that has type C passes the filter_
-  - `I -> I1 && I2`  _a conjunction of two items_
-  - `I -> I1 || I2` _a disjunction of two items_
-  - `I -> !I1` _a negation of an item_
+# Examples
+  - *Collect all red triangles from the point where robot is currently standing*: 
+    ```
+    pick item has color red and has shape triangle
+    ```
+    
+  - *Collect two green triangles*
+     ```
+    repeat 2 times pick item has color green
+    ```
+    
+  - *Visit kitchen ((xk1, yk1),...,(yk1, ykn)), and living room ((xl1, yl1),...,(xln, yln)). Pick whichever cubes you find there. Repeat the visits 10 times*
+```    
+repeat 10 times {
+       foreach point in [[xk1, yk1],...,[yk1, ykn]] containing item has shape cube {visit point; pick item has shape cube}; 
+       foreach point in [[xl1, yl1],...,[yl1, yln]] containing item has shape cube {visit point; pick item has shape cube}
+      }
+```
+      
+  - a room in which there is a blue item; **currently, `room with point` has been removed**
+  ```
+  room with point any point in { world with item filter has color blue }
+  ```
+  - all rooms in which there is a blue item:
+  **with current grammar, I don't see how to do it. What I would need is something like**
+  ```
+  [ room with point p for p in world with item filter has color blue ]
+  ```
+  **is it worth adding additional rule for this?**
+  
+  - all social rooms in the building
+  ```
+  [ [[x11,y11], ...,[x1n, y1n]], ..., [[xm1, ym1],..., [xmk, ymk]] ]
+  ```
+  
+  - assuming that in the previous statement user defined the name for this location *social rooms*: visit all social rooms in the building
+  ```
+  foreach area in social rooms {visit area}
+  ```
+  
+  - area of fields in which there is a red triangle or any blue item
+  ```
+  world containing item {has color red && has type triangle} || has color blue
+  ```
 
-## Locations (L)
-A 2D-grid consists of (x,y)-denoted fields. When describing locations we are always using sets of fields.
-  - `L->[[x1,y1], [x2, y2],...,[xn,yn]]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
-  - `L -> [x, y]` *syntactic sugar for a set consisting of a single field, {(x,y)}*
-  - `L -> world` *the whole map*
-  - `L -> current` *current location of a robot*
-  - `L -> L1 + L2` *a union of L1 and L2*
-  - `L -> L1 * L2` *an intersection of L1 and L2*
-  - `L -> L1 - L2` *a difference between L1 and L2*
-  - `L -> L1 spread (u, v)` $`\{(p_x+i,p_y+j): i\in \{-u,...,u\},j\in \{-v,...,v\}, p \in L\}`$
-  - `L -> L1 bounded spread (u, v)`  *spread that respects room borders - same as spread, but stop spreading once door or wall was hit. if u = -1 or v = -1, then spread as far as possible before hitting the wall*
-  - `L -> L1 with item I` *location consisting of fields that contain item I*
+  - collect all red items from the building; two ways are listed: 1st is the "declarative" way, 2nd is the imperative way; note that these ways are both realizable as long as all of the locations are visitible
+  ```
+  foreach point in world containing item has color red {visit point; pick has item has color red}
+  foreach point in world containing {if item has color red at point {visit point; pick has item has color red}}
+  ```
 
-## Examples
-  - visit the room in which there is the item with id 5: 
-    - *visit bounded spread( -1,-1) has id 5*
-  - come to the field with item5 and pick it up:
-    - *visit has id 5 and then pick single has id 5*
-  - come to the field with item5 and pick up all the items from that field:
-    - *visit has id 5 and then pick all*
-  - visit any field in 4-vicinity of [4,5] but during getting there avoid stepping on the fields with blue items
-    - *visit [4,5] spread (4,4) and avoid world has color blue*
-  - visit any field in the 4-vicinity of [4,5], spend 3 time-units there and then repeat 10 times: picking from [2,3] and dropping at [0,0]
-    - *visit [4,5] spread (4,4) and then foreach i in [1..3] do (no-op) and then foreach j in [1..10] (visit [2,3] and then pick and then visit [0,0] and then drop)
-  - robot should drop whatever items it carries if its current field has item with red color
-    - *if has color red drop  all*
-  - robot should pick all red objects in the current room 
-    - *foreach l in current bounded spread -1 (if has color red at l (visit l and then pick all has color red))*
-    - *foreach l in (current bounded spread -1 with item has color red) (visit l and then pick all has color red)*
-  - visit location (2,2) or (2,3) only if it is possible to reach it within 10 time units (if arrived earlier, action is finished. if not possible, abort)
-    - *if possible(visit [2,2]+[2,3] within 10) visit [2,2]+[2,3]*
-  - bring three red objects to the location (2,2)
-    - *foreach i in [1..3] (visit world with item has color red and then pick single has color red) and then visit [2,2] and then drop all* : here we can't check if there are three objects at all!
+  - collect a red item from every room in building; note that this action is not realizable if one room does not contain a red item
+  ```
+  foreach area in rooms {visit any point in area containing item has color red; pick has item has color red}
+  ```
 
