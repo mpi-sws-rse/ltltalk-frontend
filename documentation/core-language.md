@@ -17,7 +17,6 @@ The only two variables are "point" and "area" which are set inside of loops.
  - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
  - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
- - `ST -> Location` *(not yet implemented)*
 
 ## Locations: Points, Areas, and Collections of areas
 A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
@@ -32,7 +31,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `Area -> Area1 - Area2` *a difference between areas Area1 and Area2*
   - `Area -> area with corners Point1 and Point2` *an area defined by corners Point1 and Point2*
   - `Collection -> [Area1, Area2,..., AreaN]` *a set of areas (set of sets of points)*
-  - `Collction -> Collection containing Item` *subcollection of Collection consisting of areas that contain an item as specified by Item*
+  - `Collection -> Collection containing Item` *subcollection of Collection consisting of areas that contain an item as specified by Item*
   - `Area -> Area containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
 
 
@@ -42,7 +41,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> Item at Point` *true if at least one item specified by Item is at point P*
  - `Sit -> robot has Item` *true if the robot carries at least one item described by Item*
  - `Sit -> robot at Location` *true if the robot is at Location (any of the fields)*
- - `Sit -> possible { Spec }` *if specification Spec is realizable, return true, otherwise false (not yet implemented)*
+ - `Sit -> possible Spec`  *if specification Spec is realizable, return true, otherwise false*
 
 ## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
@@ -52,6 +51,7 @@ If a specification is realizable, a controller is synthesized and the spec is ex
   - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any point in Area1 while avoiding Area2__*
   - `Spec -> pick LimitedItem` *pick item(s) defined by item definition I (from your current point). If nothing can be picked, the specification is considered unrealizable*
   - `Spec -> drop LimitedItem` *drop item(s) defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
+  - `Spec -> strict Spec` only perform Spec if all actions can be completed (if one action fails, nothing executes)
 
 ## Items definitions and item filters
 Item filters function as logical filters. One can say _pick item_ with the meaning pick whatever there is at your current location, or _pick item has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue. The item definition is then either a filter (takes everything that passes through the filter) or a single item (nondeterministically chosen) that passes the filter.

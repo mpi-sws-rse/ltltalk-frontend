@@ -4,6 +4,11 @@ This document contains the formal definitions of realizable actions in the
 robot world. Each definition contains a set of preconditions, constraints,
 and postconditions that must be met for the action to be considered "realizable."
 
+By default, an action that is not realizable will not execute (i.e., no partial
+execution); when qualifying actions with `strict`, if one action fails, none
+of the actions will execute. For example, `strict { A ; B ; C }` means that
+if any of the three actions fail, none of the others will execute.
+
 - `visit FIELD`
     ```
     preconditions:
@@ -46,7 +51,7 @@ and postconditions that must be met for the action to be considered "realizable.
       none
 
     postconditions:
-      none
+      robot has more than N items passing FILTER
     ```
 - `drop item FILTER`
     ```
@@ -68,5 +73,5 @@ and postconditions that must be met for the action to be considered "realizable.
       none
 
     postconditions:
-      none
+      robot has less than N items passing FILTER
     ```
