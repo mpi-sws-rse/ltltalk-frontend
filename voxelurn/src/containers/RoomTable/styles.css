@@ -12,7 +12,13 @@
   border-collapse: collapse;
 }
 
-.RoomTable td {
+.RoomTable td, th {
   border: 3px solid rgb(244,244,244);
   padding: 5px;
+  transition: 0.5s;
+}
+
+.RoomTable td:hover {
+  background-color: rgba(0,255,255,0.2);
+  transition: 0.5s;
 }

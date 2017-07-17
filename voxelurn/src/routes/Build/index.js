@@ -26,7 +26,8 @@ class Build extends Component {
     dispatch: PropTypes.func,
     task: PropTypes.string,
 
-    markers: PropTypes.array
+    roomMarkers: PropTypes.array,
+    pointMarkers: PropTypes.array
   }
 
   constructor(props) {
@@ -184,7 +185,7 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, markers, history, current_history_idx, task } = this.props
+    const { status, responses, pointMarkers, roomMarkers, history, current_history_idx, task } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -213,7 +214,8 @@ class Build extends Component {
             blocks={currentState}
             path={currentPath}
             robot={robot}
-            markers={markers}
+            pointMarkers={pointMarkers}
+            roomMarkers={roomMarkers}
             width={1650}
             height={1200}
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
@@ -259,7 +261,8 @@ const mapStateToProps = (state) => ({
   history: state.world.history,
   task: state.user.task,
   responses: state.world.responses,
-  markers: state.world.markers,
+  roomMarkers: state.world.roomMarkers,
+  pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   current_history_idx: state.world.current_history_idx
 })

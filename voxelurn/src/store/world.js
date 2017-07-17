@@ -10,7 +10,9 @@ const initialState = {
     path: [],
     formula: "(initial)" }],
   responses: [],
-  markers: [], // Not sure if this is being set
+  pointMarkers: [], 
+  roomMarkers: [], 
+  //robotStep: 0, // How far is the robot along its visual simulation
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
@@ -54,8 +56,10 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
     ///////
-    case Constants.UPDATE_MARKERS:
-      return { ...state, markers: action.markers }
+    case Constants.UPDATE_POINT_MARKERS:
+      return { ...state, pointMarkers: action.pointMarkers }
+    case Constants.UPDATE_ROOM_MARKERS:
+      return { ...state, roomMarkers: action.roomMarkers }
     ///////
     case Constants.RESET_RESPONSES:
       return { ...state, status: STATUS.TRY, query: "", responses: [] }

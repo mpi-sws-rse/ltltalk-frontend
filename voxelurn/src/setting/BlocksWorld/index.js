@@ -72,7 +72,8 @@ class Blocks extends React.Component {
   static propTypes = {
     blocks: React.PropTypes.array,
     path: React.PropTypes.array,
-    markers: React.PropTypes.array,
+    pointMarkers: React.PropTypes.array,
+    roomMarkers: React.PropTypes.array,
     robot: React.PropTypes.object,
     isoConfig: React.PropTypes.object,
     width: React.PropTypes.number,
@@ -149,7 +150,6 @@ class Blocks extends React.Component {
 
   componentDidUpdate() {
     counter++;
-    //console.log(this.props.robot);
     window.requestAnimationFrame(() =>
         this.renderEverything(
             this.props.blocks.filter((b) => b.type !== "point"),
@@ -181,17 +181,22 @@ class Blocks extends React.Component {
 
     
     // TODO Move this to its own function
-    let m = this.props.markers;
+    let pm = this.props.pointMarkers;
+    let rm = this.props.roomMarkers;
+    if (!rm) rm = [];
+    if (!pm) pm = [];
     for (let i = 0; i < updatedBlocks.length; ++i) {
-      if (updatedBlocks[i].type === "marker") {
+      if (updatedBlocks[i].type === "roomMarkers" || updatedBlocks[i].type == "pointMarkers") {
         updatedBlocks.splice(i,1);
         --i;
       }
     }
-    for (let i = 0; i < this.props.markers.length; ++i) {
-      updatedBlocks.push({x:parseInt(m[i][0],10), y:parseInt(m[i][1],10), z:-0.01, color: "fuchsia", type: "marker"});
+    for (let i = 0; i < rm.length; ++i) {
+      updatedBlocks.push({x:parseInt(rm[i][0],10), y:parseInt(rm[i][1],10), z:-0.01, color: "cyan", type: "roomMarker"});
     }
-    //console.log(updatedBlocks.filter(b => b.type === "marker"));
+    for (let i = 0; i < pm.length; ++i) {
+      updatedBlocks.push({x:parseInt(pm[i][0],10), y:parseInt(pm[i][1],10), z:-0.01, color: "fuchsia", type: "pointMarker"});
+    }
     
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
     adjustRobot(robot, blocks);
@@ -237,7 +242,6 @@ class Blocks extends React.Component {
     if (p.y > this.config.canvasHeight - margin)
       yscale = (this.config.canvasHeight - margin - Y0) / (p.y - Y0);
 
-    // console.log(`p:${p.x},${p.y} margin: ${margin}, height:${this.config.canvasHeight}`);
     return Math.min(xscale, yscale);
   }
 
@@ -287,25 +291,19 @@ class Blocks extends React.Component {
       // TODO Determine if this should be kept
       if (color) {
         let alpha = 0.88;
-        if (block.type === "marker")
-          alpha = 0.5;
+        if (block.type === "roomMarker" || block.type === "pointMarker")
+          alpha = 0.2;
         blockColor = new Color(color[0], color[1], color[2], alpha);
-      }
-      if (!block.type) {
-        console.log(block);
       }
 
       // Determine what sort of block to construct
-      if (block.color === "fake") {
-        //blockColor = new Color(244,244,244, 0.2);
-        //this.state.iso.add(this.makeBlock(block.x, block.y, block.z), blockColor);
-      } else if (block.type === "robot") {
+      if (block.type === "robot") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
       } else if (block.type === "item" || block.type === "carriedItem") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
       } else if (block.type === "path") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
-      } else if (block.type === "marker") {
+      } else if (block.type === "roomMarker" || block.type === "pointMarker") {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "marker"), blockColor);
       } else {
         this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "wall"), new Color(0, 0, 0, 0.88));

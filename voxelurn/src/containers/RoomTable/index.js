@@ -53,23 +53,24 @@ class RoomTable extends Component {
 
   onCellHover(event) {
     this.props.dispatch({
-      type: Constants.UPDATE_MARKERS,
-      markers: [...worldConfig.roomPoints[event.target.innerHTML]]
+      type: Constants.UPDATE_ROOM_MARKERS,
+      roomMarkers: [...worldConfig.roomPoints[event.target.innerHTML]]
     })
   }
 
   onCellLeave() {
     this.props.dispatch({
-      type: Constants.UPDATE_MARKERS,
-      markers: []
+      type: Constants.UPDATE_ROOM_MARKERS,
+      roomMarkers: []
     })
   }
 
   getTableCells() {
     //let str = "";
+    let keys = Object.keys(worldConfig.roomPoints);
+    keys = keys.sort((a,b) => a > b);
     let arr = [];
-    for (let room in worldConfig.roomPoints) {
-      if (worldConfig.roomPoints.hasOwnProperty(room)) {
+    for (let room of keys) {
         arr.push((
           <tr
             key={room}
@@ -77,7 +78,6 @@ class RoomTable extends Component {
             onMouseOut={this.onCellLeave.bind(this)}
           ><td>{room}</td></tr>
       ));
-      }
     }
     return arr;
   }
@@ -86,6 +86,7 @@ class RoomTable extends Component {
     return (
       <div className="RoomTable">
         <table><tbody>
+          <tr><th>Hover to highlight</th></tr>
           {this.getTableCells()}
         </tbody></table>
       </div>

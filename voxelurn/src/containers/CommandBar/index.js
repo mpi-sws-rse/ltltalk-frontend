@@ -78,8 +78,8 @@ class CommandBar extends Component {
     if (this.props.status === STATUS.ACCEPT) {
       this.props.dispatch(Actions.setQuery(""))
       this.props.dispatch({
-        type: Constants.UPDATE_MARKERS,
-        markers: []
+        type: Constants.UPDATE_POINT_MARKERS,
+        pointMarkers: []
       })
     }
   }
@@ -120,8 +120,8 @@ class CommandBar extends Component {
       result = locRe.exec(newValue);
     }
     this.props.dispatch({
-      type: Constants.UPDATE_MARKERS,
-      markers: locs
+      type: Constants.UPDATE_POINT_MARKERS,
+      pointMarkers: locs
     })
   }
 
