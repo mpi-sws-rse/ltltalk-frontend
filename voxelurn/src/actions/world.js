@@ -87,6 +87,9 @@ const Actions = {
           return SEMPREquery(cmds)
             .then((response) => {
 
+              if (!response)
+                throw new Error("empty_response");
+
               if (response.lines && response.lines.length > 0) {
                 /* Alert any errors in the query */
                 alert(response.lines.join("; "))
@@ -115,8 +118,14 @@ const Actions = {
             })
         })
         .catch((e) => {
-          console.log("tryQuery error?", e)
-          return false
+          if (e.message === "empty_response") {
+            alert("Could not contact server");
+          }
+          //alert("Query could no be processed by server.");
+          //console.log("tryQuery error?", e);
+          //console.log(JSON.stringify(e, null, 4));
+          console.log(e);
+          return null;
         })
     }
   },
@@ -166,38 +175,6 @@ const Actions = {
       return true
     }
   },
-
-  /*
-  accept: (text, selectedResp) => {
-    return (dispatch, getState) => {
-      const { sessionId } = getState().user
-      const { responses } = getState().world
-
-      const selected = responses[selectedResp]
-
-      if (selected.error) {
-        alert("You can't accept a response with an error in it. Please accept another response or try a different query.")
-        dispatch({
-          type: Constants.SET_STATUS,
-          status: STATUS.TRY
-        })
-        return
-      }
-
-      const query = `(:accept ${JSON.stringify(text)} ${selected.formulas.map(f => JSON.stringify(f)).join(" ")})`
-      SEMPREquery({ q: query, sessionId: sessionId }, () => { })
-
-      dispatch(Logger.log({ type: "accept", msg: { query: text, rank: selected.rank, formula: selected.formula } }))
-
-      dispatch({
-        type: Constants.ACCEPT,
-        el: { ...selected, text }
-      })
-
-      return true
-    }
-  },
-   */
 
   acceptNone: (text) => {
     return (dispatch, getState) => {

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from "react"
 import { connect } from "react-redux"
 import classnames from "classnames"
 import Actions from "actions/world"
+import { worldConfig } from "constants/defaultMap"
 import { STATUS, COMMAND_BAR_DEFINE_PLACEHOLDER, COMMAND_BAR_PLACEHOLDER } from "constants/strings"
 
 import "./styles.css"
@@ -31,6 +32,30 @@ class CommandBar extends Component {
     }
   }
 
+  setToPoints(set) {
+    let str = '[';
+    let first = true;
+    for (let point of set) {
+      if (first)
+        first = false;
+      else
+        str += ',';
+      str += '[' + point[0] + ',' + point[1] + ']';
+    }
+    return str + ']';
+  }
+
+  processMacros(str) {
+    for (let room in worldConfig.roomPoints) {
+      if (worldConfig.roomPoints.hasOwnProperty(room)) {
+        let re = new RegExp('(\\W|^)' + room + '(\\W|$)', 'gi');
+        let setString = this.setToPoints(worldConfig.roomPoints[room]);
+        str = str.replace(re, (m,g0,g1) => g0 + setString+ g1);
+      }
+    }
+    return str;
+  }
+
   handleClick() {
     /* If the query is empty, we don't want to do anything */
     if (this.props.query.length === 0) {
@@ -44,7 +69,9 @@ class CommandBar extends Component {
       type: Constants.SET_STATUS,
       status: STATUS.TRY
     })
-    this.props.onClick(this.props.query)
+    let command = this.processMacros(this.props.query);
+    console.log(command);
+    this.props.onClick(command);
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */

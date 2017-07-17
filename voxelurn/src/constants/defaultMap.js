@@ -26,15 +26,6 @@ const items = {
   d: ["purple"],
   z: ["red","blue","green"]
 }
-/*
-const rooms = {
-  room1 : ['B'],
-  room2 : ['A'],
-  room3 : ['C','D'],
-  room4 : ['E'],
-  room5 : ['F']
-};
- */
 const rooms = {
   'A' : 'room2',
   'B' : 'room1',
@@ -52,26 +43,35 @@ const corners = {}; // Leave empty
   
 function processCorners() {
   let c;
-  let points = [];
+  let points = {};
   for (let key in corners) {
     if (corners.hasOwnProperty(key)) {
       c = corners[key];
       for (let i = Math.min(c[0][0],c[1][0]); i < Math.max(c[0][0],c[1][0]); ++i) {
         for (let j = Math.min(c[0][1],c[1][1]); j < Math.max(c[0][1],c[1][1]); ++j) {
-          points.push({
-            x: i,
-            y: j,
-            type: "point",
-            color: rooms[key]
-          });
+          //points.push({ x: i, y: j, type: "point", color: rooms[key] });
+          if (!points[rooms[key]])
+            points[rooms[key]] = new Set();
+          points[rooms[key]].add([
+              i + defaultConfig.xMin,
+              defaultConfig.yMax - j
+          ]);
         }
       }
     }
   }
+
   return points;
 }
 
-function getDefaultMap(config = defaultConfig) {
+function adjustPoints(p) {
+  p.x += defaultConfig.xMin;
+  p.y = defaultConfig.yMax - p.y;
+  return p
+}
+
+function getDefaultMap(/*config = defaultConfig*/) {
+  let config = defaultConfig;
   //let xMax = config.world.reduce((acc, x) => Math.max(acc, x.length));
   let world = config.world;
   let rowCount = -1; // The string literal starts with a newline
@@ -122,11 +122,8 @@ function getDefaultMap(config = defaultConfig) {
   robot.x += config.xMin;
   robot.y = config.yMax - robot.y;
   return {
-    worldMap: array.map((i) => {
-      i.x += config.xMin;
-      i.y = config.yMax - i.y;
-      return i
-    }).concat(roomPoints),
+    worldMap: array.map(adjustPoints),//.concat(roomPoints),
+    roomPoints: roomPoints,
     xMin: defaultConfig.xMin,
     xMax: xMax + defaultConfig.xMin,
     yMin: defaultConfig.yMax - rowCount - 1,

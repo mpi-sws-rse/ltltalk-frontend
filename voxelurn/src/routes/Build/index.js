@@ -93,7 +93,9 @@ class Build extends Component {
         /* Try the query */
         this.props.dispatch(Actions.tryQuery(query))
           .then(r => {
-            if (!r) {
+            if (r === null) { // If an error occurred
+              this.props.dispatch(Actions.setStatus(STATUS.TRY));
+            } else if (!r) {
               /* The try query was unsuccessful, so set it as a pin */
               this.props.dispatch(Actions.setPin())
               this.props.dispatch(Actions.resetResponses())
