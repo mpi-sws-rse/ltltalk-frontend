@@ -7,6 +7,7 @@ import Mousetrap from "mousetrap"
 import History from "containers/History"
 import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
+import RoomTable from "containers/RoomTable"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
@@ -203,6 +204,10 @@ class Build extends Component {
 
     return (
       <div className="Build">
+        <div className="Build-info" >
+          <RoomTable
+          />
+        </div>
         <div className="Build-world">
           <Setting
             blocks={currentState}

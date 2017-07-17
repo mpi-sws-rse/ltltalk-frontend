@@ -47,8 +47,8 @@ function processCorners() {
   for (let key in corners) {
     if (corners.hasOwnProperty(key)) {
       c = corners[key];
-      for (let i = Math.min(c[0][0],c[1][0]); i < Math.max(c[0][0],c[1][0]); ++i) {
-        for (let j = Math.min(c[0][1],c[1][1]); j < Math.max(c[0][1],c[1][1]); ++j) {
+      for (let i = Math.min(c[0][0],c[1][0]); i <= Math.max(c[0][0],c[1][0]); ++i) {
+        for (let j = Math.min(c[0][1],c[1][1]); j <= Math.max(c[0][1],c[1][1]); ++j) {
           //points.push({ x: i, y: j, type: "point", color: rooms[key] });
           if (!points[rooms[key]])
             points[rooms[key]] = new Set();
