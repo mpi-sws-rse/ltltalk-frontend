@@ -5,6 +5,7 @@ import { updateRobot, removeRobot } from "helpers/blocks"
 import { persistStore } from "redux-persist"
 import { getStore } from "../"
 import { STATUS } from "constants/strings"
+import { worldConfig } from "constants/defaultMap"
 
 function sendContext(history, current_history_idx, sessionId) {
   let contextCommand = "(:context)"
@@ -22,6 +23,30 @@ function sendContext(history, current_history_idx, sessionId) {
   const contextCmds = { q: contextCommand, sessionId: sessionId }
 
   return SEMPREquery(contextCmds)
+}
+
+function setToPoints(set) {
+  let str = '[';
+  let first = true;
+  for (let point of set) {
+    if (first)
+      first = false;
+    else
+      str += ',';
+    str += '[' + point[0] + ',' + point[1] + ']';
+  }
+  return str + ']';
+}
+
+function processMacros(str) {
+  for (let room in worldConfig.roomPoints) {
+    if (worldConfig.roomPoints.hasOwnProperty(room)) {
+      let re = new RegExp('(\\W|^)' + room + '(\\W|$)', 'gi');
+      let setString = setToPoints(worldConfig.roomPoints[room]);
+      str = str.replace(re, (m,g0,g1) => g0 + setString+ g1);
+    }
+  }
+  return str;
 }
 
 const Actions = {
@@ -81,6 +106,7 @@ const Actions = {
 
       return sendContext(history, current_history_idx, sessionId)
         .then((eh) => {
+          q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
 
@@ -96,7 +122,8 @@ const Actions = {
               }
 
               const formval = parseSEMPRE(response.candidates)
-              console.log(formval);
+              //console.log('Server response:');
+              //console.log(formval);
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
@@ -183,6 +210,7 @@ const Actions = {
 
       const formulas = responses.reduce((acc, r) => acc.concat(r.formulas), [])
 
+      // Do I need to processMacros() here?
       const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
       SEMPREquery({ q: query, sessionId: sessionId }, () => { })
 
@@ -202,7 +230,10 @@ const Actions = {
       const text = history[idx] !== undefined ? history[idx].text : ""
       const defineAs = text !== "" ? text : query
 
-      const defineHist = history.slice(idx + 1, history.length).map(h => [h.text, h.formula]).filter(h => h.type !== "pin")
+      const defineHist = history
+          .slice(idx + 1, history.length)
+          .map(h => [processMacros(h.text), h.formula])
+          .filter(h => h.type !== "pin");
 
       // scope multiline definitions by default
       let mode = ":def"
@@ -212,7 +243,8 @@ const Actions = {
         mode = ":def_iso"
       }
 
-      const sempreQuery = `(${mode} "${defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`
+      const processed = processMacros(defineAs);
+      const sempreQuery = `(${mode} "${processed/*defineAs*/}" ${JSON.stringify(JSON.stringify(defineHist))})`
 
       /* Submit the define command */
       SEMPREquery({ q: sempreQuery, sessionId: sessionId })

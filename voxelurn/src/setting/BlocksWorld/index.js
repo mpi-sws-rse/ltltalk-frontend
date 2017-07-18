@@ -186,7 +186,7 @@ class Blocks extends React.Component {
     if (!rm) rm = [];
     if (!pm) pm = [];
     for (let i = 0; i < updatedBlocks.length; ++i) {
-      if (updatedBlocks[i].type === "roomMarkers" || updatedBlocks[i].type == "pointMarkers") {
+      if (updatedBlocks[i].type === "roomMarker" || updatedBlocks[i].type === "pointMarker") {
         updatedBlocks.splice(i,1);
         --i;
       }

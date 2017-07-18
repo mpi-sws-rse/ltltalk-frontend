@@ -69,9 +69,12 @@ class CommandBar extends Component {
       type: Constants.SET_STATUS,
       status: STATUS.TRY
     })
+    /*
     let command = this.processMacros(this.props.query);
-    console.log(command);
+    this.props.dispatch(Actions.setQuery(command))
     this.props.onClick(command);
+     */
+    this.props.onClick(this.props.query);
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */
