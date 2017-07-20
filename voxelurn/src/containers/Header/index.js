@@ -14,6 +14,7 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/build", query: query }} activeClassName="active"><div>Build</div></Link>
+  {/*
       <Link to={{ pathname: "/community", query: query }} activeClassName="active"><div>Leaderboard</div></Link>
       <a target="_blank" href="https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md#core-language"><div>Reference</div></a>
       <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>Help</div></Link>
@@ -31,6 +32,7 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
           </div>
         </a>
       }
+  */}
     </div>
   </div>
 )

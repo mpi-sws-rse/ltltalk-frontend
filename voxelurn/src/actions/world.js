@@ -16,7 +16,16 @@ function sendContext(history, current_history_idx, sessionId) {
     //const currentState = worldToJSON(history[idx].worldMap);
     const robot = history[idx].robot;
     const robotContext = [robot.x, robot.y, robot.items];
-    const totalState = JSON.stringify(JSON.stringify([robotContext].concat(currentState)));
+    const rooms = {};
+    for (let k of Object.keys(worldConfig.roomPoints)) {
+      rooms[k] = [...worldConfig.roomPoints[k].values()];
+    }
+    const totalState = JSON.stringify(JSON.stringify({
+      robot: robotContext,
+      world: currentState,
+      rooms: rooms
+    }));
+    console.log(totalState);
     contextCommand = `(:context ${totalState})`;
   }
 
@@ -106,7 +115,7 @@ const Actions = {
 
       return sendContext(history, current_history_idx, sessionId)
         .then((eh) => {
-          q = processMacros(q);
+          //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
 
@@ -232,7 +241,8 @@ const Actions = {
 
       const defineHist = history
           .slice(idx + 1, history.length)
-          .map(h => [processMacros(h.text), h.formula])
+          //.map(h => [processMacros(h.text), h.formula])
+          .map(h => [h.text, h.formula])
           .filter(h => h.type !== "pin");
 
       // scope multiline definitions by default
@@ -243,8 +253,8 @@ const Actions = {
         mode = ":def_iso"
       }
 
-      const processed = processMacros(defineAs);
-      const sempreQuery = `(${mode} "${processed/*defineAs*/}" ${JSON.stringify(JSON.stringify(defineHist))})`
+      //const processed = processMacros(defineAs);
+      const sempreQuery = `(${mode} "${/*processed*/defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`
 
       /* Submit the define command */
       SEMPREquery({ q: sempreQuery, sessionId: sessionId })

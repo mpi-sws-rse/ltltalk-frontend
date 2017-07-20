@@ -9,7 +9,7 @@ import CubesImage from "images/struct_frames_cubes.png"
 
 class Information extends Component {
 	componentDidMount() {
-		this.props.dispatch(Actions.joinCommunity())
+		//this.props.dispatch(Actions.joinCommunity())
 	}
 
 	render() {
