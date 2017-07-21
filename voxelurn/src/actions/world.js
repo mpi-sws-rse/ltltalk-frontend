@@ -25,37 +25,12 @@ function sendContext(history, current_history_idx, sessionId) {
       world: currentState,
       rooms: rooms
     }));
-    console.log(totalState);
     contextCommand = `(:context ${totalState})`;
   }
 
   const contextCmds = { q: contextCommand, sessionId: sessionId }
 
   return SEMPREquery(contextCmds)
-}
-
-function setToPoints(set) {
-  let str = '[';
-  let first = true;
-  for (let point of set) {
-    if (first)
-      first = false;
-    else
-      str += ',';
-    str += '[' + point[0] + ',' + point[1] + ']';
-  }
-  return str + ']';
-}
-
-function processMacros(str) {
-  for (let room in worldConfig.roomPoints) {
-    if (worldConfig.roomPoints.hasOwnProperty(room)) {
-      let re = new RegExp('(\\W|^)' + room + '(\\W|$)', 'gi');
-      let setString = setToPoints(worldConfig.roomPoints[room]);
-      str = str.replace(re, (m,g0,g1) => g0 + setString+ g1);
-    }
-  }
-  return str;
 }
 
 const Actions = {

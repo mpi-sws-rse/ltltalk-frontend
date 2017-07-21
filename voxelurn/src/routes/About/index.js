@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import Actions from "actions/logger"
+//import Actions from "actions/logger"
 import { Link } from "react-router"
 import "./styles.css"
 import { TUTORIAL_URL, SLACK_SIGNUP_URL, DOCUMENTATION_URL } from "constants/strings"

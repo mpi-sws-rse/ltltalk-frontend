@@ -89,7 +89,8 @@ class Blocks extends React.Component {
     super(props)
     /* Default Isomer config */
     const defaultIsoConfig = {
-      centerPoint: Point(0, 0, 0),
+      // TODO : calculate this
+      centerPoint: Point(-5, 20, 0),
       rotation: worldAngle,
       scale: 1,
 
@@ -148,11 +149,34 @@ class Blocks extends React.Component {
     return JSON.parse(JSON.stringify(obj));
   }
 
+  joinWalls(blocks) {
+    let wc = worldConfig;
+    blocks = blocks.filter(b => b.type !== "wall" || (b.x !== wc.xMin
+        && b.x !== wc.xMax && b.y !== wc.yMin && b.y !== wc.yMax));
+    console.log(wc);
+    let xLen = wc.xMax - wc.xMin;
+    let yLen = wc.yMax - wc.yMin;
+    let border = [
+      { x: wc.xMin+1, y: wc.yMin, type: "wall", extend: { x: xLen-2, y: 0 } },
+      { x: wc.xMin, y: wc.yMin+1, type: "wall", extend: { x: 0, y: yLen-2 } },
+      { x: wc.xMax, y: wc.yMax, type: "wall", extend: { x: -xLen+2, y: 0 } },
+      { x: wc.xMax, y: wc.yMax, type: "wall", extend: { x: 0, y: -yLen+2 } },
+      { x: wc.xMin, y: wc.yMin, type: "wall" },
+      { x: wc.xMin, y: wc.yMax, type: "wall" },
+      { x: wc.xMax, y: wc.yMin, type: "wall" },
+      { x: wc.xMax, y: wc.yMax, type: "wall" }
+    ];
+    return blocks.concat(border);
+  }
+
   componentDidUpdate() {
     counter++;
+    let blocks = this.props.blocks;
+    if (worldConfig.optimizeBorder)
+      blocks = this.joinWalls(blocks);
     window.requestAnimationFrame(() =>
         this.renderEverything(
-            this.props.blocks.filter((b) => b.type !== "point"),
+            blocks.filter((b) => b.type !== "point"),
             this.clone(this.props.robot),
             this.props.path.slice(),
             0,
@@ -248,13 +272,13 @@ class Blocks extends React.Component {
   renderGrid(scale) {
     const { /*groundRadius,*/ rotation, groundColor, centerPoint } = this.config;
 
-    for (let x = 0; x < worldConfig.xMax - worldConfig.xMin  + 1; ++x) {
+    for (let x = 0; x <= worldConfig.xMax - worldConfig.xMin + 1; ++x) {
 
 
       this.state.iso.add(new Path([
-        new Point((x + worldConfig.xMin), (worldConfig.yMin + 1), 0),
+        new Point((x + worldConfig.xMin), (worldConfig.yMin + 0), 0),
         new Point((x + worldConfig.xMin), (worldConfig.yMax + 1), 0),
-        new Point((x + worldConfig.xMin), (worldConfig.yMin + 1), 0)
+        new Point((x + worldConfig.xMin), (worldConfig.yMin + 0), 0)
       ])
         .rotateZ(centerPoint, rotation)
         .scale(centerPoint, scale)
@@ -263,11 +287,11 @@ class Blocks extends React.Component {
       );
     }
 
-    for (let y = 0; y < worldConfig.yMax - worldConfig.yMin + 1; ++y) {
+    for (let y = 0; y <= worldConfig.yMax - worldConfig.yMin + 1; ++y) {
       this.state.iso.add(new Path([
-        new Point((worldConfig.xMin), (y + worldConfig.yMin + 1), 0),
-        new Point((worldConfig.xMax), (y + worldConfig.yMin + 1), 0),
-        new Point((worldConfig.xMin), (y + worldConfig.yMin + 1), 0)
+        new Point((worldConfig.xMin),     (y + worldConfig.yMin + 0), 0),
+        new Point((worldConfig.xMax + 1), (y + worldConfig.yMin + 0), 0),
+        new Point((worldConfig.xMin),     (y + worldConfig.yMin + 0), 0)
       ])
         .rotateZ(centerPoint, rotation)
         .scale(centerPoint, scale)
@@ -294,20 +318,16 @@ class Blocks extends React.Component {
         if (block.type === "roomMarker" || block.type === "pointMarker")
           alpha = 0.2;
         blockColor = new Color(color[0], color[1], color[2], alpha);
+      } else if (block.type === "robot") {
+        blockColor = new Color(128, 128, 128, 0.5);
+      } else {
+        //blockColor = new Color(128, 128, 128, 0.5);
+        blockColor = new Color(0, 0, 0, 0.8);
       }
 
+
       // Determine what sort of block to construct
-      if (block.type === "robot") {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "robot"), new Color(128, 128, 128, 0.50));
-      } else if (block.type === "item" || block.type === "carriedItem") {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "item"), blockColor);
-      } else if (block.type === "path") {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "path"), blockColor);
-      } else if (block.type === "roomMarker" || block.type === "pointMarker") {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "marker"), blockColor);
-      } else {
-        this.state.iso.add(this.makeBlock(block.x, block.y, block.z, false, scale, "wall"), new Color(0, 0, 0, 0.88));
-      }
+      this.state.iso.add(this.makeBlock(block, false, scale), blockColor);
     }
   }
 
@@ -320,9 +340,13 @@ class Blocks extends React.Component {
     return factor * graystandard + (1 - factor) * value;
   }
 
-  makeBlock(x, y, z, highlighted = false, scale = this.config.scale, type = null) {
+  //makeBlock(x, y, z, highlighted = false, scale = this.config.scale, type = null) {
+  makeBlock(block, highlighted = false, scale = this.config.scale) {
     const { rotation, centerPoint} = this.config
     const cubesize = highlighted ? this.config.selectWidthScale : this.config.blockWidthScale;
+    let { x, y, z, type } = block;
+    const extend = block.extend ? block.extend : {x:0, y:0};
+    type = type === "pointMarker" || type === "roomMarker" ? "marker" : type;
 
     let cScale = 1;
     if (type === "path")
@@ -350,7 +374,7 @@ class Blocks extends React.Component {
           y +  cubesize/2,
           z * heightScaling + zShift),
         0.5 * cScale,
-        16, // Number of vertices
+        10, // Number of vertices
         cubesize * heightScaling)
       .rotateZ(centerPoint, rotation)
       .scale(centerPoint, scale);
@@ -361,9 +385,15 @@ class Blocks extends React.Component {
         //shape = Shape.Pyramid;
         //yRotation = Math.PI;
       }
+      let xSign = (extend.x >= 0) ? 1 : -1;
+      let ySign = (extend.y >= 0) ? 1 : -1;
+      if (xSign < 0) x += extend.x - 1;
+      if (ySign < 0) y += extend.y - 1;
       let objectPoint = Point(x + shift, y + shift, z * heightScaling + zShift);
       return shape(objectPoint ,
-        cubesize*cScale, cubesize*cScale, cubesize*zScale
+        cubesize*cScale + xSign*extend.x,
+        cubesize*cScale + ySign*extend.y,
+        cubesize*zScale
       )
         .rotateY(objectPoint, yRotation)
         .rotateZ(centerPoint, rotation)

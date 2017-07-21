@@ -1,8 +1,8 @@
 import React, { PropTypes } from "react"
-import { SLACK_OAUTH_URL } from "constants/strings"
+//import { SLACK_OAUTH_URL } from "constants/strings"
 import { Link } from "react-router"
 import { connect } from "react-redux"
-import Actions from "actions/world"
+//import Actions from "actions/world"
 
 import "./styles.css"
 

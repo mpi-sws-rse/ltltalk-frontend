@@ -39,8 +39,8 @@ class Build extends Component {
   componentDidMount() {
     /* Bind Ctrl+Z and Crtl+Shift+Z to Undo and Redo actions respectively */
     Mousetrap.prototype.stopCallback = () => false;
-    Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
-    Mousetrap.bind("command+shift+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.redo()) })
+    //Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
+    //Mousetrap.bind("command+shift+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.redo()) })
 
     /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
      * otherwise, set a current structure id for the currently working sturct */

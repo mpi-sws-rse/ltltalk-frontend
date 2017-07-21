@@ -116,10 +116,12 @@ class CommandBar extends Component {
     let result = locRe.exec(newValue);
     let locs = [];
     while (result) {
-      //console.log(result.index);
-      //if (cursor >= result.index && cursor < (result.index + result[0].length))
-        //console.log(result[0]);
-      locs.push([result[1], result[2]]);
+      let x = parseInt(result[1], 10);
+      let y = parseInt(result[2], 10);
+      if (x <= worldConfig.xMax && x >= worldConfig.xMin && y <= worldConfig.yMax
+          && y >= worldConfig.yMin) {
+        locs.push([x,y]);
+      }
       result = locRe.exec(newValue);
     }
     this.props.dispatch({

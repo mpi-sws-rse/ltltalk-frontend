@@ -13,8 +13,8 @@ const world = `
 
 const defaultConfig = {
   world: world,
-  xMin: -8,
-  yMax: 5
+  xMin: -1,
+  yMax: 9
 }
 
 const itemFlag = /[a-z]/;
@@ -122,11 +122,12 @@ function getDefaultMap(/*config = defaultConfig*/) {
   robot.x += config.xMin;
   robot.y = config.yMax - robot.y;
   return {
+    optimizeBorder: true,
     worldMap: array.map(adjustPoints),//.concat(roomPoints),
     roomPoints: roomPoints,
     xMin: defaultConfig.xMin,
-    xMax: xMax + defaultConfig.xMin,
-    yMin: defaultConfig.yMax - rowCount - 1,
+    xMax: xMax + defaultConfig.xMin - 1,
+    yMin: defaultConfig.yMax - rowCount,
     yMax: defaultConfig.yMax,
     robot: robot
   };
