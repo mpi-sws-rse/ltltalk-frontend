@@ -17,7 +17,6 @@ The only two variables are "point" and "area" which are set inside of loops.
  - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
  - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
- - ~~`ST -> Location`~~ *(not implemented, see Issue #8)*
 
 ## Locations: Points, Areas, and Collections of areas
 A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
@@ -27,9 +26,9 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `Point -> any point in Area` *nondeterministically chosen any point from Area*
   - `Area -> [Point1, Point2,...,PointN]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
   - `Area -> world` *area of the whole map*
-  - `Area -> Area1 + Area2` *a union of areas Area1 and Area2*
-  - `Area -> Area1 * Area2` *an intersection of areas Area1 and Area2*
-  - `Area -> Area1 - Area2` *a difference between areas Area1 and Area2*
+  - `Area -> Area1 union Area2` *a union of areas Area1 and Area2*
+  - `Area -> Area1 intersect Area2` *an intersection of areas Area1 and Area2*
+  - `Area -> Area1 minus Area2` *a difference between areas Area1 and Area2*
   - `Area -> area with corners Point1 and Point2` *an area defined by corners Point1 and Point2*
   - `Collection -> [Area1, Area2,..., AreaN]` *a set of areas (set of sets of points)*
   - `Collection -> Collection containing Item` *subcollection of Collection consisting of areas that contain an item as specified by Item*
@@ -47,6 +46,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
 ## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
+  - `Spec -> move Direction` *robot moves one space in the direciton `up`, `down`, `right`, or `left`*
   - `Spec -> visit Point while avoiding Area`  *robot should visit Point , and while doing this not enter any point of Area* 
   - `Spec -> visit Point`  *syntactic sugar for __visit Point while avoiding $`\emptyset`$__* 
   - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any point in Area1 while avoiding Area2__*
@@ -63,8 +63,8 @@ Item filters function as logical filters. One can say _pick item_ with the meani
   - `Item -> item Filter` _item with the specified filter_
   - `Filter -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
   - `Filter -> has shape T` _T is from finite set of shapes, everything that has type T passes the filter_
-  - `Filter -> Filter1 && Filter2`  _a conjunction of two item filters_
-  - `Filter -> Filter1 || Filter2` _a disjunction of two item filters_
+  - `Filter -> Filter1 and Filter2`  _a conjunction of two item filters_
+  - `Filter -> Filter1 or Filter2` _a disjunction of two item filters_
   - `Filter -> !Filter1` _a negation of an item filter F1_
  
 
