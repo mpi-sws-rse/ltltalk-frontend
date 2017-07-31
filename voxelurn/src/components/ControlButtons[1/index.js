@@ -24,8 +24,8 @@ class RoomTable extends Component {
     dispatch: PropTypes.func,
   }
 
-  componentDidUpdate(prevProps) {
-  }
+  //componentDidUpdate(prevProps) {
+  //}
 
   setToPoints(set) {
     let str = '[';

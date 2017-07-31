@@ -330,11 +330,20 @@ const Actions = {
   },
 
   removePin: (idx) => {
-    return (dispatch) => {
+    // Does getState work here?
+    return (dispatch, getState) => {
+      const { history } = getState().world
       dispatch({
         type: Constants.REMOVE_PIN,
         idx
       })
+      if (idx === history.length - 1) {
+        let query = history[history.length-1].text;
+        dispatch({
+          type: Constants.SET_QUERY,
+          query
+        })
+      }
     }
   },
 

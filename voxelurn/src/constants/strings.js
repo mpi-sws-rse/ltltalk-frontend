@@ -27,7 +27,7 @@ export const STATUS = {
 export const CUBE_MINIMUM = 50
 
 /* Display Strings */
-export const COMMAND_BAR_PLACEHOLDER = "Tell the computer to build something..."
+export const COMMAND_BAR_PLACEHOLDER = "Tell the robot to do something..."
 export const COMMAND_BAR_DEFINE_PLACEHOLDER = "Define this set of actions as..."
 export const TRY_MSG = "Enter a command for the computer."
 export const ACCEPT_MSG = "Click accept if the computer correctly intepreted what you meant, scroll to see other intepretations, or revise your command."

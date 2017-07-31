@@ -32,6 +32,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `Area -> area with corners Point1 and Point2` *an area defined by corners Point1 and Point2*
   - `Collection -> [Area1, Area2,..., AreaN]` *a set of areas (set of sets of points)*
   - `Collection -> Collection containing Item` *subcollection of Collection consisting of areas that contain an item as specified by Item*
+  - `Collection -> all rooms` *collection of all predefined rooms*
   - `Area -> Area containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
 
 

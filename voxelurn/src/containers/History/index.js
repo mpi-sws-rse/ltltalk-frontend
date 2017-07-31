@@ -125,8 +125,8 @@ class History extends Component {
   }
 
   deletePin(idx) {
-    this.props.dispatch(Actions.removePin(idx))
     this.props.dispatch(Actions.closeDefine())
+    this.props.dispatch(Actions.removePin(idx))
   }
 
   setPin() {

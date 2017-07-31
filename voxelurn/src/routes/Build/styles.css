@@ -46,6 +46,10 @@ div.Build-world {
 
 .Build-info {
   width: 100%;
-  float: left;
+  height: 100%;
+  float: right;
+  text-align: right;
+  padding-right: 10%;
+  margin-left: auto;
   position: absolute;
 }

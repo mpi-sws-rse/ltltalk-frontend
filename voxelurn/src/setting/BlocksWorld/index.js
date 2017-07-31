@@ -153,7 +153,6 @@ class Blocks extends React.Component {
     let wc = worldConfig;
     blocks = blocks.filter(b => b.type !== "wall" || (b.x !== wc.xMin
         && b.x !== wc.xMax && b.y !== wc.yMin && b.y !== wc.yMax));
-    console.log(wc);
     let xLen = wc.xMax - wc.xMin;
     let yLen = wc.yMax - wc.yMin;
     let border = [
@@ -224,7 +223,9 @@ class Blocks extends React.Component {
     
     const blocks = sortBlocks(updatedBlocks.map((b) => rotateBlock(b, this.state.rotational)));
     adjustRobot(robot, blocks);
-    const scalars = blocks.map((b) => this.getBlockScale(b));
+    // This line will "zoom out" when the blocks get large to display
+    //const scalars = blocks.map((b) => this.getBlockScale(b));
+    const scalars = blocks.map((b) => 1.0);
     const minScalar = Math.max(Math.min(...scalars), this.config.numUnits / this.config.maxUnits);
 
 
@@ -346,7 +347,10 @@ class Blocks extends React.Component {
     const cubesize = highlighted ? this.config.selectWidthScale : this.config.blockWidthScale;
     let { x, y, z, type } = block;
     const extend = block.extend ? block.extend : {x:0, y:0};
-    type = type === "pointMarker" || type === "roomMarker" ? "marker" : type;
+    if (type === "pointMarker" || type === "roomMarker")
+      type = "marker";
+    else if (type === "carriedItem")
+      type = "item";
 
     let cScale = 1;
     if (type === "path")

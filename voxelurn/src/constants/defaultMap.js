@@ -21,7 +21,7 @@ const itemFlag = /[a-z]/;
 const cornerFlag = /[A-Z]/;
 const items = {
   a: ["blue","green"],
-  b: ["orange", "red"],
+  b: ["purple", "red"],
   c: ["red"],
   d: ["purple"],
   z: ["red","blue","green"]

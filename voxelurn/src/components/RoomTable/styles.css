@@ -1,10 +1,8 @@
 .RoomTable {
-  //width: 100%;
   box-shadow: 0 6px 24px rgba(60, 60, 60, 0.18);
-  //display: block;
-  float: left;
-  margin-left: 10%;
-  margin-bottom: 20%;
+  display: inline-block;
+  text-align: left;
+  margin-top: 4%;
   background-color: white;
 }
 
