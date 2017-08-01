@@ -24,7 +24,7 @@ or by specifying the direction: `move left`
 - You can pick items with the following command `pick item has color blue`
   - Tip: you can perform multiple actions sequentially by separating them with `;`
   - Color specification is optional; `pick item` will pick an item of any color
-  - A conjunction (`and`) or disjunction (`or`) of colors can be specified with
+  - Disjunction (`or`) of colors can be specified with
 `has color blue or has color red`
 - Dropping items works in the same manner `drop every item`
   - The modifier `every` can be used with `pick` or `drop` to perform the
@@ -32,7 +32,9 @@ action on every item specified instead of just one
 - Visiting an area (a set of points) will send the robot to one point contained
 in area `visit room5`
   - `visit room5` is equivalent to `vist any point in room5`
-- Areas can be filtered down to points that contain items: `visit room3 containing item has color red`
+  - Areas can be explicitly written: `[[3,3],[3,4],[4,4]]`
+- Areas can be filtered down to points that contain items:
+`visit any point in room3 containing item has color red`
   - Tip: areas can be combined with `union`, `intersect`, and `minus` (relative complement)
 - It is possible to perform an action on every point in an area:
 `foreach point in world containing item { visit point; pick item }`
@@ -42,6 +44,7 @@ in area `visit room5`
 - It is also possible to loop through areas:
 `foreach area in all rooms containing item has color red { visit area; drop item }`
   - `all rooms` is an area collection consisting of all redefined rooms
+  - A collection of areas can be explicitly written: `[room1, room4]`
 
 ## Basic Rule Defining
 
@@ -87,8 +90,45 @@ items and sort them into `room4` and `room5` respectively
   - `visit room5`
   - `drop every item has color green`
 
+This concludes the basic part of the tutorial. Feel free to play around in the
+virtual environment, learn about the rest of the core language below, or
+consult the [core language specification](/documentation/core-language.md).
+When you feel comfortable with the core language, please complete some tasks
+from our [suggested list](/documentation/open-tasks.md) so that we can see how
+different people go about defining the tasks.
+
 ### Advanced Language Constructs
 
 Feel free to skip this and reference it as needed.
 
-- `if robot has item has color purple then { move down }`
+- `{` and `}` function as optional grouping symbols
+  - Group actions as a single action `{ move left; move up}` (these are
+completed in the specified sequence)
+- `visit [9,8] while avoiding room3`
+  - `visit` the specified point without entering the specified area
+- An area can also be specified by its corner points
+  - `foreach point in area with corners [3,3] and [4,5] { visit point }`
+  - If the area spans walls, the walls will not be considered in the area
+- `if` statements can be used with `robot has item`, `robot at [3,3]`,
+`robot at room2`, `item at [4,4]`, `item at room1`, etc.
+  - `if CONDITION then ACTION`
+  - `if robot has item has color purple then { move down }`
+- `if` statements can also be used with the possibility of an action being
+completed
+  - `if possible ACTION then ACTION`
+  - `if possible { move left } then { move right }`
+  - An action is `possible` if every step can be completed successfully
+  - `if possible { move left; pick item has color green } then { move right }`
+- Closely related to possibility is strictly completing a sequence of commands
+  - `strict { move left ; pick item has color red ; drop item has color purple }` 
+  - If it is not possible to complete each of the actions in sequence, the
+robot will do nothing; otherwise, the action will be completed normally
+- Successful completion (applies only to actions)
+  - `visit` is successful if the robot's final position is the same as the
+  - `move` is successful if the robot's final location is one point in the
+specified direction
+  - `pick`/`drop` is successful if the robot has one more/fewer of the item specified
+  - `pick every`/`drop every` is successful if the robot has at least one
+more/fewer of the item specified
+  - `strict ACTION` is succes
+position specified in the command
