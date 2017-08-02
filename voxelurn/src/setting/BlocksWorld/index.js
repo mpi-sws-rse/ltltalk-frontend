@@ -378,7 +378,7 @@ class Blocks extends React.Component {
           y +  cubesize/2,
           z * heightScaling + zShift),
         0.5 * cScale,
-        10, // Number of vertices
+        6,//10, // Number of vertices
         cubesize * heightScaling)
       .rotateZ(centerPoint, rotation)
       .scale(centerPoint, scale);
