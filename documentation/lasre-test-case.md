@@ -4,13 +4,17 @@ Language Acquisition System in a Robotic Environment
 
 ## Basics
 
-The following commands give a basic introduction to LASRE. After typing in a
-command, press enter to see a preview of the possible result(s), and press
-enter again to accept the action. You can undo an accepted action by clicking
-on the "x" next to command history. If you enter a command incorrectly, the
-system will give you an opportunity to define the command, click the "x" to
-cancel and edit the command. All commands can be cleared by opening the
-Control Panel on the right side and clicking "CLEAR".
+The following commands give a basic introduction to LASRE.
+- After typing in a command (try `move left`), press enter to see a preview of 
+  the possible result(s)
+- Press enter again to accept the action
+- You can undo an accepted action by clicking on the "x" next to the command 
+  history
+- If you enter a command incorrectly (`move leftt`), the system will give you an 
+  opportunity to define the command, click the "x" to cancel and edit the 
+  command
+- All commands can be cleared by opening the Control Panel on the right 
+  side and clicking "CLEAR".
 
 ## The Core Language
 
@@ -20,22 +24,24 @@ describes the individual actions that the robot can perform.
 - You can move the robot either by specifying the absolute point: `visit [5,8]`
 or by specifying the direction: `move left`
   - Tip: any action can be repeated with the following syntax `repeat 2 times move left`
-  - Before you accept the move, you can edit the command and try something else
-- You can pick items with the following command `pick item has color blue`
-  - Tip: you can perform multiple actions sequentially by separating them with `;`
-  - Color specification is optional; `pick item` will pick an item of any color
-  - Disjunction (`or`) of colors can be specified with
+  - Before you accept the action, you can edit the command and try something else
+- You can pick items with the following command `pick item`
+  - You can also specify a color: `pick item has color blue` 
+  - Tip: you can perform multiple actions sequentially by separating them with
+  `;`; for example: `pick item; pick item has color blue`
+  - A disjunction (`or`) of colors can be specified with
 `has color blue or has color red`
-- Dropping items works in the same manner `drop every item`
+- Dropping items works in the same manner `drop item`
   - The modifier `every` can be used with `pick` or `drop` to perform the
-action on every item specified instead of just one
+action on every item specified instead of just one: `drop every item`
+  - Color specificaiton works similarly: `drop every item has color blue`
 - Visiting an area (a set of points) will send the robot to one point contained
 in area `visit room5`
-  - `visit room5` is equivalent to `vist any point in room5`
+  - `visit room5` is shorthand for `vist any point in room5`
   - Areas can be explicitly written: `[[3,3],[3,4],[4,4]]`
 - Areas can be filtered down to points that contain items:
 `visit any point in room3 containing item has color red`
-  - Tip: areas can be combined with `union`, `intersect`, and `minus` (relative complement)
+  - Tip: areas can be combined with `union`, `intersect`, and `minus` (relative complement): `room1 union room2`
 - It is possible to perform an action on every point in an area:
 `foreach point in world containing item { visit point; pick item }`
   - `world` is an area consisting of every open point
