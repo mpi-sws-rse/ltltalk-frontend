@@ -16,6 +16,9 @@ The following commands give a basic introduction to LASRE.
 - All commands can be cleared by opening the Control Panel on the right 
   side and clicking "CLEAR".
 
+If you need a quick reminder of command syntax, see these
+[examples](/documentation/example-commands.md).
+
 ## The Core Language
 
 The following commands introduce you to the basics of the core language which
@@ -23,9 +26,12 @@ describes the individual actions that the robot can perform.
 
 - You can move the robot either by specifying the absolute point: `visit [5,8]`
 or by specifying the direction: `move left`
+  - If it is not possible to visit a point (e.g., it is a wall), the robot will
+  do nothing
   - Tip: any action can be repeated with the following syntax `repeat 2 times move left`
   - Before you accept the action, you can edit the command and try something else
-- You can pick items with the following command `pick item`
+- You can pick items with the following command `pick item` (you must be on the
+same square as an item in order to pick it up)
   - You can also specify a color: `pick item has color blue` 
   - Tip: you can perform multiple actions sequentially by separating them with
   `;`; for example: `pick item; pick item has color blue`
@@ -51,6 +57,12 @@ in area `visit room5`
 `foreach area in all rooms containing item has color red { visit area; drop item }`
   - `all rooms` is an area collection consisting of all redefined rooms
   - A collection of areas can be explicitly written: `[room1, room4]`
+- Sometimes there will be multiple ways to interpret a command:
+`pick every item not has color red and has color green`
+  - This could possibly be
+  `pick every item not { has color red and has color green }` or
+  `pick every item { not has color red } and has color green`
+  - Use the up and down arrows to choose which one you would like
 
 ## Basic Rule Defining
 
