@@ -7,7 +7,8 @@ Language Acquisition System in a Robotic Environment
 The following commands give a basic introduction to LASRE.
 - After typing in a command (try `move left`), press enter to see a preview of 
   the possible result(s)
-- Press enter again to accept the action
+- Press enter again to accept the action (you do not have to wait for the
+  action to finish)
 - You can undo an accepted action by clicking on the "x" next to the command 
   history
 - If you enter a command incorrectly (`move leftt`), the system will give you an 
@@ -58,7 +59,7 @@ in area `visit room5`
   - `all rooms` is an area collection consisting of all redefined rooms
   - A collection of areas can be explicitly written: `[room1, room4]`
 - Sometimes there will be multiple ways to interpret a command:
-`pick every item not has color red and has color green`
+`visit [7,4]` and then `pick every item not has color red and has color green`
   - This could possibly be
   `pick every item not { has color red and has color green }` or
   `pick every item { not has color red } and has color green`
