@@ -16,6 +16,7 @@ const initialState = {
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
+  //popup: { active: true, text: "No error yet!" },
   defining: false,
   //exampleQuery: "add red 3 times",
   defineN: null

@@ -1,15 +1,15 @@
 import { SEMPRE_SERVER_URL } from "constants/strings"
 
-function formatValue(value) {
-  if (typeof value === "undefined") return "";
+function formatValue(rawValue) {
+  if (typeof rawValue === "undefined") return "";
   // "[[5,5,1,\"Blue\",[]],[5,5,2,\"Red\",[]],[5,4,2,\"Green\",[]]]"
-  const valueArray = JSON.parse(value);
+  const value = JSON.parse(rawValue);
 
   // const valueArray = [[1, 1, 0, "Red", []], [1, 1, 1, "Orange", []]];
-  //
   // [ x , y , action , spec ]
 
-  return valueArray.map((c) => (
+  let status = value.status;
+  let path =  value.path.map((c) => (
     {
       x: c[0],
       y: c[1],
@@ -18,6 +18,7 @@ function formatValue(value) {
       possible: c[4]
     }
   ));
+  return {path: path, status: status};
 }
 
 function combine(vsTmp, v) {
@@ -26,6 +27,7 @@ function combine(vsTmp, v) {
     vs = {};
     //vs.value = v.value;
     vs.path = v.path;
+    vs.status = v.status;
     vs.formula = v.formula;
     vs.formulas = [vs.formula];
     vs.prob = parseFloat(v.prob);
@@ -64,7 +66,9 @@ export function parseSEMPRE(valid) {
   for (let i = 0; i < valid.length; i++) {
     const qapair = {};
     try {
-      qapair.path = formatValue(valid[i].value);
+      let value = formatValue(valid[i].value);
+      qapair.path = value.path;
+      qapair.status = value.status;
       qapair.formula = valid[i].formula;
       qapair.score = valid[i].score.toFixed(7);
       qapair.rank = i;

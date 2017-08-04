@@ -7,6 +7,7 @@ import Mousetrap from "mousetrap"
 import History from "containers/History"
 import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
+import ActionPopup from "components/ActionPopup"
 import RoomTable from "components/RoomTable"
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
@@ -26,6 +27,7 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
+    //popup: PropTypes.object,
 
     roomMarkers: PropTypes.array,
     pointMarkers: PropTypes.array
@@ -186,7 +188,8 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, pointMarkers, roomMarkers, history, current_history_idx, task } = this.props
+    const { status, responses, pointMarkers, roomMarkers, history,
+        current_history_idx, task } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -197,11 +200,20 @@ class Build extends Component {
     let robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;
 
+    let popup = { text: "", active: false };
     if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
       /* If the status is accept, then the current state will be the diff
        * of the previous state and the responded state */
       //currentState = diff(currentState, responses[this.state.selectedResp].value)
-      currentPath = JSON.parse(JSON.stringify(responses[this.state.selectedResp].path));
+      let response = JSON.parse(JSON.stringify(responses[this.state.selectedResp])); 
+      currentPath = response.path;
+      //currentPath = JSON.parse(JSON.stringify(responses[this.state.selectedResp].path));
+      if (response.status.length === 0) {
+        popup.active = false;
+      } else {
+        popup.text = response.status;
+        popup.active = true;
+      }
     }
 
     return (
@@ -223,6 +235,9 @@ class Build extends Component {
         </div>
         <div className="Build-command">
           <History />
+          <ActionPopup
+            active={popup.active}
+            text={popup.text} />
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
             handleShiftClick={() => this.handleShiftClick()}
@@ -265,6 +280,7 @@ const mapStateToProps = (state) => ({
   roomMarkers: state.world.roomMarkers,
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
+  //popup: state.world.popup,
   current_history_idx: state.world.current_history_idx
 })
 

@@ -107,7 +107,6 @@ const Actions = {
 
               const formval = parseSEMPRE(response.candidates)
               //console.log('Server response:');
-              //console.log(formval);
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
