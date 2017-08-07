@@ -14,6 +14,8 @@ export const SEMPRE_SERVER_URL = process.env.REACT_APP_SEMPRE_SERVER ? process.e
 
 /* Meta information */
 export const DEFAULT_SESSIONID = "euthyphro"
+//export const DEFAULT_SESSIONID = Math.random(new Date()/1).toString(36).substr(2,10);
+//console.log("Session ID: " + DEFAULT_SESSIONID);
 
 /* Control strings */
 export const STATUS = {

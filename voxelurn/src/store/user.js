@@ -1,7 +1,8 @@
 import Constants from "constants/actions"
+import { DEFAULT_SESSIONID } from "constants/strings"
 
 const initialState = {
-  sessionId: "deadbeef",
+  sessionId: DEFAULT_SESSIONID,
   task: "world",
   email: null,
   signedIn: false,
@@ -17,7 +18,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.SIGN_IN:
       return { ...state, sessionId: action.id, email: action.email, signedIn: true, token: action.token }
     case Constants.CLEAR:
-      return initialState
+      return { ...initialState, sessionId: state.sessionId };
     default:
       return state
   }

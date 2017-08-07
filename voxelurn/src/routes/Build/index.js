@@ -36,7 +36,13 @@ class Build extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { selectedResp: 0, targetIdx: -1, target: [], possSteps: 33, win: false }
+    this.state = {
+      selectedResp: 0,
+      targetIdx: -1,
+      target: [],
+      possSteps: 33,
+      win: false
+    }
   }
 
   componentDidMount() {
