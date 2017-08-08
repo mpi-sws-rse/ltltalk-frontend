@@ -57,8 +57,9 @@ class CommandBar extends Component {
   }
 
   handleClick() {
+    let query = this.props.query.trim();
     /* If the query is empty, we don't want to do anything */
-    if (this.props.query.length === 0) {
+    if (query.length === 0) {
       /* Alert informatively if we are in define mode */
       if (this.props.status === "define")
         alert("You cannot define something as an empty string.")
@@ -74,7 +75,7 @@ class CommandBar extends Component {
     this.props.dispatch(Actions.setQuery(command))
     this.props.onClick(command);
      */
-    this.props.onClick(this.props.query);
+    this.props.onClick(query);
 
 
     /* If we clicked on an ACCEPT status, let's clear the query */
