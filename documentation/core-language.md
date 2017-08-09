@@ -63,10 +63,9 @@ Item filters function as logical filters. One can say _pick item_ with the meani
   - `Item -> item` _no filter, any item matches_
   - `Item -> item Filter` _item with the specified filter_
   - `Filter -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
-  - `Filter -> has shape T` _T is from finite set of shapes, everything that has type T passes the filter_
   - `Filter -> Filter1 and Filter2`  _a conjunction of two item filters_
   - `Filter -> Filter1 or Filter2` _a disjunction of two item filters_
-  - `Filter -> !Filter1` _a negation of an item filter F1_
+  - `Filter -> not Filter1` _a negation of an item filter F1_
  
 
 # Examples
