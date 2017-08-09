@@ -130,14 +130,14 @@ completed in the specified sequence)
   - If the area spans walls, the walls will not be considered in the area
 - `if` statements can be used with `robot has item`, `robot at [3,3]`,
 `robot at room2`, `item at [4,4]`, `item at room1`, etc.
-  - `if CONDITION then ACTION`
-  - `if robot has item has color purple then { move down }`
+  - `if CONDITION ACTION`
+  - `if robot has item has color purple { move down }`
 - `if` statements can also be used with the possibility of an action being
 completed
-  - `if possible ACTION then ACTION`
-  - `if possible { move left } then { move right }`
+  - `if possible ACTION ACTION`
+  - `if possible { move left } { move right }`
   - An action is `possible` if every step can be completed successfully
-  - `if possible { move left; pick item has color green } then { move right }`
+  - `if possible { move left; pick item has color green } { move right }`
 - Closely related to possibility is strictly completing a sequence of commands
   - `strict { move left ; pick item has color red ; drop item has color purple }` 
   - If it is not possible to complete each of the actions in sequence, the

@@ -51,12 +51,12 @@ This file provides a list of examples of the various language constructs.
 
 ### If
 
-- `if item has color blue at [0,0] then { move left }`
-- `if item at room1 then { move left }`
-- `if item at current then { pick item }`
-- `if robot has item has color blue then { move left }`
-- `if robot at [4,4] then { move left }`
-- `if possible { move right; pick item } then { move left }`
+- `if item has color blue at [0,0] { move left }`
+- `if item at room1 { move left }`
+- `if item at current { pick item }`
+- `if robot has item has color blue { move left }`
+- `if robot at [4,4] { move left }`
+- `if possible { move right; pick item } { move left }`
 
 ### Strict
 

@@ -13,7 +13,8 @@ The only two variables are "point" and "area" which are set inside of loops.
  - `ST -> Spec`
  - `ST -> {ST}` *grouping statements, useful in looping or branching*
  - `ST -> ST1; ST2` *ST1 gets executed and once it is finished ST2 gets executed*
- - `ST -> if Sit then ST1`  *If Sit evaluates to true, ST1 gets executed*
+ - `ST -> if Sit ST1`  *If Sit evaluates to true, ST1 gets executed*
+ - `ST -> while Sit ST1`  *While Sit evaluates to true, ST1 gets executed*
  - `ST -> foreach point in Area ST1` *The loop variable would be used as such: `visit point`*
  - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
@@ -43,6 +44,9 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> robot has Item` *true if the robot carries at least one item described by Item*
  - `Sit -> robot at Location` *true if the robot is at Location (any of the fields)*
  - `Sit -> possible Spec`  *if specification Spec is realizable, return true, otherwise false*
+ - `Sit -> Sit and Sit` *logical and*
+ - `Sit -> Sit or Sit` *logical or*
+ - `Sit -> not Sit` *logical negation*
 
 ## Specifications (Spec)
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
