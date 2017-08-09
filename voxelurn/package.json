@@ -1,13 +1,13 @@
 {
-  "name": "shrdlurn",
+  "name": "lasr",
   "description": "teach the computer your language",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sidaw/shrdlurn.git"
+    "url": ""
   },
-  "author": "Sida Wang <sidaw@cs.stanford.edu> and Sam Ginn <samginn@cs.stanford.edu>",
+  "author": "Brendon Boldt <brendonboldt@mpi-sws.org>",
   "license": "MIT",
-  "homepage": "http://www.voxelurn.com",
+  "homepage": "",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "react-addons-perf": "^15.4.2",
@@ -20,6 +20,7 @@
     "hashids": "^1.1.1",
     "isomer": "^0.2.6",
     "lz-string": "^1.4.4",
+    "marked": ">=0.3.6",
     "moment": "^2.17.1",
     "mousetrap": "^1.6.0",
     "normalize.css": "^5.0.0",

@@ -84,3 +84,9 @@ button.accepting {
 button.full {
   border-radius: 2px;
 }
+
+code {
+  font-size: 0.85em;
+  background-color: lightcyan;
+  padding: 0 0.2em 0 0.2em;
+}
