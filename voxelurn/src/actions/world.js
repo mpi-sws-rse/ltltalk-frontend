@@ -207,7 +207,7 @@ const Actions = {
       const { history, query } = getState().world
 
       if (idx === history.length - 1) {
-        alert("You cannot define the first history item because you must have something to define it as!")
+        alert("The definition body cannot be empty. If you have tried a command, make sure to accept it first.")
         return
       }
       const text = history[idx] !== undefined ? history[idx].text : ""

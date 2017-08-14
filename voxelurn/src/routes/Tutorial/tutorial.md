@@ -1,78 +1,84 @@
 # Tutorial
 
-Welcome to the tutorial. You can follow along with this tutorial by opening
+Welcome to the tutorial! Here we will teach you the basics of using the system,
+controlling the robot, and defining new commands for the robot.
+Please complete this tutorial step-by-step so you get
+a complete understanding of the system.
+You can follow along with this tutorial by opening
 the <a href="/#/build" target="_blank">build page</a> in a new window.
 
-## Basics
+## Basics System Usage
 
-The following commands give a basic introduction to LASRE.
-- After typing in a command (try `move left`), press enter to see a preview of 
-  the possible result(s)
-- Press enter again to accept the action (you do not have to wait for the
-  action to finish)
-- You can undo an accepted action by clicking on the "x" next to the command 
-  history
-- If you enter a command incorrectly (`move leftt`), the system will give you an 
-  opportunity to define the command, click the "x" to cancel and edit the 
-  command
-- All commands can be cleared by opening the Control Panel on the right 
-  side and clicking "CLEAR".
+Here you can find the basic ways to interact with the system.
+- Basic usage
+  - After typing in a command (try `move left`), press enter to see a preview of 
+    the possible result(s)
+  - Press enter again to accept the action (you do not have to wait for the
+    action to finish)
+  - You can undo an accepted action by clicking on the "x" next to the command 
+    history
+  - If you enter a command incorrectly (`move leftt`), the system will give you an 
+    opportunity to define the command, click the "x" to cancel and edit the 
+    command
+  - All commands can be cleared by opening the Control Panel on the right 
+    side and clicking "RESET".
 
 If you need a quick reminder of command syntax, see these
 [examples](/#/reference).
 
-## The Core Language
+## Learning the Basic Commands
 
 The following commands introduce you to the basics of the core language which
-describes the individual actions that the robot can perform. 
+describes the individual actions that the robot can perform. After learning
+a command, try using the command with different parameters (e.g., colors,
+numbers, locations).
 
-- You can move the robot either by specifying the absolute point: `visit [5,8]`
-or by specifying the direction: `move left`
-  - If it is not possible to visit a point (e.g., it is a wall), the robot will
-  do nothing
-  - Tip: any action can be repeated with the following syntax `repeat 2 times move left`
+- Type `visit [5,8]` and  `move left`: you can specify movement by coordinate
+or by direction 
+  - If it is not possible to visit a point (e.g., it is a wall), _the robot will
+  do nothing_
+  - __Tip:__ any action can be repeated with the following syntax `repeat 2 times move left`
   - Before you accept the action, you can edit the command and try something else
-- You can pick items with the following command `pick item` (you must be on the
+- `pick item` will pick an item (you must be on the
 same square as an item in order to pick it up)
-  - You can also specify a color: `pick item has color blue` 
-  - Tip: you can perform multiple actions sequentially by separating them with
+  - `pick item has color blue` will specify the color for the action
+  - __Tip:__ you can perform multiple actions sequentially by separating them with
   `;`; for example: `pick item; pick item has color blue`
-  - A disjunction (`or`) of colors can be specified with
-`has color blue or has color red`
-- Dropping items works in the same manner `drop item`
-  - The modifier `every` can be used with `pick` or `drop` to perform the
-action on every item specified instead of just one: `drop every item`
+  - `has color blue or has color red` specifies disjunction (`or`) of colors
+-  `drop item` works in the same manner
+  -  `drop every item` will perform the action (`pick` or `drop`) on multiple items
   - Color specificaiton works similarly: `drop every item has color blue`
-- Visiting an area (a set of points) will send the robot to one point contained
-in area `visit room5`
+-  `visit room5` will send the robot to one point contained
+in area (a set of points)
   - `visit room5` is shorthand for `vist any point in room5`
   - Areas can be explicitly written: `[[3,3],[3,4],[4,4]]`
-- Areas can be filtered down to points that contain items:
-`visit any point in room3 containing item has color red`
+- `visit any point in room3 containing item has color red`
+filters the area down to points that contain the specified item
   - Tip: areas can be combined with `union`, `intersect`, and `minus` (relative complement): `room1 union room2`
-- It is possible to perform an action on every point in an area:
-`foreach point in world containing item { visit point; pick item }`
+- `foreach point in world containing item { visit point; pick item }`
+will perform an action on every point in an area
   - `world` is an area consisting of every open point
   - `containing` is an optional filter that can be used with `item`, `item has color ...`, etc.
   - `point` is used to refer to the individual points specified by `foreach`
-- It is also possible to loop through areas:
-`foreach area in all rooms containing item has color red { visit area; drop item }`
+- `foreach area in all rooms containing item has color red { visit area; drop item }`
+will loop through areas
   - `all rooms` is an area collection consisting of all redefined rooms
   - A collection of areas can be explicitly written: `[room1, room4]`
 - Sometimes there will be multiple ways to interpret a command:
-`visit [7,4]` and then `pick every item not has color red and has color green`
+first try `visit [7,4]` and then `pick every item not has color red and has color green`
   - This could possibly be
   `pick every item not { has color red and has color green }` or
   `pick every item { not has color red } and has color green`
   - Use the up and down arrows to choose which one you would like
 
-## Basic Rule Defining
+## Defining New Rules
 
 If you enter a command that the system does yet not recognize, you have the
 option of defining what the command means in terms of command that the system
-does know.
+does know. The system includes the new definition in the language, so it is
+not just blind macro expansion.
 
-### Paraphrasing
+### Defining by Paraphrasing
 
 Paraphrasing is taking a long or unnatural command and phrasing in a different,
 equivalent way.
@@ -88,7 +94,7 @@ recognize similar commands like `move left 2` or `move up 5`
 - `visit room1, room2, and room3`
   - This could be defined as: `foreach area in [room1, room2, room3] visit area`
 
-### Abstracting
+### Defining Abstract Commands
 
 It is also possible to define more abstract or complex commands in terms of
 simpler commands.
@@ -126,16 +132,16 @@ completed in the specified sequence)
   - If the area spans walls, the walls will not be considered in the area
 - `if` statements can be used with `robot has item`, `robot at [3,3]`,
 `robot at room2`, `item at [4,4]`, `item at room1`, etc.
-  - `if CONDITION then ACTION`
-  - `if robot has item has color purple then { move down }`
+  - `if CONDITION ACTION`
+  - `if robot has item has color red { move down }`
 - `if` statements can also be used with the possibility of an action being
 completed
-  - `if possible ACTION then ACTION`
-  - `if possible { move left } then { move right }`
+  - `if possible ACTION ACTION`
+  - `if possible { move left } { move right }`
   - An action is `possible` if every step can be completed successfully
-  - `if possible { move left; pick item has color green } then { move right }`
+  - `if possible { move left; pick item has color green } { move right }`
 - Closely related to possibility is strictly completing a sequence of commands
-  - `strict { move left ; pick item has color red ; drop item has color purple }` 
+  - `strict { move left ; pick item has color red ; drop item has color red }` 
   - If it is not possible to complete each of the actions in sequence, the
 robot will do nothing; otherwise, the action will be completed normally
 - Successful completion (applies only to actions)

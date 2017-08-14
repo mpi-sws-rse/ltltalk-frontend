@@ -15,3 +15,10 @@
   overflow-y: scroll;
 }
 
+.Tutorial li {
+  padding: 0.1em 0 0.1em 0;
+}
+
+.Tutorial > div > ul > li {
+  padding-top: 1.3em;
+}

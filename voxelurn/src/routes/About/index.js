@@ -26,6 +26,7 @@ class Information extends Component {
           <ul>
             <li>Please complete the step-by-step tutorial provided <Link to={{ pathname: "/tutorial" }}>here</Link></li>
             <li>You may also find it useful to reference a <Link to={{ pathname: "/reference" }}>list of example commands</Link></li>
+            <li>After the tutorial, try to come up with new, complex commands!</li>
           </ul>
         </div></div>
 		)

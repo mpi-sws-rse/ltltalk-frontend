@@ -15,7 +15,8 @@ html {
 
 body {
   font-family: "Lato", "Helvetica Neue", "Helvetica", sans-serif;
-  font-size: 1.6rem;
+  //font-size: 1.6rem;
+  font-size: 2.0rem;
 }
 
 * {
