@@ -75,7 +75,7 @@ Item filters function as logical filters. One can say _pick item_ with the meani
 # Examples
   - *Collect all red triangles from the point where robot is currently standing*: 
     ```
-    pick item has color red and has shape triangle
+    pick every item has color red and has shape triangle
     ```
     
   - *Collect two green triangles*
