@@ -1,5 +1,13 @@
 # Benchmarks from existing work
 
+In short, the most common evaluation methods are
+ - giving the system to testers and letting them do as they wish with it (later testing how well the system reacted)
+ - creating some kind of game/competition
+ - showing a task (e.g. in a video) and asking testers to describe it as instructions (then using these utterances for further testing)
+ - giving a concrete task that needs to be accomplished using the system
+
+---------------
+
 In this document the experimental setup from all related work is enumerated (for the future comparison).
 
 1. Learning Environmental Knowledge from Task-Based Human-Robot Dialog (Kollar and others)
@@ -19,9 +27,9 @@ In this document the experimental setup from all related work is enumerated (for
   - the success measure is how much of naturalization is happening (the ratio of induced utterances and the ones from the core language)
   - the Turkers were incentivized by daily prizes for different categories (bridge, house, animal...). The prizes were awarded for the citations too (with the idea to provoke users to define reusable utterances)
 <br /><br />
-4. Provably Correct Reactive Control from Natural Language
+4. Provably Correct Reactive Control from Natural Language (Lignos and others)
  - setup: a fixed set of supported commands is offered. They are mapped to VerbNet senses (so that the meaning can be restored even if the user uses different utterances that the foreseen ones). The commands are translated to LTL formulas (so the translation must include identification of conditionals, negations, quantification, boolean connections...). A robot is also able to answer a question such as *What are you doing?* (structure that maps LTL tree to the utterance tree)
- - the system was tested by including it to a first-person 3D video game where the participants played a role of a human that used a robot-helper for search 14 rooms, dismantle bombs (robot) and rescue hostages (human). The control over robot was given only by natural language communication.
+ - the system was tested by including it into a first-person 3D video game where the participants played a role of a human that used a robot-helper for search 14 rooms, dismantle bombs (robot) and rescue hostages (human). The control over robot was given only by natural language communication.
  - the measure of success was how many valid commands were understood (valid commands = the one that talks about visiting a room or dismantling a bomb). The result is 94% correctly understood commands.
  <br /><br />
 5. Improved Semantic Parsers for If-Then Statements (Quirk and Beltagy)
