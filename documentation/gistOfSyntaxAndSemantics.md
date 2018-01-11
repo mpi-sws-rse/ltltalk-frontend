@@ -38,6 +38,7 @@ The semantics is given by
  - `location -> (x,y)` 
  - `location -> current`
  - `setOfLocations -> setOfLocations WHERE itemFilter`
+ - `setOfSetsOfLocations -> setOfSetsOfLocations WHERE itemFilter`
  - `setOfLocations -> {(x1,y1), (x2, y2), ..., (xk, yk)}`
  - `setOfLocations -> world`
  - `setOfLocations -> setOfLocations <+ | - | * > setOfLocations`
