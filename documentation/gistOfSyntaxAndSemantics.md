@@ -31,6 +31,7 @@ For the moment the only attribute is color, so an example selecting action looks
 The last selection, while syntactically correct, is semantically meaningless (since one item can only have one color)
 
 The semantics is given by
+ -  *ITEM* :: `I`
  -  *ITEM WHERE itemFilter* :: `{i ∈ I: itemFilter(i) evaluates to true}`
  - 	*ITEM WHERE itemFilter LIMIT 1* :: nondeterministically chosen `j ∈ {i ∈ I: itemFilter(i) evaluates to true}`
  
