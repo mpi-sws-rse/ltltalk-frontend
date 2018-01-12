@@ -38,16 +38,16 @@ The semantics is given by
 ## Selecting locations
  - `location -> (x,y)` 
  - `location -> current`
- - `setOfLocations -> setOfLocations WHERE itemFilter`
- - `setOfSetsOfLocations -> setOfSetsOfLocations WHERE itemFilter`
- - `setOfLocations -> {(x1,y1), (x2, y2), ..., (xk, yk)}`
- - `setOfLocations -> world`
- - `setOfLocations -> setOfLocations <+ | - | * > setOfLocations`
- - `setOfSetsOfLocations -> {setOfLocations, setOfLocations, ..., setOfLocations}`
+ - `area -> area WHERE itemFilter`
+ - `setOfAreas -> setOfAreas WHERE itemFilter`
+ - `area -> {(x1,y1), (x2, y2), ..., (xk, yk)}`
+ - `area -> world`
+ - `area -> area <+ | - | * > area`
+ - `setOfAreas -> {area, area, ..., area}`
 
 The semantics is given by
- - *setOfLocations WHERE itemFilter* :: `{l ∈ setOfLocations: ∃ id ∈ N, c ∈ C. (id, c, l) ∈ I and itemFilter((id, c, l)) = true}`
- - *setOfSetsOfLocations WHERE itemFilter* :: `{a ∈ setOfSetsOfLocations: ∃ l ∈ a, id ∈ N, c ∈ C. (id, c, l) ∈ I and itemFilter((id, c, l)) = true}}`
+ - *area WHERE itemFilter* :: `{l ∈ area: ∃ id ∈ N, c ∈ C. (id, c, l) ∈ I and itemFilter((id, c, l)) = true}`
+ - *setOfAreas WHERE itemFilter* :: `{a ∈ setOfAreas: ∃ l ∈ a, id ∈ N, c ∈ C. (id, c, l) ∈ I and itemFilter((id, c, l)) = true}}`
  - *world* :: `M`
  - *current* :: `r`
  - semantics of the rest is given by operations on sets
@@ -64,27 +64,27 @@ The semantics is:
  - *VISIT location* :: if there is a path from `r` to `location` (a sequence of neighbouring locations such that none of them is in `O` and the last one is `location`), the value of `r` becomes `location`.    
  
 ## Iteration
-  - `FOREACH POINT IN setOfLocations action` : note that `POINT` is a fixed keyword here (so, one **can not** write *foreach field in ...*). Also, when defining an action, the programmer can refer to `POINT` 
-  - `FOREACH AREA IN setOfLocations action`  : again, `AREA` is a keyword and when defining an action, the programmer can refer to `AREA`
+  - `FOREACH POINT IN area action` : note that `POINT` is a fixed keyword here (so, one **can not** write *foreach field in ...*). Also, when defining an action, the programmer can refer to `POINT` 
+  - `FOREACH AREA IN area action`  : again, `AREA` is a keyword and when defining an action, the programmer can refer to `AREA`
   
  The semantics is  
-  - *FOREACH POINT IN setOfLocations action* :: `action (point1); action (point2);..., action(pointk)` where `setOfLocations = {point1, point2, ..., pointk}`
-  - *FOREACH AREA IN setOfSetsOfLocations action* :: `action (area1); action (area2);..., action(areak)` where `setOfSetsOfLocations = {area1, area2, ..., areak}`
+  - *FOREACH POINT IN area action* :: `action (p), ∀ p ∈ area` in an unspecified order
+  - *FOREACH AREA IN setOfAreas action* :: `action (a), ∀ a ∈ setOfAreas` in an unspecified order
   
 ## If branching
  - `branching -> IF condition action`
  - `condition -> itemSet AT location`
- - `condition -> itemSet AT setOfLocations`
+ - `condition -> itemSet AT area`
  - `condition -> ROBOT HAS itemSet`
  - `condition -> ROBOT AT location`
- - `condition -> ROBOT AT setOfLocations`
+ - `condition -> ROBOT AT area`
  - `condition -> POSSIBLE action`
  
  The semantics is given by
-  - *if condition action* :: if condition is satisfied, action is performed (otherwise, no-op)
+  - *if condition action* :: `action ⇒ condition` (only if condition is satisfied, action is performed)
   - *itemSet AT location* :: we define `itemSet2` as `itemSet WHERE position = location`. true if `itemSet2` is not empty
-  - *itemSet AT setOfLocations* :: we define `itemSet2` as `itemSet WHERE position ∈ setOfLocations`. true if `itemSet2` is not empty
+  - *itemSet AT area* :: we define `itemSet2` as `itemSet WHERE position ∈ area`. true if `itemSet2` is not empty
   - *ROBOT HAS itemSet* :: we define `itemSet2` as `itemSet WHERE position = (-1,-1)`. true if `itemSet2` is not empty
   - *ROBOT AT location* :: true if `r = location`
-  - *ROBOT AT setOfLocations* :: true if `r ∈ setOfLocations`
+  - *ROBOT AT area* :: true if `r ∈ area`
   - *POSSIBLE action* :: true if `action` can be executed - if the end state of each atomic action that constitutes `action` is as specified by the action (leaving it vague because it seems that this one is anyway superfluous)
