@@ -9,7 +9,7 @@ Specification language consists of statements that can be either Specifications 
 
 
 
-** Statement (ST)**
+**Statement (ST)**
  
  - `ST -> Spec`
  - `ST -> {ST}` *grouping statements, useful in looping or branching*
@@ -20,7 +20,7 @@ Specification language consists of statements that can be either Specifications 
  - `ST -> foreach area in Collection ST1`
  - `ST -> repeat n times ST1`
 
-** Locations: Points, Areas, and Collections of areas**
+**Locations: Points, Areas, and Collections of areas**
 A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
 
   - `Point -> [x1, y1]`
@@ -39,7 +39,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `Area -> Area containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
 
 
-** Situations (Sit) **
+**Situations (Sit)**
  
  - `Sit -> Item at Area` *true if at least one item specified by Item is at area A*
  - `Sit -> Item at Point` *true if at least one item specified by Item is at point P*
@@ -50,7 +50,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> Sit or Sit` *logical or*
  - `Sit -> not Sit` *logical negation*
 
-** Specifications (Spec)**
+**Specifications (Spec)**
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
   - `Spec -> move Direction` *robot moves one space in the direciton `up`, `down`, `right`, or `left`*
@@ -61,7 +61,7 @@ If a specification is realizable, a controller is synthesized and the spec is ex
   - `Spec -> drop LimitedItem` *drop item(s) defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
   - `Spec -> strict Spec` only perform Spec if all actions can be completed (if one action fails, nothing executes)
 
-** Items definitions and item filters**
+**Items definitions and item filters**
 Item filters function as logical filters. One can say _pick item_ with the meaning pick whatever there is at your current location, or _pick item has color blue_ meaning that one should pick whatever there is at current location **only** if it is blue. The item definition is then either a filter (takes everything that passes through the filter) or a single item (nondeterministically chosen) that passes the filter.
 
   - `LimitedItem -> every Item` _any number of items; set will not be restricted_
@@ -77,7 +77,7 @@ Item filters function as logical filters. One can say _pick item_ with the meani
 
 Semantics is defined on the following world model
 
-** World Model**
+**World Model**
 The world and its state are represented by 
  - the grid `M = {0,..,w-1}x{0,..,h-1}`  
  - the set of obstacle (wall) locations `O ⊆ M` 
@@ -89,7 +89,7 @@ The world and its state are represented by
  
 ---
 
-** Semantics of expressions **
+**Semantics of expressions**
 
  - every item                          :: `I`
  - item                              :: nondeterministically chosen `i ∈ I`
