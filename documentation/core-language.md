@@ -2,7 +2,9 @@
 Specification language consists of statements that can be either Specifications (telling the robot to go somewhere or to do one of its primitive actions), or selecting locations and items. Simple control-flow structures are supported (looping or branching).
 
 
+
 ## Syntax
+This grammar should help user understanding the core language. The actual implementation is available in the file [robo.grammar](https://gitlab.mpi-sws.org/gavran/sempre-interactive/blob/master/interactive/robo.grammar)
  **Program ( Root )**
 
    - `Root -> ST`
@@ -36,7 +38,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
   - `Collection -> [Area1, Area2,..., AreaN]` *a set of areas (set of sets of points)*
   
   - `Collection -> all rooms` *collection of all predefined rooms*
-  - `Area -> Area containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
+  - `Collection -> Collection containing Item` *subarea of Area (consisting of fields that contain an item described by Item)*
 
 
 **Situations (Sit)**
@@ -44,7 +46,8 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> Item at Area` *true if at least one item specified by Item is at area A*
  - `Sit -> Item at Point` *true if at least one item specified by Item is at point P*
  - `Sit -> robot has Item` *true if the robot carries at least one item described by Item*
- - `Sit -> robot at Location` *true if the robot is at Location (any of the fields)*
+ - `Sit -> robot at Point` *true if the robot is at Point*
+ - `Sit -> robot at Area` *true if the robot is at Area (any of the fields)*
  - `Sit -> possible Spec`  *if specification Spec is realizable, return true, otherwise false*
  - `Sit -> Sit and Sit` *logical and*
  - `Sit -> Sit or Sit` *logical or*
@@ -55,6 +58,7 @@ If a specification is realizable, a controller is synthesized and the spec is ex
  
   - `Spec -> move Direction` *robot moves one space in the direciton `up`, `down`, `right`, or `left`*
   - `Spec -> visit Point while avoiding Area`  *robot should visit Point , and while doing this not enter any point of Area* 
+  - `Spec -> visit Point while avoiding Point`  *robot should visit Point , and while doing this not cross the other point* 
   - `Spec -> visit Point`  *syntactic sugar for __visit Point while avoiding $`\emptyset`$__* 
   - `Spec -> visit Area1 while avoiding Area2` *syntactic sugar for __visit any point in Area1 while avoiding Area2__*
   - `Spec -> pick LimitedItem` *pick item(s) defined by item definition I (from your current point). If nothing can be picked, the specification is considered unrealizable*
@@ -113,11 +117,13 @@ The world and its state are represented by
   - *Area* containing *Item* ::  `{l ∈ Area: ∃ i ∈ Item. i.position == l}`
   - [*Area_1*, *Area_2*,..., *Area_n*] ::  ` {Area_1, Area_2,...,Area_n} ⊆ 2^M`
   - all rooms :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points 
+  - *Collection* containing *Item* ::  `{a ∈ Collection: ∃ i ∈ Item. i.position ∈ l}`
   
 ---
 
     
-  - visit *Point* while avoiding *Area* :: if there is a path in `G` that never goes through `l ∈ Area`, then `r := Point`. otherwise, action is considered unrealizable 
+  - visit *Point* while avoiding *Area* :: if there is a path in `G` from `r` to `Point` that never goes through `l ∈ Area`, then `r := Point`. otherwise, action is considered unrealizable 
+  - visit *Point1* while avoiding *Point2* :: if there is a path in `G` from `r` to `Point1 `that never goes through `Point2`, then `r := Point1`. otherwise, action is considered unrealizable 
   - move *Direction* :: `visit newPos` where `newPos` is defined by `newPos = r + (Direction.x, Direction.y)`, with choices for direction being `up = (0, 1)`, `down = (0,-1)`, `left = (-1,0)`, `right = (1,0)`
   - pick *LimitedItem*  :: let `itemSet2 = {i ∈ LimitedItem: i.position == r}`. Then, `∀i ∈ itemSet2: i.position = (-1,-1).`. If `itemSet2` is empty set, the specification is considered unrealizable
   - drop *LimitedItem* :: let `itemSet2 = {i ∈ LimitedItem: i.position == (-1,-1)}`. Then, `∀i ∈ itemSet2: i.position = r`. If `itemSet2` is empty set, the specification is considered unrealizable
@@ -128,7 +134,8 @@ The world and its state are represented by
  - *Item* at *Area* ::   `∃ i ∈ Item : i.location ∈ Area `
  - *Item* at *Point* ::  `∃ i ∈ Item : i.location = Point `
  - robot has *Item* ::   `∃ i ∈ Item : i.location = (-1,-1) `
- - robot at *Location* ::  `r == Location`
+ - robot at *Point* ::  `r == Location`
+ - robot at *Area* ::  `r ∈Area`
  - possible *Spec* :: if specification `Spec` is realizable, return true, otherwise false*
  - *Sit1* and *Sit2* ::  `Sit1 ∧ Sit2`
  - *Sit1* or *Sit2* :: `Sit1 ∨ Sit2`
