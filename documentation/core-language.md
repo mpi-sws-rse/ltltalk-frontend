@@ -5,6 +5,7 @@ Specification language consists of statements that can be either Specifications 
 
 ## Syntax
 This grammar should help user understanding the core language. The actual implementation is available in the file [robo.grammar](https://gitlab.mpi-sws.org/gavran/sempre-interactive/blob/master/interactive/robo.grammar)
+ 
  **Program ( Root )**
 
    - `Root -> ST`
