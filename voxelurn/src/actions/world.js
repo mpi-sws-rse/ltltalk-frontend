@@ -93,10 +93,10 @@ const Actions = {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
-
+          console.log("sending query "+query);
           return SEMPREquery(cmds)
             .then((response) => {
-
+   //         	console.log("received response: "+JSON.stringify(response));
               if (!response)
                 throw new Error("empty_response");
 

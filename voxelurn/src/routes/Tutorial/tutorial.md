@@ -28,6 +28,7 @@ If you need a quick reminder of command syntax, see these
 
 ## Learning the Basic Commands
 
+
 The following commands introduce you to the basics of the core language which
 describes the individual actions that the robot can perform. After learning
 a command, try using the command with different parameters (e.g., colors,
@@ -52,17 +53,20 @@ same square as an item in order to pick it up)
 in area (a set of points)
   - `visit room5` is shorthand for `vist any point in room5`
   - Areas can be explicitly written: `[[3,3],[3,4],[4,4]]`
-- `visit any point in room3 containing item has color red`
+- `visit room3 containing item has color red`
 filters the area down to points that contain the specified item
-  - Tip: areas can be combined with `union`, `intersect`, and `minus` (relative complement): `room1 union room2`
+  - Tip: areas can be combined with `or` (union of two areas),  `and` (intersection of two areas), and `minus` (relative complement): `room1 or room2`
+- `visit world containing item has color blue` filters world (all points) and takes only those that have a blue item on it
+   - __Tip__: if you want to visit a point that has green items, doesn't have red ones, it can be done by `visit {world containing item has color green} minus {world containing item has color red}`. This is not the same as `visit world containing item has color green and not has color blue` (that one means visitin a point that has on it an item that is both "green and not blue". Which is any green item)
 - `foreach point in world containing item { visit point; pick item }`
 will perform an action on every point in an area
   - `world` is an area consisting of every open point
+  - `rooms` is a set of areas consisting of 5 predefined areas - rooms (room1,..., room5)
   - `containing` is an optional filter that can be used with `item`, `item has color ...`, etc.
   - `point` is used to refer to the individual points specified by `foreach`
-- `foreach area in all rooms containing item has color red { visit area; drop item }`
+- `foreach area in rooms containing item has color red { visit area; drop item }`
 will loop through areas
-  - `all rooms` is an area collection consisting of all redefined rooms
+  - `rooms` is an area collection consisting of all redefined rooms
   - A collection of areas can be explicitly written: `[room1, room4]`
 - Sometimes there will be multiple ways to interpret a command:
 first try `visit [7,4]` and then `pick every item not has color red and has color green`
@@ -134,22 +138,18 @@ completed in the specified sequence)
 `robot at room2`, `item at [4,4]`, `item at room1`, etc.
   - `if CONDITION ACTION`
   - `if robot has item has color red { move down }`
-- `if` statements can also be used with the possibility of an action being
-completed
+
+- `if` statements can also be used with the possibility  of an action being
+completed (realizability of an action)
   - `if possible ACTION ACTION`
   - `if possible { move left } { move right }`
   - An action is `possible` if every step can be completed successfully
   - `if possible { move left; pick item has color green } { move right }`
 - Closely related to possibility is strictly completing a sequence of commands
   - `strict { move left ; pick item has color red ; drop item has color red }` 
-  - If it is not possible to complete each of the actions in sequence, the
+  - If at least one of the actions in sequence is not realizable, the
 robot will do nothing; otherwise, the action will be completed normally
-- Successful completion (applies only to actions)
-  - `visit` is successful if the robot's final position is the same as the
-  - `move` is successful if the robot's final location is one point in the
-specified direction
-  - `pick`/`drop` is successful if the robot has one more/fewer of the item specified
-  - `pick every`/`drop every` is successful if the robot has at least one
-more/fewer of the item specified
-  - `strict ACTION` is succes
-position specified in the command
+- Realizability of primitive actions
+  - `visit` is realizable if there is the path from robot's current position to the location specified
+  - `pick`/`drop` is realizable if the set specified to be picked/dropped is not empty
+  
