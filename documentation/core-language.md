@@ -32,7 +32,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
 
   - `Point -> [x1, y1]`
   - `Point -> current` *a current point on which the robot is standing*
-  - `Area -> [Point1, Point2,...,PointN]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}
+  - `Area -> [Point1, Point2,...,PointN]` *a set consisting of fields {(x1,y1),(x2,y2),...,(xn, yn)}*
   - `Area -> world` *area of the whole map*
   - `Area -> Area1 or Area2` *a union of areas Area1 and Area2*
   - `Area -> Area1 and Area2` *an intersection of areas Area1 and Area2*
@@ -118,16 +118,16 @@ The world and its state are represented by
  
  - [x1, y1] :: `(x1, y1)∈M` 
  - current :: `r.current`
-  - [*Point_1*, *Point_2*,...,*Point_n*] :: `{(Point_1.x,Point_1.y),(Point_2.x,Point_2.y),...,(Point_n.x, Point_n.y)} ⊆ M`
-  - world :: `M`
-  - *Area1* or *Area2* :: `Area1 ∪ Area2`
-  - *Area1* and *Area2* :: `Area1 ∩ Area2`
-  - *Area1* minus *Area2* :: `Area1  \ Area2`
-  - area with corners *Point1* and *Point2* :: `{ l ∈ M \ O:   Point1.x ≤ l.x ≤ Point2.x ∧ Point1.y ≤ l.y ≤ Point2.y}`
-  - *Area* containing *Item* ::  `Area ∩ {pos(i): i ∈ Item ∩ I_w}`
-  - [*Area_1*, *Area_2*,..., *Area_n*] ::  ` {Area_1, Area_2,...,Area_n} ⊆ 2^M`
-  - rooms :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points 
-  - *Collection* containing *Item* ::  `{a ∈ Collection: ∃ i ∈ Item ∩ I_w. i.position ∈ a}`
+ - [*Point_1*, *Point_2*,...,*Point_n*] :: `{(Point_1.x,Point_1.y),(Point_2.x,Point_2.y),...,(Point_n.x, Point_n.y)} ⊆ M`
+ - world :: `M`
+ - *Area1* or *Area2* :: `Area1 ∪ Area2`
+ - *Area1* and *Area2* :: `Area1 ∩ Area2`
+ - *Area1* minus *Area2* :: `Area1  \ Area2`
+ - area with corners *Point1* and *Point2* :: `{ l ∈ M \ O:   Point1.x ≤ l.x ≤ Point2.x ∧ Point1.y ≤ l.y ≤ Point2.y}`
+ - *Area* containing *Item* ::  `Area ∩ {pos(i): i ∈ Item ∩ I_w}`
+ - [*Area_1*, *Area_2*,..., *Area_n*] ::  ` {Area_1, Area_2,...,Area_n} ⊆ 2^M`
+ - rooms :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points 
+ - *Collection* containing *Item* ::  `{a ∈ Collection: ∃ i ∈ Item ∩ I_w. i.position ∈ a}`
   
 ---
 
