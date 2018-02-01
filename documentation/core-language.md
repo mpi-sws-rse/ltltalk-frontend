@@ -14,7 +14,7 @@ This grammar should help user understanding the core language. The actual implem
 
 
 
-** Statement (ST)**
+**Statement (ST)**
  
  - `ST -> Spec`
  - `ST -> {ST}` *grouping statements, useful in looping or branching*
