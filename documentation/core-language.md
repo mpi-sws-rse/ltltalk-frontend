@@ -3,7 +3,10 @@ The language talks about the grid world in which there is a robot and some items
 The language supports simple control-flow structures: if-branching, while loops, iteration over points and areas and repeating an action fixed number of times.
 
 
+
 ## Syntax
+This grammar should help user understanding the core language. The actual implementation is available in the file [robo.grammar](https://gitlab.mpi-sws.org/gavran/sempre-interactive/blob/master/interactive/robo.grammar)
+ 
  **Program ( Root )**
 
    - `Root -> ST`
@@ -21,8 +24,6 @@ The language supports simple control-flow structures: if-branching, while loops,
  - `ST -> foreach point in Area ST1` *The loop variable can only be point *
  - `ST -> foreach area in Collection ST1`*The loop variable can only be area*
  - `ST -> repeat n times ST1`
-
-  
 
 
 **Locations: Points, Areas, and Collections of areas**
@@ -58,6 +59,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1)
  - `Sit -> not Sit` *logical negation*
 
 **Specifications (Spec)**
+
 
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
@@ -102,7 +104,6 @@ The world and its state are represented by
 
 ---
 
-
  - every item                          :: `I`
  - item                              :: nondeterministically chosen `i ∈ I`
  - item *Filter*                         :: `{i ∈ I: Filter(i) == true}`
@@ -127,11 +128,11 @@ The world and its state are represented by
   - [*Area_1*, *Area_2*,..., *Area_n*] ::  ` {Area_1, Area_2,...,Area_n} ⊆ 2^M`
   - rooms :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points 
   - *Collection* containing *Item* ::  `{a ∈ Collection: ∃ i ∈ Item ∩ I_w. i.position ∈ a}`
-
   
 ---
 
     
+
   - visit *Location* while avoiding *Area* :: if there is a path in `G` from `r` to `Location` (point, area or collection of areas) that never goes through `l ∈ Area`, then `r.current := Point`. otherwise, action is considered unrealizable 
   
   - move *Direction* :: `visit newPos` where `newPos` is defined by `newPos = r.current + (Direction.x, Direction.y)`, with choices for direction being `up = (0, 1)`, `down = (0,-1)`, `left = (-1,0)`, `right = (1,0)`

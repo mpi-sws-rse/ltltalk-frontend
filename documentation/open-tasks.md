@@ -27,3 +27,36 @@
 - make robot pick at most 5 red boxes
 - make robot pick at most 7 red boxes
 
+
+# Tasks suggested by Rupak and Eva
+
+## simpler
+- Pick up all green items 
+- find another blue item
+- If room5 contains a blue item, visit room5
+- Move all items one step to the right
+- Move items such that no two items are on top of each other
+- Bring all items to an empty room
+- Bring all items to a room with a blue item
+- Bring all items to a room that does not contain a blue item
+- move blue item from room3 next to red item in room2
+
+## complex
+- Sort items into rooms: red ones go to room 1, green to room 2, etc
+- Queue up all blocks starting at your current location (queue need not be straight)
+- Line up all blue items, i.e. put all blue items next to each other, non-overlapping
+- make a line of alternate colors
+- Line up all items sorted by color. I.e. first all blue items, then all red items, etc.
+- Bring all red items to room 1, but never carry more than two things at once
+- Go to a room that contains (exactly 1 | at most 2 | at least k) item(s) 
+- Distribute items such that no two items of the same color share a room
+- Put a red item next to every blue item
+- Put a blue item right of every red item and left of every green item   (this would required as many blue items as there are of the other colors)
+- Move an item to roomX, but do not place it immediately next to a red item
+
+## not sure if possible
+- get me or Ivan a red item
+- get me a red or green item
+- use items to block off access to room 1
+- Move every item to the next room, i.e. rotate all items (not sure this is possible, as the rooms are probably not numbered) 
+ 
