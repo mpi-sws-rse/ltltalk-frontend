@@ -87,12 +87,12 @@ export function rotateBlock (b, rotational, width = 1) {
     blocks.push.apply(blocks, sorted);
   }
 
-  export function pickItem(x, y, color, blocks, robot) {
+  export function pickItem(x, y, color, shape, blocks, robot) {
     for (let i = 0; i < blocks.length; ++i) {
-      if (blocks[i].x === x && blocks[i].y === y && blocks[i].color === color) {
+      if (blocks[i].x === x && blocks[i].y === y && blocks[i].color === color && blocks[i].shape === shape) {
         blocks.splice(i, 1);
         --i;
-        robot.items.push(color);
+        robot.items.push([color, shape]);
         resolveZ(x, y, blocks);
         return true;
       }
@@ -100,12 +100,19 @@ export function rotateBlock (b, rotational, width = 1) {
     return false;
   }
 
-  export function dropItem(x, y, color, blocks, robot) {
-    let index = robot.items.indexOf(color);
-    if (index !== -1) {
+  export function dropItem(x, y, color, shape, blocks, robot) {
+	  
+	  var index = -1;
+	  for (var i = 0; i < robot.items.length; ++i){
+		  if (robot.items[i][0] === color && robot.items[i][1] === shape){
+			  index = i;
+			  break;
+		  }
+	  }
+    if (index != -1) {
       robot.items.splice(index, 1);
       // z value does not mean anything, it is just very high so it is on top of the stack
-      blocks.push({x:x, y:y, z:0xffff, type:"item", color:color});
+      blocks.push({x:x, y:y, z:0xffff, type:"item", color:color, shape:shape});
       resolveZ(x, y, blocks);
       return true;
     }
@@ -124,16 +131,17 @@ export function rotateBlock (b, rotational, width = 1) {
 
   // Maybe it would be better to move the robot instead of recreating it?
   export function updateRobot(blocks, robot, step, path, factor) {
+	  
     const c = Math.ceil(1.0*step/factor);
     const f = Math.floor(1.0*step/factor);
     if (typeof path === "undefined") {
       // Should something be here?
     } else {
       if (path[c] && path[c].action === "pickitem" && !path[c].completed) {
-        pickItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
+        pickItem(path[c].x, path[c].y, path[c].color, path[c].shape, blocks, robot);
         path[c].completed = true;
       } else if (path[c] && path[c].action === "dropitem" && !path[c].completed) {
-        dropItem(path[c].x, path[c].y, path[c].spec, blocks, robot);
+        dropItem(path[c].x, path[c].y, path[c].color, path[c].shape, blocks, robot);
         path[c].completed = true;
       } else if (path[f] && path[c]) {
         const d = 1.0*step/factor - f;
@@ -150,7 +158,8 @@ export function rotateBlock (b, rotational, width = 1) {
       // 4 is the height of the robot
       blocks.push({
         x: robot.x, y: robot.y, z:(4+i),
-        color: robot.items[i],
+        color: robot.items[i][0],
+        shape: robot.items[i][1],
         type: "carriedItem"
       });
     }

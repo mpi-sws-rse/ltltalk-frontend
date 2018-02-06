@@ -60,7 +60,8 @@ export const computeEquality = (struct1, struct2) => {
     if (a[i].x !== b[i].x ||
       a[i].y !== b[i].y ||
       a[i].z !== b[i].z ||
-      a[i].color !== b[i].color) {
+      a[i].color !== b[i].color ||
+      a[i].shape !== b[i].shape) {
       return false;
     }
   }
@@ -87,6 +88,7 @@ class Blocks extends React.Component {
 
   constructor(props) {
     super(props)
+    
     /* Default Isomer config */
     const defaultIsoConfig = {
       // TODO : calculate this
@@ -150,6 +152,7 @@ class Blocks extends React.Component {
   }
 
   joinWalls(blocks) {
+	
     let wc = worldConfig;
     blocks = blocks.filter(b => b.type !== "wall" || (b.x !== wc.xMin
         && b.x !== wc.xMax && b.y !== wc.yMin && b.y !== wc.yMax));
@@ -171,6 +174,8 @@ class Blocks extends React.Component {
   componentDidUpdate() {
     counter++;
     let blocks = this.props.blocks;
+    
+    
     if (worldConfig.optimizeBorder)
       blocks = this.joinWalls(blocks);
     window.requestAnimationFrame(() =>
@@ -183,13 +188,14 @@ class Blocks extends React.Component {
   }
 
   renderEverything(argBlocks, robot, path, robotStep, selectionNumber) {
+	  
     if (counter > 1) {
       counter--;
       return;
     }
-
     // Robot speed factor
     const factor = 5;
+    
     let updatedBlocks = updateRobot(argBlocks, robot, robotStep, path, factor);
     if (robotStep === 0) {
       updatedBlocks.slice().forEach((b) => {
@@ -345,12 +351,15 @@ class Blocks extends React.Component {
   makeBlock(block, highlighted = false, scale = this.config.scale) {
     const { rotation, centerPoint} = this.config
     const cubesize = highlighted ? this.config.selectWidthScale : this.config.blockWidthScale;
-    let { x, y, z, type } = block;
+    let { x, y, z, type, shape} = block;
+    
     const extend = block.extend ? block.extend : {x:0, y:0};
     if (type === "pointMarker" || type === "roomMarker")
       type = "marker";
-    else if (type === "carriedItem")
+    else if (type === "carriedItem"){
       type = "item";
+      
+    }
 
     let cScale = 1;
     if (type === "path")
@@ -372,17 +381,42 @@ class Blocks extends React.Component {
     const zShift = (1 - cubesize) / 2;
 
     // Items are rendered as cylinders and must be constructed differently 
-    if (type === "item") {
+    if (type === "item" && shape === "circle") {
       return Shape.Cylinder(
         Point (x + cubesize/2,
           y +  cubesize/2,
           z * heightScaling + zShift),
         0.5 * cScale,
-        6,//10, // Number of vertices
+        15,//10, // Number of vertices -- 15 makes them appear as round
         cubesize * heightScaling)
       .rotateZ(centerPoint, rotation)
-      .scale(centerPoint, scale);
-    } else {
+     .scale(centerPoint, scale);
+    }
+    else if (type ==="item" && shape ==="triangle"){
+    	return Shape.Cylinder(
+    	        Point (x + cubesize/2,
+    	          y +  cubesize/2,
+    	          z * heightScaling + zShift),
+    	        0.5 * cScale,
+    	        3,
+    	        cubesize * heightScaling)
+    	      .rotateZ(centerPoint, rotation)
+    	     .scale(centerPoint, scale);
+		
+    }
+    else if (type ==="item" && shape ==="square"){
+    	return Shape.Cylinder(
+    	        Point (x + cubesize/2,
+    	          y +  cubesize/2,
+    	          z * heightScaling + zShift),
+    	        0.5 * cScale,
+    	        4,
+    	        cubesize * heightScaling)
+    	      .rotateZ(centerPoint, rotation)
+    	     .scale(centerPoint, scale);
+		
+    }
+    else {
       let shape = Shape.Prism;
       let yRotation = 0;
       if (type === "marker") {

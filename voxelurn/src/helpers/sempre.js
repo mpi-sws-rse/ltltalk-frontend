@@ -14,8 +14,9 @@ function formatValue(rawValue) {
       x: c[0],
       y: c[1],
       action: c[2],
-      spec: c[3],
-      possible: c[4]
+      color: c[3],
+      shape: c[4],
+      possible: c[5]
     }
   ));
   return {path: path, status: status};

@@ -20,11 +20,11 @@ const defaultConfig = {
 const itemFlag = /[a-z]/;
 const cornerFlag = /[A-Z]/;
 const items = {
-  a: ["blue","green"],
-  b: ["green", "red"],
-  c: ["red"],
-  d: ["blue"],
-  z: ["red","blue","green"]
+  a: [["blue", "circle"],["green", "square"]],
+  b: [["green", "triangle"], ["red", "triangle"]],
+  c: [["red", "triangle"]],
+  d: [["blue", "square"]],
+  z: [["red", "circle"],["blue", "circle"],["green", "square"]]
 }
 const rooms = {
   'A' : 'room2',
@@ -87,7 +87,8 @@ function getDefaultMap(/*config = defaultConfig*/) {
         x: (i - rowIndex),
         y: rowCount,
         type: "wall",
-        color: null
+        color: null,
+        shape: null
       });
     } else if (c === '@') {
       robot = {
@@ -100,14 +101,17 @@ function getDefaultMap(/*config = defaultConfig*/) {
       xMax = Math.max(xMax, i - rowIndex);
       rowIndex = i + 1;
       rowCount += 1;
+      
     } else if (c.match(itemFlag)) {
       let list = items[c];
+      
       for (let j = 0; j < list.length; ++j) {
         array.push({
           x: (i - rowIndex),
           y: rowCount,
           type: "item",
-          color: list[j]
+          color: list[j][0],
+          shape: list[j][1]
         });
       }
     } else if (c.match(cornerFlag)) {

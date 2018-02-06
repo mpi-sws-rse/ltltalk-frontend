@@ -12,7 +12,7 @@ function sendContext(history, current_history_idx, sessionId) {
 
   if (history.length > 0) {
     const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-    const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color]));
+    const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color, c.shape]));
     //const currentState = worldToJSON(history[idx].worldMap);
     const robot = history[idx].robot;
     const robotContext = [robot.x, robot.y, robot.items];
@@ -93,10 +93,11 @@ const Actions = {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
-          console.log("sending query "+query);
+          //console.log("sending query "+query);
           return SEMPREquery(cmds)
             .then((response) => {
-   //         	console.log("received response: "+JSON.stringify(response));
+            	//console.log("received response: "+JSON.stringify(response));
+            	//console.log(response);
               if (!response)
                 throw new Error("empty_response");
 
@@ -106,7 +107,7 @@ const Actions = {
               }
 
               const formval = parseSEMPRE(response.candidates)
-              //console.log('Server response:');
+             
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
@@ -116,6 +117,7 @@ const Actions = {
                 //const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
 
                 const responses = formval;
+             
 
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
                 dispatch({
