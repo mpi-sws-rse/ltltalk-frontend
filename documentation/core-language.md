@@ -78,10 +78,12 @@ Item filters function as logical filters. One can say _pick item_ with the meani
   - `LimitedItem -> Item` _set will be restricted to one item_
   - `Item -> item` _no filter, any item matches_
   - `Item -> item Filter` _item with the specified filter_
-  - `Filter -> has color C` _C is from finite set of colors, everything that has color C passes the filter_
+  - `Filter -> has color C | has shape S` _C is from finite set of colors (resp S is from finite set of shapes), everything that has color C passes the filter_
   - `Filter -> Filter1 and Filter2`  _a conjunction of two item filters_
   - `Filter -> Filter1 or Filter2` _a disjunction of two item filters_
   - `Filter -> not Filter1` _a negation of an item filter F1_
+  - `C -> red | blue | green | yellow`
+  - `S -> triangle | square | circle`
   
 ## Semantics
 
@@ -94,7 +96,7 @@ The world and its state are represented by
  - the set of obstacle (wall) positions `O ⊆ M` 
  - graph `G` build from `M` and `O` that represents connections between positions
  - robot `r` with its position `r.current ∈ M` and the items robot holds given in `r.items ⊆ N x C`
- - the set of items,with their ids and colors `I ⊆ N x C`. For  `i ∈ I` we have `i = (i.id, i.color)`. The set of items is a disjoint union of items in the world (`I_w`) and the items that robot holds (`I_r`).
+ - the set of items,with their ids, colors and shapes `I ⊆ N x C x S`. For  `i ∈ I` we have `i = (i.id, i.color, i.shape)`. The set of items is a disjoint union of items in the world (`I_w`) and the items that robot holds (`I_r`).
  - mapping `pos : I_w -> M` that maps each item in the world to its position 
  
 
@@ -107,7 +109,8 @@ The world and its state are represented by
  - every item                          :: `I`
  - item                              :: nondeterministically chosen `i ∈ I`
  - item *Filter*                         :: `{i ∈ I: Filter(i) == true}`
- - has color C        :: `i.color == C`
+ - has color c        :: `i.color == c`
+ - has shape s		  :: `i.shape == s`
  -  *Filter1*  and *Filter2* :: `Filter1 ∧ Filter2`
  - *Filter1* or *Filter2* :: `Filter1 ∨ Filter2`
  - not *Filter1* :: `¬ Filter1`

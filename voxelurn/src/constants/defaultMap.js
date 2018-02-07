@@ -20,7 +20,7 @@ const defaultConfig = {
 const itemFlag = /[a-z]/;
 const cornerFlag = /[A-Z]/;
 const items = {
-  a: [["blue", "circle"],["green", "square"]],
+  a: [["blue", "circle"],["yellow", "square"]],
   b: [["green", "triangle"], ["red", "triangle"]],
   c: [["red", "triangle"]],
   d: [["blue", "square"]],

@@ -16,7 +16,7 @@ Here are examples of the syntax of various commands in the core language.
 - `pick item`, `drop item`
 - `pick every item`
 - `pick item has color blue`, `drop every item has color blue`
-- `pick item has color blue or has color green`, `pick item not has color blue`, 
+- `pick item has color blue or has shape triangle`, `pick item not has color blue`, 
 
 ### Grouping Symbols
 
@@ -39,7 +39,7 @@ Here are examples of the syntax of various commands in the core language.
 - `foreach point in world { visit point }`
 - `foreach point in room1 or room2 { visit point }`
 - `foreach point in world minus room3 { visit point }`
-- `foreach point in world intersect room3 { visit point }`
+- `fpreach point in {world containing item has color red} and {world containing item has shape green} {visit point}`
 - `foreach point in area with corners [3,3] and [4,5] { visit point }`
 - `foreach point in [[3,3],[3,4],[4,4]] { visit point }`
 - `foreach point in world containing item { visit point; pick item }`
@@ -48,7 +48,7 @@ Here are examples of the syntax of various commands in the core language.
 
 - `foreach area in rooms { visit area }`
 - `foreach area in [room1, room2, room3] { visit area }`
-- `foreach area in all rooms containing item has color red { visit area }`
+- `foreach area in rooms containing item has color red { visit area }`
 
 ### If
 

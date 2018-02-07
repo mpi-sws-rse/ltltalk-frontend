@@ -44,11 +44,12 @@ or by direction
 same square as an item in order to pick it up)
   - `pick item has color blue` will specify the color for the action
   - __Tip:__ you can perform multiple actions sequentially by separating them with
-  `;`; for example: `pick item; pick item has color blue`
+  `;`; for example: `pick item; pick item has shape circle`
   - `has color blue or has color red` specifies disjunction (`or`) of colors
 -  `drop item` works in the same manner
-  -  `drop every item` will perform the action (`pick` or `drop`) on multiple items
+  -  commands of the kind `drop every item` will perform the action (`pick` or `drop`) on multiple items
   - Color specificaiton works similarly: `drop every item has color blue`
+- Colors and shapes can be combined: `pick item has color red and has shape triangle` will pick a red triangle, if there is one on robot's current spot
 -  `visit room5` will send the robot to one point contained
 in area (a set of points)
   - `visit room5` is shorthand for `vist any point in room5`
@@ -57,7 +58,7 @@ in area (a set of points)
 filters the area down to points that contain the specified item
   - Tip: areas can be combined with `or` (union of two areas),  `and` (intersection of two areas), and `minus` (relative complement): `room1 or room2`
 - `visit world containing item has color blue` filters world (all points) and takes only those that have a blue item on it
-   - __Tip__: if you want to visit a point that has green items, doesn't have red ones, it can be done by `visit {world containing item has color green} minus {world containing item has color red}`. This is not the same as `visit world containing item has color green and not has color blue` (that one means visitin a point that has on it an item that is both "green and not blue". Which is any green item)
+   - __Tip__: if you want to visit a point that has green items, but doesn't circles, it can be done by `visit {world containing item has color green} minus {world containing item has shape triangle}`. This is not the same as `visit world containing item has color green and not has shape triangle` (that one means visiting a point that has on it an item that is both "green and not triangle".)
 - `foreach point in world containing item { visit point; pick item }`
 will perform an action on every point in an area
   - `world` is an area consisting of every open point
