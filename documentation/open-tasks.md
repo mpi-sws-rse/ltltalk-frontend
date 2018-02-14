@@ -49,10 +49,12 @@
 - Line up all items sorted by color. I.e. first all blue items, then all red items, etc.
 - Bring all red items to room 1, but never carry more than two things at once
 - Go to a room that contains (exactly 1 | at most 2 | at least k) item(s) 
+  - *how would I accomplish that?*
 - Distribute items such that no two items of the same color share a room
 - Put a red item next to every blue item
 - Put a blue item right of every red item and left of every green item   (this would required as many blue items as there are of the other colors)
 - Move an item to roomX, but do not place it immediately next to a red item
+- Patrol indefinitely over fields that contain item
 
 ## not sure if possible
 - get me or Ivan a red item
