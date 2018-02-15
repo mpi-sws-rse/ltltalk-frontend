@@ -95,54 +95,8 @@ first try `visit [7,4]` and then `pick every item not has color red and has colo
   `pick every item { not has color red } and has color green`
   - Use the up and down arrows to choose which one you would like
 
-
-## Defining New Rules
-
-If you enter a command that the system does yet not recognize, you have the
-option of defining what the command means in terms of command that the system
-does know. The system includes the new definition in the language, so it is
-not just blind macro expansion.
-
-### Defining by Paraphrasing
-
-Paraphrasing is taking a long or unnatural command and phrasing in a different,
-equivalent way.
-
-- It is somewhat awkward to say `repeat 3 times move right`; instead try
-entering `move right 3`
-  - Now type in the definition `repeat 3 times move right`
-  - Accept the action and click "Finish Definition"
-  - Not only will the system recognize this command in the future, it will also
-recognize similar commands like `move left 2` or `move up 5`
-- `pick a red or green item`
-  - This could be defined as: `pick item has color red or has color green`
-- `visit room1, room2, and room3`
-  - This could be defined as: `foreach area in [room1, room2, room3] visit area`
-- **TIP**: another way is to first write the definitions (any number of them) and then decided to use a shorter/more usable expression for this (sequence of) command(s). This is achieved by clicking on the number next to the first command of the sequence that needs to be redefined and typing in the expression.  
-
-### Defining Abstract Commands
-
-It is also possible to define more abstract or complex commands in terms of
-simpler commands.
-
-- `get all red items`: pick up every red item on the map
-  - This would be expressed by the much longer command
-`foreach point in world containing item has color red { visit point; pick every item has color red }`
-- `bring a blue item to [5,5]`: find a blue item and drop it at the point `[5,5]`
-  - `visit world containing item has color blue`
-  - `pick item has color blue`
-  - `visit [5,5]`
-  - `drop item has color blue`
-- `sort all red and green items into room4 and room5`: gather all red and green
-items and sort them into `room4` and `room5` respectively
-  - `get all red items`
-  - `get all green items`
-  - `visit room4`
-  - `drop every item has color red`
-  - `visit room5`
-  - `drop every item has color green`
-
 This concludes the basic part of the tutorial. Feel free to play around in the <a href="/#/build" target="_blank">build page</a>.
+
 
 ## Advanced Language Constructs
 
