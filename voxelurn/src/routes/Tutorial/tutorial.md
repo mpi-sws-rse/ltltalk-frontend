@@ -76,6 +76,22 @@ first try `visit [7,4]` and then `pick every item not has color red and has colo
   `pick every item { not has color red } and has color green`
   - Use the up and down arrows to choose which one you would like
 
+## The Keywords `world`, `current`, and `robot`
+
+The builtin keyword `world` stands for the set of all points in the world. 
+Thus, 
+`visit world` is short for visiting any point in the world. You can filter the
+world as usual:
+`visit world containing item has color red` will visit some point, if possible, that contains a red item.
+
+The keyword `current` evaluates to the point that gives the current position of the robot.
+Thus, `if item has shape circle at current { pick item }` picks an item if there is a circular object
+at the current location. Note that if there are multiple objects, the `pick item` can pick any one,
+not necessarily the circular one. To pick the circular one, you say `if item has shape circle at current { pick item has shape circle }`.
+
+The keyword `robot` gives access to the current state of the robot (i.e., the items carried by the robot).
+For example, you say `if robot has item { drop item }` to drop an item if the robot is currently carrying one.
+
 ## Defining New Rules
 
 If you enter a command that the system does yet not recognize, you have the
