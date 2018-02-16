@@ -2,7 +2,7 @@ This experiment is described in issue #41.
 
 
 1.
- - Get one green square 
+- Get one green square 
 - Visit any field containing both a yellow item and a circle-shaped item (may be the same item)
 - Pick a yellow item from that space
 - If possible, pick a square shaped item (from that space). Else, drop yellow item.

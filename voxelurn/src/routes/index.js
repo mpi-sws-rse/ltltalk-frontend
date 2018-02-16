@@ -5,6 +5,7 @@ import Build from './Build';
 import Tutorial from './Tutorial';
 import Reference from './Reference';
 import About from "./About"
+import SyntaxSemantics from "./SyntaxSemantics";
 //import Community from "./Community"
 //import Help from "./Help"
 //import Login from "./Login"
@@ -18,7 +19,8 @@ const Routes = ({ history }) => (
       <Route path="build" component={Build} />
       <Route path="about" component={About} />
       <Route path="tutorial" component={Tutorial} />
-      <Route path="reference" component={Reference} />
+      <Route path="reference" component={Reference} />   
+      <Route path="syntaxsemantics" component={SyntaxSemantics} />
       {/*
       <Route path="help" component={Help} />
       <Route path="community" component={Community} />

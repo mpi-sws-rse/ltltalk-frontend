@@ -28,7 +28,7 @@ This grammar should help user understanding the core language. The actual implem
 
 **Locations: Points, Areas, and Collections of areas**
 
-A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x1, y1), ..., (xn, yn)}. A collection of areas is a set of sets of points { {(x11, y11),..., (x1n,y1n)},...,{(xm1,ym1),...,(xmk, ymk)}}
+A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x<sub>1</sub>, y<sub>1</sub>), ..., (x<sub>n</sub>, y<sub>n</sub>)}. A collection of areas is a set of sets of points { {(x<sub>1,1</sub>, y<sub>1,1</sub>),..., (x<sub>1,n</sub>,y<sub>1,n</sub>)},...,{(x<sub>m,1</sub>,y<sub>m,1</sub>),...,(x<sub>m,k</sub>, y<sub>m,k</sub>)}}
 
   - `Point -> [x1, y1]`
   - `Point -> current` *a current point on which the robot is standing*
