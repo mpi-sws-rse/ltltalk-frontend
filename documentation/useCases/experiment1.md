@@ -25,7 +25,7 @@ This experiment is described in issue #41.
  4.
  - Get one red triangle
  - Collect all red items
- - Put all blue items to room3
+ - Put all blue items in room3
  
  
 5.
