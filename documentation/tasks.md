@@ -1,6 +1,10 @@
 # Tasks
 
-There are seven sets of tasks ahead. They are grouped from simpler to more difficult ones. After finishing each set of tasks, reset the environment (an arrow on the right-hand side and then `RESET`). Remember, reseting only affects front-end, all the learnt rules are preserved.
+There are seven sets of tasks ahead. Please, read all of them first to get the rough idea how they look like.
+
+---
+
+Now start solving them (if you haven't already, check the <a href="/#/tutorial" target="_blank">tutorial section</a> to get you started). After finishing each set of tasks, reset the environment (an arrow on the right-hand side and then `RESET`). Remember, reseting only affects front-end, all the learnt rules are preserved.
 While you can solve the tasks in the best way you see fit, there is a benefit in trying to provide a general solution (that would work in more than one situation) because you can reuse solutions as building blocks in the tasks that follow. It might also be useful to define some basic building blocks that are not tasks themselves (e.g. `pick green` for `pick item has color green`)
 
 ---

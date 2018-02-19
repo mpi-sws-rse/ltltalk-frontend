@@ -48,10 +48,6 @@ class SharePanel extends Component {
                       <td><button id="controlPanel-clear" onClick={() => this.clear()}>Reset</button></td>
                       <td><div>Reset world to initial state (learned commands are remembered)</div></td>
                     </tr>
-                    <tr>
-                      <td><button >Click</button></td>
-                      <td><div>Click a button</div></td>
-                    </tr>
                     </tbody>
                   </table>
                 </div>
