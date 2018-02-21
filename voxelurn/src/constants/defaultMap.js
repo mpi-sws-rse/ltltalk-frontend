@@ -4,7 +4,7 @@ const world = `
 █E     █F    █
 ██████ ███ ███
 █C       D   █
-█       z@  D█
+█  @    z   D█
 █       C█████
 █  ███████B  █
 █       A█  d█
@@ -22,9 +22,9 @@ const cornerFlag = /[A-Z]/;
 const items = {
   a: [["blue", "circle"],["yellow", "square"]],
   b: [["green", "triangle"], ["red", "triangle"]],
-  c: [["red", "triangle"]],
+  c: [["red", "triangle"],["yellow", "triangle"]],
   d: [["blue", "square"]],
-  z: [["red", "circle"],["blue", "circle"],["green", "square"]]
+  z: [["red", "circle"],["blue", "circle"],["green", "square"],["green", "circle"]]
 }
 const rooms = {
   'A' : 'room2',

@@ -42,7 +42,7 @@ or by direction
   - __Tip:__ any action can be repeated with the following syntax `repeat 2 times move left`
   - Before you accept the action, you can edit the command and try something else
 - `pick item` will pick an item (you must be on the
-same square as an item in order to pick it up)
+same square as an item in order to pick it up) and `pick every item` will pick all the items on the square
   - `pick item has color blue` will only pick a blue item
   - __Tip:__ you can perform multiple actions sequentially by separating them with
   `;`; for example: `pick item; pick item has shape circle`

@@ -14,10 +14,11 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></Link>
-      <Link to={{ pathname: "/build", query: query }} activeClassName="active"><div>Build</div></Link>
+      <Link to={{ pathname: "/build", query: query }} activeClassName="active"><div>Play</div></Link>
       <Link to={{ pathname: "/tutorial", query: query }} activeClassName="active"><div>Tutorial</div></Link>
       <Link to={{ pathname: "/reference", query: query }} activeClassName="active"><div>Reference</div></Link>
       <Link to={{ pathname: "/syntaxsemantics", query: query }} activeClassName="active"><div>Syntax and Semantics</div></Link>
+      <Link to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></Link>
   {/*
       <Link to={{ pathname: "/community", query: query }} activeClassName="active"><div>Leaderboard</div></Link>
       <a target="_blank" href="https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md#core-language"><div>Reference</div></a>
