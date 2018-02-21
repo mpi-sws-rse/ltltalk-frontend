@@ -1,1 +1,9 @@
 \section{Core Language}
+Interesting core-language examples
+
+\begin{itemize}
+	\item drop an item to any field that contains both red item and circle-shaped item (can be the same item): \textit{foreach point in \{world containing item has color red\} and \{world containing item has shape circle\} \{visit point; drop item\}}
+	\item if possible, form a horizontal line on the floor out of all items robot currently has and starting at robot's current position: \textit{strict \{while robot has item \{drop item; move right\}\}; strict \{while robot has item \{drop item; move left\}\}}
+	\item keep bringing circle-shaped items to room1 until there is a red item in room1: \textit{while not \{ item has color red at room1\} \{visit \{world containing item has shape circle\} minus room1; pick item has shape circle; visit room1; drop item has shape circle\}}
+
+\end{itemize}
