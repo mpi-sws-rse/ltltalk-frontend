@@ -1,5 +1,5 @@
 # Specification language
-The language talks about the grid world in which there is a robot and some items of few different colors. Language can express a location - be it a point in the grid, a set of such points (area) or a set of areas. Furthermore, a location can be defined by the items it contains. Locations can be combined using set operations - union, intersection and difference. Items can be filtered by their properties. One can limit the result of such filtering to a single (nondeterministically chosen) item. Robot can visit a location, pick a filtered set of items from its current position or drop a filtered set of items to its current position. Boolean primitives supported are whether a robot is at particular position or area; if an item is at particular position or area and if robot holds a particular item. Finally, there is a boolean primitive that tells whether an action is realizable.
+The language talks about the grid world in which there is a robot and some items of few different colors. Language can express a location - be it a point in the grid, a set of such points (area), or a set of areas (collection). Furthermore, a location can be obtained by filtering a set locations based on the items they contain. Locations can be combined using set operations - union, intersection and difference. Items can be filtered by their properties. One can limit the result of such filtering to a single (nondeterministically chosen) item. Robot can visit a location, pick a filtered set of items from its current position or drop a filtered set of items to its current position. Boolean primitives supported are whether a robot is at particular position or area; if an item is at particular position or area and if robot holds a particular item. Finally, there is a boolean primitive that tells whether an action is realizable.
 The language supports simple control-flow structures: if-branching, while loops, iteration over points and areas and repeating an action fixed number of times.
 
 
@@ -64,7 +64,7 @@ A 2D-grid consists of (x,y)-denoted points. An area is a set of points {(x<sub>1
 If a specification is realizable, a controller is synthesized and the spec is executed. If not, it reports unrealizability and asks user to change it/remove it from the program. 
  
   - `Spec -> move Direction` *robot moves one space in the direction `up`, `down`, `right`, or `left`*
-  - `Spec -> visit Location while avoiding Area`  *robot should visit Location (Collection, Area or Point) , and while doing this not enter any point of Area* 
+  - `Spec -> visit Location while avoiding Area`  *robot should visit Location (Collection, Area or Point) , and while doing this not enter any point of Area \ Location* 
   - `Spec -> visit Location`  *syntactic sugar for __visit Location while avoiding $`\emptyset`$__* 
   - `Spec -> pick LimitedItem` *pick item(s) defined by item definition I (from your current point). If nothing can be picked, the specification is considered unrealizable*
   - `Spec -> drop LimitedItem` *drop item(s) defined by item definition I that it currently has (it should drop it on its location). If nothing can be dropped, the specification is considered unrealizable*
@@ -136,7 +136,7 @@ The world and its state are represented by
 
     
 
-  - visit *Location* while avoiding *Area* :: if there is a path in `G` from `r` to `Location` (point, area or collection of areas) that never goes through `l ∈ Area`, then `r.current := Point`. otherwise, action is considered unrealizable 
+  - visit *Location* while avoiding *Area* :: if there is a path in `G` from `r` to `Location` (if `Location` is a point, then `g=Location`, if it is an area, then `g ∈ Location`, and if it is a collection of areas, then `g ∈ a ∈ Location`) that never goes through `l ∈ Area \ g`, then `r.current := g`.  otherwise, action is considered unrealizable 
   
   - move *Direction* :: `visit newPos` where `newPos` is defined by `newPos = r.current + (Direction.x, Direction.y)`, with choices for direction being `up = (0, 1)`, `down = (0,-1)`, `left = (-1,0)`, `right = (1,0)`
   - pick *LimitedItem*  :: let `itemSet2 = {i ∈ LimitedItem ∩ I_w: pos(i) == r.current}`. Then, `I_r = I_r ∪ itemSet2` and `I_w = I_w \ itemSet2`. If `itemSet2` is an empty set, the specification is considered unrealizable
