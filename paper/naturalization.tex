@@ -1,1 +1,18 @@
 \section{Naturalization of the Language}
+
+The task of putting all items of different colors to different rooms looks in the core language like this \\
+\begin{displayquote}
+ \textit{foreach point in world containing item has color red \{ visit point; pick every item has color red\}; visit room1; drop every item has color red; foreach point in world containing item has color green \{ visit point; pick every item has color green\}; visit room2; drop every item has color green; foreach point in world containing item has color blue \{ visit point; pick every item has color blue\}; visit room3; drop every item has color blue; foreach point in world containing item has color yellow \{ visit point; pick every item has color yellow\}; visit room4; drop every item has color yellow} 
+\end{displayquote} 
+ The same task could be accomplished using naturalization with 
+\begin{displayquote} 
+ \textit{red to room1; green to room2; blue to room3; yellow to room4}
+\end{displayquote} 
+  with a single definition of \textit{red to room1} as
+  \begin{displayquote}
+  \textit{foreach point in world containing item has color red \{ visit point; pick every item has color red\}; visit room1; drop every item has color red}
+  \end{displayquote}.
+  If the next thing would be to put all items of different shapes to different rooms, it would again be possible to do it by 
+\begin{displayquote}  
+   \textit{ triangle to room1; circle to room2; square to room3}
+   \end{displayquote}
