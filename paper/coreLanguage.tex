@@ -81,3 +81,20 @@ pick item has shape circle; visit room1; drop item has shape circle}
 
 
 \subsection{Semantics}
+
+The model of our world consists of a tuple $(M, I, r)$ where
+$M$ is a two-dimensional grid, $I$ is the set of items, and $r$ is the robot.
+Each item $i \in I$ is has an associated color, shape and a unique identifier.
+The robot has a position in $M$ and holds a set of items. All items are either held by
+the robot, or can be mapped to a position in $M$ ($pos: i \in I \to M$).
+The semantics of our core language is summarized in~\autoref{fig:core-semantics}.
+\todo[inline]{(Eva) To be continued... Not sure yet how to present this.}
+\begin{figure}
+  \begin{align*}
+  \sem{item Fltr}{\{i \in I: Filter(i) == true \}} \\
+  \sem{has color c}{i.color == c}\\
+  ...
+  \end{align*}
+  \caption{Semantics of the core language}
+  \label{fig:core-semantics}
+\end{figure}
