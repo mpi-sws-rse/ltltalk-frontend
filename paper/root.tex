@@ -6,7 +6,7 @@
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
 
-\IEEEoverridecommandlockouts                              % This command is only needed if 
+\IEEEoverridecommandlockouts                              % This command is only needed if
                                                           % you want to use the \thanks command
 
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
@@ -30,6 +30,35 @@
 \usepackage{amsmath} % assumes amsmath package installed
 %\usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage[svgnames,dvipsnames]{xcolor}
+\definecolor{shadeGray}{rgb}{0.9,0.95,0.95}
+\usepackage[bordercolor=red, backgroundcolor=shadeGray, linecolor=red, textwidth=0.8in, textsize=footnotesize]{todonotes}
+\usepackage{listings}
+\lstdefinestyle{corelang}{
+  %frame=tb,
+  %rulesepcolor=\color{gray},
+  rulecolor=\color{gray},
+  morekeywords={
+  repeat, times, foreach, visit, pick, drop, containing, strict
+  },%in,
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray},
+  showstringspaces=false,
+  columns=fullflexible,
+  mathescape=true,
+  numberstyle=\tiny,
+  basicstyle=\footnotesize\ttfamily,
+  numbersep=5pt,
+  stepnumber=2,
+  numbers=none,                   % where to put the line-numbers
+  morestring=[b]"
+}
+\lstset{style=corelang}
+\usepackage[T1]{fontenc}  % this is necessary for beramo to work
+\usepackage[scaled=0.80]{beramono}  % our monospace font
 
 \title{\LARGE \bf
 LASRE looking for a new name
