@@ -28,7 +28,8 @@
 %\usepackage{mathptmx} % assumes new font selection scheme installed
 %\usepackage{times} % assumes new font selection scheme installed
 \usepackage{amsmath} % assumes amsmath package installed
-%\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{xspace}
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{stmaryrd}
@@ -64,6 +65,9 @@
 \lstset{style=corelang}
 \usepackage[T1]{fontenc}  % this is necessary for beramo to work
 \usepackage[scaled=0.80]{beramono}  % our monospace font
+
+
+\newcommand{\tool}{LASRE\xspace}
 
 \newcommand{\sem}[2]{\llbracket \texttt{#1}\rrbracket ::= #2}
 
