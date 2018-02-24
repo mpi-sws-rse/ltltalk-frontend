@@ -8,8 +8,92 @@ We performed a number of trials of the system under different conditions.We ulti
 In the evaluation performed we were interested in two properties: whether or not users are inclined to define new commands that make their work easier and how much they are able to benefit from other people's definitions (without knowing them in advance).  The first property resembles defining a function in a programming language (except that in XnameX the system tries to generalize the definition from an example). The second property describes how much closer the system gets to pure natural-language interface if there is a number of active expert users. The assumption is that people will have similar (linguistic) ideas on how to express similar commands and that's why they don't have to be aware of existing definitions.
 \paragraph*{\textbf{Setup}} We created a list of 21 tasks. The tasks levels ranged from easy (e.g.\  \emph{get one green square}) to difficult (e.g.\ \emph{bring all red items to a room that contains a yellow square}\footnote{the list of all tasks is available at \url{URL TO LIST OF TASKS}}). Fourteen participants (with prior programming experience, but without any knowledge of the system) were split into groups $A$ (4 members), $B$ (6 members) and $C$ (3 members). Group $A$ was only allowed to use the core language, group $B$ could additionally define their own concepts. Finally, group $C$ had access to concepts defined by two expert users as well as by other participants in the experiment. Participants were instructed to solve tasks as they see fit - not necessarily in the most general way. At the start of the experiment each group went through the core language tutorial\footnote{tutorial is available at \url{TUTORIALURL}}. Each group had half an hour to go through the tutorial and the average time needed to solve all tasks was one and half hour (but there was no deadline set). For each participant we measured the number of accepted commands (the ones that are part of either the core-language or that are induced by naturalization), number of words used to finish all tasks, number of defined concepts, number of used induced commands - with a distinction of whether they are used by that participant or by other participant.
 \paragraph*{\textbf{Difficulty of learning the core language}} The average number of successful queries in group $A$ was 75\%. Additionally, judging from the feedback by participants and the questions they were asking during the experiment, we conclude that learning the core-language in half an hour is not an easy task. (However simple we might have thought the language was.) It is also interesting to notice that there were big differences among participants - from 63\% to 90\% of successful commands.
-\paragraph*{\textbf{Naturalization makes work easier}} When comparing groups $B$ and $C$ to group $A$, it is clear that the participants who were able to use naturalization end up with less work in terms of total number of tokens needed to finish the tasks. Specifically, the average number of total tokens in the successful queries for groups $B$ and $C$ is 1156, while for the group $A$ it is 1765. This takes into account all tokens, also the ones from unsuccessful commands. (Some number of unsuccessful commands by groups that use naturalization comes from trying out commands they believed might be defined by others.) If we filter out the unsuccessful commands, the result becomes 738 compared to 1287 (i.e.\ improvement of 43\% with respect to the usage of core language only).
-\paragraph*{\textbf{Relying on the concepts defined by others}} It is interesting to observe results by group $C$. The participants adopted wildly different strategies. While they were on average more likely to use induced language over the core language (43 commands in comparison to 35 commands), it was only one participant who relied primarily on induced language, while for the other two the ratio was a little bit in favor of core language ( as shown in Figure \ref{fig:groupCCoreVSInduced}). The main point of the experiment for group $C$ was to see if the existence of previously defined concept is helpful. First thing to notice is that participants were using concepts defined by others (Figure \ref{fig:groupCRulesInducedBySelfVsOthers}). The numbers differ among participants significantly. By closer look at the kinds of commands issued by each participant, we see that these differences stem from their individual styles: participant $C2$ chose to try small building blocks that matched the style of two expert users whose definitions were available to group $C$. Participant $C3$, on the other hand, used commands similar to the core language. That didn't find a match among predefined rules. \footnote{All commands by all experiment participants are available at \url{URLFORALLDATA}}
+\paragraph*{\textbf{Naturalization makes work easier}} When comparing groups $B$ and $C$ to group $A$, it is clear that the participants who were able to use naturalization end up with less work in terms of total number of tokens needed to finish the tasks. Specifically, the average number of total tokens in the successful queries for groups $B$ and $C$ is 1156, while for the group $A$ it is 1765. This takes into account all tokens, also the ones from unsuccessful commands. (Some number of unsuccessful commands by groups that use naturalization comes from trying out commands they believed might be defined by others.) If we filter out the unsuccessful commands, the result becomes 738 compared to 1287 (i.e.\ improvement of 43\% with respect to the usage of core language only).  The averages hint that with naturalization reduces users' effort. It is important to emphasize that individual performance of participants in a single group varies significantly. To give a whole picture, the results per participant are showed on Figure \ref{fig:groupAVSBAndCNumTokens}.
+\paragraph*{\textbf{Relying on the concepts defined by others}} It is interesting to observe results by group $C$. The participants adopted wildly different strategies. While they were on average more likely to use induced language over the core language (43 commands in comparison to 35 commands), it was only one participant who relied primarily on induced language, while for the other two the ratio was a little bit in favor of core language (as shown in Figure \ref{fig:groupCCoreVSInduced}). The main point of the experiment for group $C$ was to see if the existence of previously defined concept is helpful. First thing to notice is that participants were using concepts defined by others (Figure \ref{fig:groupCRulesInducedBySelfVsOthers}). The numbers differ among participants significantly. By closer look at the kinds of commands issued by each participant, we see that these differences stem from their individual styles: participant $C2$ chose to try small building blocks that matched the style of two expert users whose definitions were available to group $C$. Participant $C3$, on the other hand, used commands similar to the core language. That didn't find a match among predefined rules. \footnote{All commands by all experiment participants are available at \url{URLFORALLDATA}}
+\paragraph*{\textbf{Types of defined concepts}} 
+Upon closer inspection of the concepts the participants defined, we see that a majority falls into two categories: 
+\begin{inparaenum}[(1)]
+\item simplifying individual commands and
+\item defining functions 
+\end{inparaenum}.
+
+Examples for the first case are  
+\textit{pick green square} defined as \textit{pick item has color green} and 
+\text{\textit{visit empty space}} defined as \textit{visit world minus {world containing item}}
+
+For the second case a simple example is 
+\textit{visit both triangle and green
+} defined as \textit{ visit { { world containing item has shape triangle } and { world containing item has color green } }}. There were also function definitions that involved previous function definitions, such as \textit{line red} being defined \textit{as fetch all red; while { robot has item } { drop item ; move left }}.  Another noticeable phenomenon was that group C was defining many concepts that were previously defined by others. The reason were small variations in the definitions (e.g.\ \emph{pick red} vs.\ \emph{take a red} vs.\ \emph{take a red item}). 
+
+
+ 
+
+
+\begin{figure}[t!]
+		\resizebox{\linewidth}{!}{
+		\centering
+
+
+				\label{fig:groupAVSBAndCNumTokens}
+				\begin{tikzpicture}
+				\begin{axis}[
+				ticklabel style = {font=\tiny},
+				    ybar,
+				    bar width = 3,
+				    area legend,
+				    %enlargelimits=0.15,
+				    legend style={at={(0.5,-0.15)},
+				      anchor=north,legend columns=-1},
+				    ylabel={\# tokens},
+				    symbolic x coords={A1, A2, A3, A4, B1,B2,B3,B4,B5,B6,C1,C2,C3},
+				    xtick=data,
+	%			    nodes near coords,
+				    ]
+				\addplot coordinates {(A1,1105 ) (A2,1035 ) (A3,1853) (A4, 1156) (B1, 375) (B2, 957) (B3, 549) (B4, 1063) (B5, 970) (B6, 985) (C1,649) (C2,622) (C3,478)};
+				\addplot coordinates {(A1,1398 ) (A2,1220 ) (A3,2790) (A4, 1654) (B1, 760) (B2,1364) (B3, 822) (B4, 1471) (B5, 1578) (B6, 1270) (C1,1098) (C2,982) (C3,1061)};
+			%	\addplot coordinates {(B1,30) (B2, 61) (B3, 29) (B4, 107) (B5, 80) (B6, 158) (C1,46) (C2,13) (C3,48)};
+				\legend{all commands, successful commands}
+				\end{axis}
+				\end{tikzpicture}
+			
+
+	}
+	\caption{Total number of tokens used per participant}
+	\end{figure}
+
+
+
+\begin{figure}[t!]
+		\resizebox{\linewidth}{!}{
+		\centering
+
+
+				\label{fig:groupBAndCCoreVsInduced}
+				\begin{tikzpicture}
+				\begin{axis}[
+				    ybar,
+				    bar width = 5,
+				    area legend,
+				    %enlargelimits=0.15,
+				    legend style={at={(0.5,-0.15)},
+				      anchor=north,legend columns=-1},
+				    ylabel={\# commands},
+				    symbolic x coords={B1,B2,B3,B4,B5,B6,C1,C2,C3},
+				    xtick=data,
+	%			    nodes near coords,
+				    ]
+				\addplot coordinates {(B1, 38) (B2, 64) (B3, 47) (B4, 6) (B5, 45) (B6, 62) (C1,37) (C2,65) (C3,28)};
+				\addplot coordinates {(B1,30) (B2, 61) (B3, 29) (B4, 107) (B5, 80) (B6, 158) (C1,46) (C2,13) (C3,48)};
+				\legend{induced, core}
+				\end{axis}
+				\end{tikzpicture}
+			
+
+	}
+	\caption{Core-language commands vs induced commands for groups B and C}
+	\end{figure}
+			
+
 
 \begin{figure}[t!]
 		%\resizebox{\linewidth}{!}{
@@ -60,5 +144,5 @@ In the evaluation performed we were interested in two properties: whether or not
 
 	}
 			}
-	\caption{Usage of induced rules}
+	\caption{Usage of induced rules in group C}
 \end{figure}
