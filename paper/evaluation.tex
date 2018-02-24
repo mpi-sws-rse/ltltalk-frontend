@@ -1,14 +1,11 @@
-\section{Evaluation and System Description}
-\subsection{System implementation}
-To a user the system looks like a grid world with a robot in it. There are walls blocking robot's way. There are also items of different colors and shapes that the robot can pick, drop and carry around.  A predefined set of rooms is available and visible to the user. The user uses a text-bar to give commands to the robot ( image Y)
-The system implementation is based on the Voxelurn system \cite{wangVoxelurn}.
+\section{Evaluation}
 
-\subsection{Evaluation}
+
 We performed a number of trials of the system under different conditions.We ultimately want to create a system that people with different levels of proficiency in the core language would use. Users could range from \emph{expert users}  (the ones that would define new commands to make the communication to the robot simpler) all the way to ones whod don't know the language at all, but take advantage of commands that \emph{sound as if they should work}, defined by the other users of the system.
 In the evaluation performed we were interested in two properties: whether or not users are inclined to define new commands that make their work easier and how much they are able to benefit from other people's definitions (without knowing them in advance).  The first property resembles defining a function in a programming language (except that in XnameX the system tries to generalize the definition from an example). The second property describes how much closer the system gets to pure natural-language interface if there is a number of active expert users. The assumption is that people will have similar (linguistic) ideas on how to express similar commands and that's why they don't have to be aware of existing definitions.
 \paragraph*{\textbf{Setup}} We created a list of 21 tasks. The tasks levels ranged from easy (e.g.\  \emph{get one green square}) to difficult (e.g.\ \emph{bring all red items to a room that contains a yellow square}\footnote{the list of all tasks is available at \url{URL TO LIST OF TASKS}}). Fourteen participants (with prior programming experience, but without any knowledge of the system) were split into groups $A$ (4 members), $B$ (6 members) and $C$ (3 members). Group $A$ was only allowed to use the core language, group $B$ could additionally define their own concepts. Finally, group $C$ had access to concepts defined by two expert users as well as by other participants in the experiment. Participants were instructed to solve tasks as they see fit - not necessarily in the most general way. At the start of the experiment each group went through the core language tutorial\footnote{tutorial is available at \url{TUTORIALURL}}. Each group had half an hour to go through the tutorial and the average time needed to solve all tasks was one and half hour (but there was no deadline set). For each participant we measured the number of accepted commands (the ones that are part of either the core-language or that are induced by naturalization), number of words used to finish all tasks, number of defined concepts, number of used induced commands - with a distinction of whether they are used by that participant or by other participant.
 \paragraph*{\textbf{Difficulty of learning the core language}} The average number of successful queries in group $A$ was 75\%. Additionally, judging from the feedback by participants and the questions they were asking during the experiment, we conclude that learning the core-language in half an hour is not an easy task. (However simple we might have thought the language was.) It is also interesting to notice that there were big differences among participants - from 63\% to 90\% of successful commands.
-\paragraph*{\textbf{Naturalization makes work easier}} When comparing groups $B$ and $C$ to group $A$, it is clear that the participants who were able to use naturalization end up with less work in terms of total number of tokens needed to finish the tasks. Specifically, the average number of total tokens in the successful queries for groups $B$ and $C$ is 1156, while for the group $A$ it is 1765. This takes into account all tokens, also the ones from unsuccessful commands. (Some number of unsuccessful commands by groups that use naturalization comes from trying out commands they believed might be defined by others.) If we filter out the unsuccessful commands, the result becomes 738 compared to 1287 (i.e.\ improvement of 43\% with respect to the usage of core language only).  The averages hint that with naturalization reduces users' effort. It is important to emphasize that individual performance of participants in a single group varies significantly. To give a whole picture, the results per participant are showed on Figure \ref{fig:groupAVSBAndCNumTokens}.
+\paragraph*{\textbf{Naturalization makes work easier}} When comparing groups $B$ and $C$ to group $A$, it is clear that the participants who were able to use naturalization end up with less work in terms of total number of tokens needed to finish the tasks. Specifically, the average number of total tokens in the successful queries for groups $B$ and $C$ is 1156, while for the group $A$ it is 1765. This takes into account all tokens, also the ones from unsuccessful commands. (Some number of unsuccessful commands by groups that use naturalization comes from trying out commands they believed might be defined by others.) If we filter out the unsuccessful commands, the result becomes 738 compared to 1287 (i.e.\ improvement of 43\% with respect to the usage of core language only).  The averages hint that with naturalization reduces users' effort. It is important to emphasize that individual performance of participants in a single group varies significantly. To give a whole picture, the results per participant are shown in Figure \ref{fig:numTokens}.
 \paragraph*{\textbf{Relying on the concepts defined by others}} It is interesting to observe results by group $C$. The participants adopted wildly different strategies. While they were on average more likely to use induced language over the core language (43 commands in comparison to 35 commands), it was only one participant who relied primarily on induced language, while for the other two the ratio was a little bit in favor of core language (as shown in Figure \ref{fig:groupCCoreVSInduced}). The main point of the experiment for group $C$ was to see if the existence of previously defined concept is helpful. First thing to notice is that participants were using concepts defined by others (Figure \ref{fig:groupCRulesInducedBySelfVsOthers}). The numbers differ among participants significantly. By closer look at the kinds of commands issued by each participant, we see that these differences stem from their individual styles: participant $C2$ chose to try small building blocks that matched the style of two expert users whose definitions were available to group $C$. Participant $C3$, on the other hand, used commands similar to the core language. That didn't find a match among predefined rules. \footnote{All commands by all experiment participants are available at \url{URLFORALLDATA}}
 \paragraph*{\textbf{Types of defined concepts}} 
 Upon closer inspection of the concepts the participants defined, we see that a majority falls into two categories: 
@@ -30,11 +27,9 @@ For the second case a simple example is
 
 
 \begin{figure}[t!]
+		
 		\resizebox{\linewidth}{!}{
 		\centering
-
-
-				\label{fig:groupAVSBAndCNumTokens}
 				\begin{tikzpicture}
 				\begin{axis}[
 				ticklabel style = {font=\tiny},
@@ -55,10 +50,9 @@ For the second case a simple example is
 				\legend{all commands, successful commands}
 				\end{axis}
 				\end{tikzpicture}
-			
-
 	}
 	\caption{Total number of tokens used per participant}
+	\label{fig:numTokens}
 	\end{figure}
 
 
