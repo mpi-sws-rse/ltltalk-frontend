@@ -1,9 +1,105 @@
 \section{Core Language}
-Interesting core-language examples
 
+
+The user of our system instructs a single robot which moves in a world
+consisting of several connected rooms. These rooms contain a number of items,
+which can have different properties; for simplicity we consider here different
+colors and shapes. The robot can modify this world by moving to a location
+containing an item, by picking up and dropping items, possibly at different
+locations.
+
+\subsection{Syntax}
+While the abstract world in which our robot operates is relatively simple,
+the core language used to instruct the robot is sufficiently expressive to
+allow for interesting scenarios. \autoref{fig:core-syntax} illustrates the
+syntax of the core language.
+\todo[inline]{(Eva) I have based this on syntaxsemantics.md. That document does not
+have the select statement though. Do we have this?}
+\begin{figure}
+  Control flow:
+  \begin{lstlisting}
+  Stmt -> Act | Stmt; Stmt
+  Stmt -> repeat n times Stmt
+  Stmt -> foreach point in Area Stmt
+  \end{lstlisting}
+
+  Actions:
+  \begin{lstlisting}
+  Act -> visit Loc | pick Itm | drop Itm
+  Act -> select Itm
+  Act -> strict Act
+  \end{lstlisting}
+
+  Locations:
+  \begin{lstlisting}
+  Area -> Area containing Itm
+  Area -> Area and Area | Area or Area
+  Area -> world   // every point on the map
+  Area -> Pnt | [Pnt, Pnt, ..., Pnt]
+  Pnt -> [x, y]
+  \end{lstlisting}
+
+  Items:
+  \begin{lstlisting}
+  Itm -> item | item Fltr
+  Fltr -> Fltr and Fltr | Fltr or Fltr | not Fltr
+  Fltr -> has color C | has shape S
+  C -> red | blue | green | yellow
+  S -> triangle | square | circle
+  \end{lstlisting}
+  \caption{Syntax of core language (subset)}
+  \label{fig:core-syntax}
+\end{figure}
+In addition, our language also allows to express sets of areas and
+conditionals which we omit here for space reasons.
+
+With this core langauage, we can express for example the following:
 \begin{itemize}
-	\item drop an item to any field that contains both red item and circle-shaped item (can be the same item): \textit{foreach point in \{world containing item has color red\} and \{world containing item has shape circle\} \{visit point; drop item\}}
-	\item if possible, form a horizontal line on the floor out of all items robot currently has and starting at robot's current position: \textit{strict \{while robot has item \{drop item; move right\}\}; strict \{while robot has item \{drop item; move left\}\}}
-	\item keep bringing circle-shaped items to room1 until there is a red item in room1: \textit{while not \{ item has color red at room1\} \{visit \{world containing item has shape circle\} minus room1; pick item has shape circle; visit room1; drop item has shape circle\}}
+	\item Drop an item to any field that contains both a red and a circle-shaped item
+    (possibly the same item):
+    \begin{lstlisting}
+foreach point in {world containing item has color red} and
+{world containing item has shape circle } {visit point; drop item}
+	   \end{lstlisting}
 
+  \item If possible, form a horizontal line on the floor out of all items robot
+    currently has and starting at robot's current position:
+    \begin{lstlisting}
+strict {while robot has item {drop item; move right}};
+strict {while robot has item {drop item; move left}}
+    \end{lstlisting}
+
+	\item Keep bringing circle-shaped items to room1 until there is a red item in room1:
+    \todo[inline]{(Eva) I have thought to not include while in the syntax, as everything
+    we include we need to explain which takes space. This example uses it though.}
+    \begin{lstlisting}
+while not { item has color red at room1}
+  {visit {world containing item has shape circle} minus room1;
+pick item has shape circle; visit room1; drop item has shape circle}
+    \end{lstlisting}
 \end{itemize}
+
+
+\subsection{Semantics}
+
+The model of our world consists of a tuple $(M, I, r)$ where
+$M$ is a two-dimensional grid, $I$ is the set of items, and $r$ is the robot.
+Each item $i \in I$ is has an associated color, shape and a unique identifier.
+The robot has a position in $M$ and holds a set of items. All items are either held by
+the robot, or can be mapped to a position in $M$ ($pos: i \in I \to M$).
+The semantics of our core language is summarized in~\autoref{fig:core-semantics}.
+\todo[inline]{(Eva) To be continued... Not sure yet how to present this.}
+\begin{figure}
+  \begin{align*}
+  \sem{item Fltr}{\{i \in I: Filter(i) == true \}} \\
+  \sem{has color c}{i.color == c}\\
+  ...
+  \end{align*}
+  \caption{Semantics of the core language}
+  \label{fig:core-semantics}
+\end{figure}
+
+\subsection{User Interface}
+\todo[inline]{(Eva) The way users program, i.e. with visual feedback on what their
+command does is probably relevant here too}
+\cite{wangVoxelurn}
