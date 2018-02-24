@@ -58,12 +58,18 @@
 
 
 # Natural Language Programming
+
+- **[Understanding Natural Language](https://ac.els-cdn.com/0010028572900023/1-s2.0-0010028572900023-main.pdf?_tid=5f84748e-17ae-11e8-8136-00000aacb362&acdnat=1519290013_fd17608d2125bfdfd484a61d960c2880)**. Terry Winograd. Cognitive Psychology. 1972.
+  - a work that started the field, had an ambition of *understanding language*, assuming that the system has a detailed model of the discussed topic
+
 - **[Language to Code: Learning Semantic Parsers for If-This-Then-That Recipes](http://aclweb.org/anthology/P/P15/P15-1085.pdf)**. C. Quirk and others. ACL. 2015.
 
 - **[Naturalizing a Programming Language via Interactive Learning](http://aclweb.org/anthology/P17-1086)**. S. Wang and others. ACL. 2017.
   - introduces the concept of starting from a formal language and gradually naturalizing it
   - base for lasre
   
+
+- **[Learning Language Games through Interaction](hhttps://arxiv.org/pdf/1606.02447.pdf)**. S. Wang and others. ACL. 2016. 
 
 - **[Program Synthesis from Natural Language Using Recurrent Neural Networks](http://victorialin.net/pubs/tellina_tr180201.pdf)**. V. Lin and others. UW technical report. 2017.
   - going from problem formulation to bash one-liners

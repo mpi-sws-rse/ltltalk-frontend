@@ -8,14 +8,19 @@ Now start solving them (if you haven't already, check the <a href="/#/tutorial" 
 While you can solve the tasks in the best way you see fit, there is a benefit in trying to provide a general solution (that would work in more than one situation) because you can reuse solutions as building blocks in the tasks that follow. It might also be useful to define some basic building blocks that are not tasks themselves (e.g. `pick green` for `pick item has color green`)
 
 ---
+*reset the environment*
 
 1.
 - Get one green square
 - Visit any field containing both a yellow item and a circle-shaped item (may be the same item)
 - Pick a yellow item from that space
-- If possible, pick a square shaped item (from that space). Else, drop yellow item.
+- If possible, pick a square shaped item (from that space).
+
+
 
 ---
+
+*reset the environment*
 
 2.
 
@@ -25,12 +30,16 @@ While you can solve the tasks in the best way you see fit, there is a benefit in
 
 ---
 
+*reset the environment*
+
 3.
  - Bring all items to room1
  - Pick exactly 3 red items
  - Build a tower at any field consisting of exactly 2 red, 2 green and 2 blue items.
 
 ---
+
+*reset the environment*
 
  4.
  - Get one red triangle
@@ -39,6 +48,8 @@ While you can solve the tasks in the best way you see fit, there is a benefit in
 
 ---
 
+*reset the environment*
+
 5.
  - Put all red items in a line on the floor
  - Pick all green items. Drop all of them to empty places.
@@ -46,10 +57,14 @@ While you can solve the tasks in the best way you see fit, there is a benefit in
 
 ---
 
+*reset the environment*
+
 6.
  - Build towers of different colors at locations [0,0], [1,1], [3,4] and [5,8]
 
 ---
+
+*reset the environment*
 
 7.
  - Bring all red items to a room that contains a yellow square

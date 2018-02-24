@@ -55,8 +55,14 @@ same square as an item in order to pick it up) and `pick every item` will pick a
 in `room5` (room5 is an area, a set of points)
   - Areas can be explicitly written: `[[3,3],[3,4],[4,4]]`
 
+**Looping**
 
-** The Keywords `world`, `rooms` `current`, and `robot` **
+There are three loop constructs
+ - `foreach` is used in two ways: looping over set of points, e.g. `foreach point in [[1,1], [1,2]] visit point` or looping over set of areas, e.g. `foreach area in [room1, room2] {visit area; drop item}`. Note that `point` and `area` are fixed looping variables (meaning that `foreach x in [[1,1], [1,2]]` is not in the language)
+ - `while`: a loop that executes an action while condition is satisfied. An example is `while robot has item {move left; drop item}` 
+ - `repeat`: used for repeating fixed number of times, for example `repeat 3 times drop item`
+
+** The Keywords `world`, `rooms`, `current`, and `robot` **
 
 The builtin keyword `world` stands for the set of all points in the world. 
 Thus, 
