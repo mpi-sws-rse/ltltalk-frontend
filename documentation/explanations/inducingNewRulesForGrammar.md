@@ -15,7 +15,7 @@ Here we are looking for a maximal packing `P = [d1, d2, ..., dk]` for which `sco
 In the original Voxelurn code, if all right-hand side utterances are categories, the rule is disregarded. In our code this restriction is removed.
 
 ## Simple packings
-This is a simpler way for generalization: the only derivations included in packings are those for primitive values. The simple categories are specified as an option (**link to the run file**). At the moment, simple categories in our system are $Color, $Direction and $Number. For the running example and the full parse of the body
+This is a simpler way for generalization: the only derivations included in packings are those for primitive values. The simple categories are specified as an option (**link to the run file**). Simple categories in our system are $Color, $Direction, $Shape, $Point and $Number. For the running example and the full parse of the body
 ```
  $Action
  (   
