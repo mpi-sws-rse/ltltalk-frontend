@@ -29,6 +29,7 @@
 %\usepackage{times} % assumes new font selection scheme installed
 \usepackage{amsmath} % assumes amsmath package installed
 \usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{balance}
 \usepackage{xspace}
 \usepackage{csquotes}
 \usepackage{hyperref}
@@ -46,7 +47,7 @@
   %rulesepcolor=\color{gray},
   rulecolor=\color{gray},
   morekeywords={
-  repeat, times, foreach, visit, pick, drop, containing, strict
+  repeat, times, foreach, visit, pick, drop, containing, avoiding, strict
   },%in,
   sensitive=true,
   morecomment=[l]{//},
@@ -66,25 +67,39 @@
 \usepackage[T1]{fontenc}  % this is necessary for beramo to work
 \usepackage[scaled=0.80]{beramono}  % our monospace font
 
+\def\pick{\mathtt{pick}}
+\def\drop{\mathtt{drop}}
+\def\visit{\mathtt{visit}}
+\def\avoiding{\mathtt{avoiding}}
 
-\newcommand{\tool}{LASRE\xspace}
+\newcounter{ex}
+\stepcounter{ex}
+
+\newenvironment{example}{\vspace{0.05in} \noindent {\sc Example \arabic{ex}: }}{\stepcounter{ex} \hfill $\Box$ \vspace{0.05in} }
+
+\newcommand{\tool}{Flipper\xspace}
 
 \newcommand{\sem}[2]{\llbracket \texttt{#1}\rrbracket ::= #2}
+\newcommand{\until}[2]{#1\; \mathcal{U}\; #2}
 
-\title{\LARGE \bf
-LASRE looking for a new name
+\title{\LARGE \bf Declarative but Natural Robot Programming using Semantic Parsing 
 }
 
 
-\author{Albert Author$^{1}$ and Bernard D. Researcher$^{2}$% <-this % stops a space
-\thanks{*This work was not supported by any organization}% <-this % stops a space
-\thanks{$^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
-        University of Twente, 7500 AE Enschede, The Netherlands
-        {\tt\small albert.author@papercept.net}}%
-\thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
-        Dayton, OH 45435, USA
-        {\tt\small b.d.researcher@ieee.org}}%
+\author{Ivan Gavran$^1$ \quad Brendon Boldt$^2$ \quad Eva Darulova$^1$ \quad Rupak Majumdar$^1$%
+\thanks{
+$^1$Max Planck Institute for Software Systems, Germany, $^2$Marist College, USA}%
+\thanks{Brendon Boldt was supported by a DAAD Internship.}
 }
+% \author{Albert Author$^{1}$ and Bernard D. Researcher$^{2}$% <-this % stops a space
+% \thanks{*This work was not supported by any organization}% <-this % stops a space
+% \thanks{$^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+%         University of Twente, 7500 AE Enschede, The Netherlands
+%         {\tt\small albert.author@papercept.net}}%
+% \thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
+%         Dayton, OH 45435, USA
+%         {\tt\small b.d.researcher@ieee.org}}%
+% }
 
 
 \begin{document}
@@ -98,7 +113,6 @@ LASRE looking for a new name
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
 \input{abstract.tex}
 \end{abstract}
 
@@ -111,8 +125,11 @@ LASRE looking for a new name
 
 \input{naturalization.tex}
 \input{evaluation.tex}
+\input{relatedWork.tex}
 
-\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+
+\balance
+% \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
                                   % the textheight of the last page by a suitable amount.
                                   % This command does not take effect until the next page
@@ -134,7 +151,6 @@ LASRE looking for a new name
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\input{relatedWork.tex}
 
 \bibliography{relatedWorkList}
 \bibliographystyle{ieeetr}
