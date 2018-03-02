@@ -9,8 +9,10 @@ import "./styles.css"
 const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
   <div className="Header">
     <div className="Header-logo">
-      <span>LASRE</span>
+      <span>Flipper</span>
       <span className="Header-sublogo">an MPI-SWS project</span>
+      <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/imprint/">[Imprint]</a> </span>
+      <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/data-protection/">[Data protection]</a> </span>
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></Link>
