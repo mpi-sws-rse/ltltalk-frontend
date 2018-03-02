@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "NODE_PATH=./src react-scripts start",
-    "start:local": "REACT_APP_SEMPRE_SERVER=http://srv-76-126.mpi-sws.org:8410/sempre REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts start",
+    "start:local": "REACT_APP_SEMPRE_SERVER=http://127.0.0.1:8410/sempre REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts start",
     "build": "NODE_PATH=./src react-scripts build",
     "build:local": "REACT_APP_SEMPRE_SERVER=http://localhost:8410 REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts build",
     "test": "NODE_PATH=./src react-scripts test --env=jsdom",
