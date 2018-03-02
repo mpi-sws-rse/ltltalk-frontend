@@ -1,2 +1,77 @@
-\section{Related work and discussion}
-Wang et al.\cite{wangVoxelurn} present the idea of starting from a programming language and let users gradually naturalize it. They implement their system as a block world in which users can build various shapes of different colors. The changed setting of robot world introduces new challenges: language that contains declarative commands and unrealizable commands. Similar approach of learning from users in the context of personal assistants is presented in \cite{azariaLia}. Beltagy and Quirk\cite{beltagyIFTT} train a model (ensemble of neural network and logistic regression) that translates a task description from IFTTT dataset into executable representations. They show few ways to improve the performance, the most interesting of which is creating synthetic data by paraphrasing task descriptions. Work by Lin et al\cite{linTelina} has the similar motivation: starting with questions from popular programming-help websites that describe programmer's intention, they devise bash one liners accomplishing it. They use RNN to learn the structure of a command and k-NN algorithm for matching between entities and slots available in the structure. With an anticipated ubiquity of personal robots, there is a lot of work dealing with commanding robots or communicating with them as well as creating programming languages for robots usable by non-programmers. Alexandrova et al.\cite{roboFlow} created a flow-based visual programming language, balancing intuitiveness and expressivity. We believe that natural language - if done right - is the most promising interface towards robots (or machines in general). SHRDLU\cite{shrdlu} was a system that started the endeavor.  Kollar et al.\cite{kollarDialog} and Thomason et al.\cite{thomasonDialog} recognize the need for a dialog between a robot and a human in order for the robot to understand human's intentions. In \cite{kollarDialog} robot is able to learn the way humans refer to different tasks or locations. \cite{thomasonDialog} allows for learned objects to be compositions of existing objects (e.g.\  \emph{the office next to X's office}. In both cases robot is trying to fill-in the gaps in simple action patterns, navigation and delivery, and the actions can not be combined. The work by Kress-Gazit et al.\cite{hadasTranslatingStructuredEnglish},\cite{hadasLTLMop},\cite{hadasProvablyCorrectReactiveControlFromNaturalLanguage} focuses on translating natural language into LTL to bridge a gap from users to available formal methods tools. A robot is able to give an answer to what it is currently doing, based on the natural language to LTL translation tree, as well as explain why an action in unrealizable. The set of things a robot can understand is limited to implemented semantic behaviors. Tellex et al.\cite{tellexGrounding} solve the problem of grounding utterances from the command to objects in space by introducing a hierarchical structure that connects (indeed similar) expressions such as \emph{beside the truck} and \emph{beside the box}. Paul et al.\cite{paulGrounding} solve the same problem, but supports abstract expressions such as \emph{first cube in the second row}. These two lines of work are connected in \cite{boteanuVerifiableGrounding} - there the grounding problem is put in the context of reactive temporal commands and potential groundings. \par In this work we showed that the idea of naturalizing existing programming language is perfectly suited for the problem of communicating with robots. That's been a long-standing open research problem. Many suggested solutions struggle with a lack of expressivity and a lack of extensibility to the concepts natural to humans. The results showed in this paper give hope that a formal language for commanding robot could be - by community effort - turned into \emph{domain specific natural language}. To accomplish this, few improvements are needed: lowering the entry bar to the system in its early phase (currently, the bar is learning the core language), providing better programming tools to make the system more usable (explanations for unparseable utterances, better depiction of two offered meanings of an utterance that have the same execution, auto-complete for available pre-defined concepts...), and further increasing of system's precision. Furthermore, significant improvements could be gained by implementing standard NLP techniques (lemmatization, rephrasing of definition heads, rephrasing of initial formal grammar) on top of the naturalization process
+\section{Related work}
+
+There are many systems commanding or communicating naturally with robots as well as creating programming
+languages for robots usable by non-programmers, starting with the seminal work in SHRDLU~\cite{shrdlu},
+and continuing over the years~\cite{kollarDialog,thomasonDialog,roboFlow}.
+% We believe that natural language---if done right---is the most promising interface with robots (or machines in general).
+% \todo[inline]{ED: maybe too strong? perhaps just say, it's an alternative?}
+% Kollar et al.~\cite{kollarDialog} and Thomason et al.~\cite{thomasonDialog} recognize the
+% need for a dialog between a robot and a human in order for the robot to
+% understand the human's intentions and to build trust in mutual understanding.
+For example, Thomason et al.~\cite{thomasonDialog} demonstrate a system in which
+utterances are mapped to $\lambda$-calculus computations and the robot 
+fills in the gaps in a simple \textit{action-patient-recipient} pattern, supporting
+navigation and delivery.
+%
+%  whereas \tool's robot actions can be of arbitrary complexity.
+%\todo[inline]{ED: how is SHRDLU related to the other works? I would skip the
+%sentence about the need for trust. Sounds subjective to me.}
+%\todo[inline]{ED: what is an action-patient-recipient pattern? Is there a different
+%word for patient?}
+%\todo[inline]{IG: it is a type of thematic relation, a concept from linguistics. At least two papers from our related work are using this term}
+%Alexandrova et al.\cite{roboFlow} created a flow-based visual programming language, balancing
+%intuitiveness and expressivity. 
+
+Formal and logical languages for planning have a long research tradition in AI and formal methods.
+Recently, the work by Kress-Gazit et
+al.~\cite{hadasTranslatingStructuredEnglish,hadasLTLMop,
+hadasProvablyCorrectReactiveControlFromNaturalLanguage} focuses on translating
+natural language into linear temporal logic to bridge the gap from users to formal methods
+tools.
+One project uses a pipeline of general-purpose NLP 
+methods~\cite{hadasProvablyCorrectReactiveControlFromNaturalLanguage}, with VerbNet~\cite{schulerVerbnet}
+at the core of semantic interpretation. A robot is additionally able
+to give an answer to what it is currently doing, based on the natural language
+to LTL translation tree, as well as to explain why an action is unrealizable. A
+limitation is, however, that the set of actions a robot can perform is still
+restricted to implemented semantic behaviours. On the other hand,~\cite{hadasTranslatingStructuredEnglish}
+can process any (GR(1)) LTL specification, but the burden is on the human to use
+only \emph{structured English}. \tool accomplishes both, with the tradeoff 
+that at least some of the users are able to learn the core language.
+
+Tellex et al.~\cite{tellexGrounding} solve the problem of grounding utterances
+from the command to objects in space by introducing a hierarchical structure
+that connects expressions such as \emph{beside the truck} and \emph{beside the
+box}. Paul et al.~\cite{paulGrounding} solve the same problem, but support
+abstract expressions such as \emph{first cube in the second row}. This line of
+work is connected to the one described in the previous paragraph in the work by
+Boteanu et al.~\cite{boteanuVerifiableGrounding}---there the grounding
+problem is put in the context of reactive temporal commands. In this line of
+work, unlike in \tool, the robot cannot be taught new concepts. On the other hand,
+\tool does not support talking about abstract spatial relations between items
+in its world. To support this, \tool's core language would need to be modified
+(and one could then use the mentioned techniques).
+
+\tool is inspired by and based upon the work on naturalization of formal
+languages by Wang et al.~\cite{wangVoxelurn}, which considers
+a block world where a user can build various shapes of different
+colors. The application of naturalization to a robot world introduces new
+challenges: the language contains declarative and unrealizable
+commands and dynamic behavior that changes the state of the world.
+A similar approach of learning the language from users is presented in~\cite{azariaLia}, but in the context of personal
+assistants. 
+Iyer et al.~\cite{iyerLearningNeuralSemanticParser} use user's feedback to 
+minimize the effort needed for additional annotation of data and iteratively improve their semantic parser 
+that translates natural language utterances to SQL queries. 
+Beltagy and Quirk~\cite{beltagyIFTT} train a model (an ensemble of a neural network and logistic
+regression) that translates a task description from an IFTTT dataset into
+executable representations. They show several ways to improve the performance, the
+most interesting of which is creating synthetic data by paraphrasing task
+descriptions. Work by Lin et al.~\cite{linTelina} has a similar motivation:
+starting with questions from popular programming-help websites that describe
+programmers' intentions, they devise bash one-liners accomplishing it. 
+This kind of work enables semantic parsing from 
+less direct instructions, but is not easily adaptable to users interactively giving clues to the 
+system about the meaning of the utterance.
+None of these papers targeted the robotics domain.
+

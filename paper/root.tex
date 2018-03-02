@@ -34,6 +34,7 @@
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{stmaryrd}
+\usepackage{cite}
 \usepackage[svgnames,dvipsnames]{xcolor}
 \definecolor{shadeGray}{rgb}{0.9,0.95,0.95}
 \usepackage[bordercolor=red, backgroundcolor=shadeGray, linecolor=red, textwidth=0.8in, textsize=footnotesize]{todonotes}
@@ -47,14 +48,17 @@
   %rulesepcolor=\color{gray},
   rulecolor=\color{gray},
   morekeywords={
-  repeat, times, foreach, visit, pick, drop, containing, avoiding, strict
+  repeat, times, foreach, visit, pick, drop, containing, avoiding, while, strict,
+  move, right, move, left, in, every, has, color, shape, possible, if, at, and, or, minus, not
   },%in,
+  keywordstyle=[2]\emph,
+  keywords=[2]{world, point, robot, item, red, blue, yellow, green, triangle, square, circle},
   sensitive=true,
   morecomment=[l]{//},
   morecomment=[s]{/*}{*/},
   commentstyle=\color{gray},
   showstringspaces=false,
-  columns=fullflexible,
+  %columns=fullflexible,
   mathescape=true,
   numberstyle=\tiny,
   basicstyle=\footnotesize\ttfamily,
@@ -66,30 +70,36 @@
 \lstset{style=corelang}
 \usepackage[T1]{fontenc}  % this is necessary for beramo to work
 \usepackage[scaled=0.80]{beramono}  % our monospace font
+\allowdisplaybreaks
 
 \def\pick{\mathtt{pick}}
 \def\drop{\mathtt{drop}}
 \def\visit{\mathtt{visit}}
 \def\avoiding{\mathtt{avoiding}}
+\def\while{\mathtt{while}}
 
-\newcounter{ex}
-\stepcounter{ex}
-
-\newenvironment{example}{\vspace{0.05in} \noindent {\sc Example \arabic{ex}: }}{\stepcounter{ex} \hfill $\Box$ \vspace{0.05in} }
+\let\proof\relax    % there is an option clash with amsthm with something in IEEEconf
+\let\endproof\relax
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheorem[style=definition,qed=$\blacksquare$]{example}
 
 \newcommand{\tool}{Flipper\xspace}
 
-\newcommand{\sem}[2]{\llbracket \texttt{#1}\rrbracket ::= #2}
+\newcommand{\sem}[2]{\llbracket \texttt{#1}\rrbracket &::= #2}
+\newcommand{\bbraces}[1]{\llbracket \texttt{#1}\rrbracket}
 \newcommand{\until}[2]{#1\; \mathcal{U}\; #2}
 
-\title{\LARGE \bf Declarative but Natural Robot Programming using Semantic Parsing 
+\title{\LARGE \bf Precise but Natural Specifications for Robot Tasks
 }
 
 
-\author{Ivan Gavran$^1$ \quad Brendon Boldt$^2$ \quad Eva Darulova$^1$ \quad Rupak Majumdar$^1$%
+\author{Brendon Boldt$^1$\quad Ivan Gavran$^2$ \quad Eva Darulova$^2$ \quad Rupak Majumdar$^2$%
 \thanks{
-$^1$Max Planck Institute for Software Systems, Germany, $^2$Marist College, USA}%
-\thanks{Brendon Boldt was supported by a DAAD Internship.}
+$^1$Marist College, USA,
+$^2$Max Planck Institute for Software Systems, Germany
+}%
+\thanks{Brendon Boldt was supported by a DAAD RISE Internship.}
 }
 % \author{Albert Author$^{1}$ and Bernard D. Researcher$^{2}$% <-this % stops a space
 % \thanks{*This work was not supported by any organization}% <-this % stops a space
@@ -126,7 +136,7 @@ $^1$Max Planck Institute for Software Systems, Germany, $^2$Marist College, USA}
 \input{naturalization.tex}
 \input{evaluation.tex}
 \input{relatedWork.tex}
-
+\input{conclusion.tex}
 
 \balance
 % \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths

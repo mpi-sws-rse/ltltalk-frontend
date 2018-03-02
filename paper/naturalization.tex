@@ -1,25 +1,280 @@
-\section{Naturalization of the Language}
+\section{Parsing, Naturalization, and Generalization}
+\label{sec:naturalization}
+
+% While the core language is expressive and precise
+% its rigid syntax is not suitable for end-users and is at odds
+% with the flexibility of natural language.
+% Therefore, \tool enables its users to
+% extend the grammar of the core language, or
+% \emph{naturalize}~\cite{wangVoxelurn} it.
+% Users can define the meaning of new utterances, and \tool generalizes their definitions into new grammar production rules.
+
+We now describe how naturalization works in \tool.
+We start by showing two examples of naturalization and then
+explain the inner mechanism of the naturalization process.
+
+\begin{example}\label{ex:pick-3-items}
+Suppose a user writes the command \lstinline{pick 3 items}. Since this is not a valid program
+in the core language, \tool asks for a definition.
+Suppose the user responds with \lstinline{repeat 3 times pick item}.
+From this, \tool's grammar induction module now induces the following
+two grammar rules:
+\begin{lstlisting}
+Act $\to$ pick Num items      ::= repeat Num times pick item
+Act $\to$ ItemAct Num items ::= repeat Num times ItemAct item
+\end{lstlisting}
+%
+Note that these rules are a generalization of the user-provided definition.
+Thus, when the next user issues the command \lstinline{drop 2 items}, the semantic parser
+will be able to parse it and \tool will successfully execute it.
+\end{example}
+
+\begin{example}
+\label{ex:definingAFunction}
+Naturalization not only helps accommodate many different language styles, it can also significantly simplify programs.
+Consider the task of distributing items of different colors to different rooms.
+Conceptually, this is fairly simple: the robot should first gather all red items and put them into \lstinline{room1},
+then do the same for the blue items and \lstinline{room2} and so on.
+Figure \ref{fig:coreLanguageDefinitionOfSortingOnColors} shows an implementation of this specification in the core language.
+Each marked part corresponds to gathering items of a specific color (as in Example~\ref{ex:example2}) and bringing
+them to a specific room.
+Clearly, there is a significant amount of redundancy.
+\begin{figure}[t!]
+  \begin{lstlisting}[frame=leftline,xleftmargin=15pt, xrightmargin=15pt]
+foreach point in world containing item has color red
+  {visit point; pick every item has color red };
+visit room1; drop every item has color red;
+  \end{lstlisting}
+
+  \begin{lstlisting}[frame=leftline,xleftmargin=15pt, xrightmargin=15pt]
+foreach point in world containing item has color green
+  {visit point; pick every item has color green};
+visit room2; drop every item has color green;
+  \end{lstlisting}
+
+  \begin{lstlisting}[frame=leftline,xleftmargin=15pt, xrightmargin=15pt]
+foreach point in world containing item has color blue
+  {visit point; pick every item has color blue};
+visit room3; drop every item has color blue;
+  \end{lstlisting}
+
+  \begin{lstlisting}[frame=leftline,xleftmargin=15pt, xrightmargin=15pt]
+foreach point in world containing item has color yellow
+  {visit point; pick every item has color yellow};
+visit room4; drop every item has color yellow
+  \end{lstlisting}
+\caption{Sorting items based on colors using the core language}
+\label{fig:coreLanguageDefinitionOfSortingOnColors}
+\end{figure}
+
+With naturalization, we can accomplish the same task by first defining
+\lstinline{gather red} as
+  \begin{lstlisting}
+foreach point in world containing item has color red
+  {visit point; pick every item has color red}
+  \end{lstlisting}
+Then using this new command, we define \lstinline{red to room1} as
+\begin{lstlisting}
+gather red; visit room1; drop every item has color red
+  \end{lstlisting}
+and finally we can accomplish our complete task with
+\begin{lstlisting}
+red to room1; green to room2; blue to room3; yellow to room4
+\end{lstlisting}
+%
+If we next want to put all items of different shapes to different rooms,
+the generalization allows us to re-use the commands defined above and simply
+write:
+  \begin{lstlisting}
+triangle to room1; circle to room2; square to room3
+  \end{lstlisting}
+\end{example}
+
+Thus, the naturalization process is a convenient way of
+giving alternative names to existing concepts and defining functions by example,
+akin to extending a programming language through new functions, but with two differences.
+Unlike usual programming languages, which require every definition to be in the core syntax,
+we use a \emph{semantic parser} to allow for relaxed syntax and natural linguistic styles.
+Second, the user always provides concrete values and the underlying system takes care of parameter inference
+through \emph{grammar induction}.
+These features make the overall system more accessible to non-programmers over time.
+% but it still requires them to consult the manual of the core-language from time to time.
+%
+% This is, however, only one part of the story.
+% More exciting is the fact that newly defined concepts can be shared across a community of users.
+% The idea is that people will likely have similar linguistic expressions for similar commands.
+% Hence, users who join a community later will only rarely need to define their own concepts.
+% Indeed, assuming that a robot works in a particular context, i.e. the same users
+% use it for an unbounded number of different but similar tasks, \tool gradually
+% becomes a pure natural language interface.
+%
+Moreover, each defined notion is available for use in the future and to different users.
+Thus, over time, \tool develops the common linguistic style and phraseology of its user base.
+
+We now describe the semantic parser and grammar induction.
+%
+% Our semantic parser and grammar induction modules reuse the corresponding
+% modules from Voxelurn~\cite{wangVoxelurn} and its
+% dependencies~\cite{zettlemoyerSentencesToLogicalForm,berantSempre}. We now
+% provide necessary background on these methods and explain the adaptations that we
+% introduced.
 
 
 \subsection{Semantic Parsing}
+Semantic parsing
+is the task of turning a natural language utterance ($x$) into a
+ranked list of formal representations (such as a logical formula, a formal specification, or a
+formal language expression) for actions~\cite{liangSemanticParsers}.
+For example, if $x = \text{``How much is three times four?''}$,
+a possible intermediate representation is $3*4$ and a
+resulting action is computing the product.
+In \tool, the role of the semantic parser is to turn an utterance $x$
+into a ranked list of temporal goals represented in the core language.
+The corresponding actions are the plans for these goals.
+\tool uses the interactive semantic parser presented in~\cite{wangVoxelurn}.
+The semantic parser outputs a ranked list because utterance parses may be ambiguous.
+In \tool, ambiguous derivations can occur
+due to ambiguities in the core language
+or due to conflicting definitions (e.g., by different users) for the same utterance.
+An example for the former is \lstinline{pick item not has color red and has shape circle}
+which could mean either
+\lstinline |pick item not {has color red and has shape circle} | or \lstinline |pick item {not has color red} and {has shape circle}|.
+The latter occurs when for one user
+\lstinline{take red} means \textit{pick up a red item from the
+current field}, but for the other \textit{find a red item and then pick it up}.
+
+To rank the potential parses, the parser uses a model $p_\theta(d | x, u)$
+which gives the probabilities over derivations $d$ given the utterance $x$ by the user $u$,
+using a set of parameters $\theta$.
+\tool then offers three best-ranked derived programs to the user who
+visually inspects their execution in simulation.
+Based on the user's choice, the model's parameters $\theta$ are updated.
+The set of features influencing the
+model include whether the rule comes from the core language or it is induced,
+whether the author of the rule is the same person as $u$, the user providing the
+utterance, etc.
+
+%\begin{figure}
+%\tikzstyle{vertex}=[draw,rectangle,minimum size=10pt,inner sep=2pt]
+%\tikzstyle{every node}=[font=\small]
+%\begin{tikzpicture}[font=\sffamily,thick, level/.style={sibling distance=47mm/#1}]
+%    \node[vertex] {Act: foreach point in Area Act }
+%        child {
+%            node[vertex] {Area: world?Prop}
+%            child {
+%                node[vertex] {Prop: Shape}
+%                child{
+%					node[vertex]{Shape: circle}
+%                }
+%            }
+%        }
+%        child {
+%                node[vertex] {Act: Act; Act}
+%                child { node[vertex] {Act: visit point} }
+%                child {
+%                    node[vertex] {Act: pick QItm}
+%                    child {
+%                    		node[vertex] {QItm: every item?Prop}
+%                    		child{
+%                 			node[vertex] {Prop: Shape}
+%				                child{
+%									node[vertex]{Shape: circle}
+%				                }
+%                    		}
+%                    	}
+%                }
+%            }
+%      ;
+%\end{tikzpicture}
+%\caption{Parse tree for the utterance \lstinline{gather circle}}
+%\label{fig:parseTree}
+%\end{figure}
+
+%The underlying semantic parser Sempre~\cite{berantSempre} allows to choose
+%between two natural language analyzers that perform a preprocessing step: a
+%simple natural language analyzer and a more involved one that uses Stanford
+%CoreNLP tools~\cite{manningCoreNLP}. In the current implementation we use the
+%simpler one.
+%\todo[inline]{ED: the above paragraph seems a bit out of place}
 
 
-\subsection{Example}
+\subsection{Grammar Induction}
+\label{subsec:grammarInduction}
 
+When the semantic parser is unable to parse an utterance,
+it asks the user to provide a definition.
+The grammar induction module generalizes the definition for a particular
+utterance into a new grammar rule.
+The grammar induction module receives an utterance $x$, and its definition $y$.
+For instance, in Example~\ref{ex:pick-3-items}, \lstinline{$x=$ pick 3 items} and
+\lstinline{$y =$ repeat 3 times pick item}.
+While $y$ must be fully parseable using the current grammar rules, only some parts of $x$ may be parseable.
+In order to induce new rules, we are interested in finding \textit{matches}---parseable spans appearing in both $x$ and $y$.
+A set of non-overlapping parsable spans is called a \emph{packing}.
 
-The task of putting all items of different colors to different rooms looks in the core language like this \\
-\begin{displayquote}
- \textit{foreach point in world containing item has color red \{ visit point; pick every item has color red\}; visit room1; drop every item has color red; foreach point in world containing item has color green \{ visit point; pick every item has color green\}; visit room2; drop every item has color green; foreach point in world containing item has color blue \{ visit point; pick every item has color blue\}; visit room3; drop every item has color blue; foreach point in world containing item has color yellow \{ visit point; pick every item has color yellow\}; visit room4; drop every item has color yellow} 
-\end{displayquote} 
- The same task could be accomplished using naturalization with 
-\begin{displayquote} 
- \textit{red to room1; green to room2; blue to room3; yellow to room4}
-\end{displayquote} 
-  with a single definition of \textit{red to room1} as
-  \begin{displayquote}
-  \textit{foreach point in world containing item has color red \{ visit point; pick every item has color red\}; visit room1; drop every item has color red}
-  \end{displayquote}.
-  If the next thing would be to put all items of different shapes to different rooms, it would again be possible to do it by 
-\begin{displayquote}  
-   \textit{ triangle to room1; circle to room2; square to room3}
-   \end{displayquote}
+New grammar rules are generated in one of the following three ways:
+\begin{itemize}
+ \item[\bf simple packing:] only primitive values are matched (in \tool those
+ are directions, numbers, colors, shapes and points). Once matched, a new rule
+ is introduced in the form of $C_y \rightarrow x[a_1/A_1,\ldots, a_k/A_k]$,
+ where $C_y$ is the category of $y$ and $x[a_1/A_1,\ldots, a_k/A_k]$ is the
+ utterance with all occurrences of primitive value $a_i$ replaced by its
+ category $A_i$. For Example~\ref{ex:pick-3-items} the only primitive match would be number 3. Therefore, a new rule will be added to the grammar \lstinline{Act -> pick Num items} with the same action specification as \lstinline{repeat Num times pick item}
+
+ \item[\bf best packing:] considers maximal packings, i.e. those that would
+ become overlapping by adding any other derivation. This method chooses the
+ packing that scores the best under the model $p_\theta$. Subsequently, a rule
+ induction (similar to the one described for simple packing) based on the
+ matching between $y$ and the found best maximal packing is performed.
+ As an example, take $x = \text{\lstinline{pick item has color green and shape circle}}$ and
+$y = \text{\lstinline{pick item has color green and has shape circle}}$. Two maximal packings of $x$ are $\alpha$ and $\beta$
+
+ \[
+ \ooalign{
+ $\overbrace{\text{pick item has color green}}^{A_\alpha}\text{and}\overbrace{\text{shape}}^{B_\alpha}\overbrace{\text{circle}}^{C_\alpha}$\cr
+ $\underbrace{\phantom{\text{pick}}}_{A_\beta}\underbrace{\phantom{\text{item has color green}}}_{B_\beta} \phantom{\text{and}} \underbrace{\phantom{\text{shape}}}_{C_\beta}\underbrace{\phantom{\text{circle}}}_{D_\beta}$\cr
+ }
+ \]
+%
+ and their matching parts in $y$
+
+ \[
+ \ooalign{
+ $\overbrace{\text{pick item has color green}}^{A_\alpha}\text{and \textcolor{red}{has}}\overbrace{\text{shape}}^{B_\alpha}\overbrace{\text{circle}}^{C_\alpha}$\cr
+ $\underbrace{\phantom{\text{pick}}}_{A_\beta}\underbrace{\phantom{\text{item has color green}}}_{B_\beta} \phantom{\text{and \textcolor{red}{has}}} \underbrace{\phantom{\text{shape}}}_{C_\beta}\underbrace{\phantom{\text{circle}}}_{D_\beta}$\cr
+ }
+ \]
+%
+The best of all maximal packings (there are more than just $\alpha$ and $\beta$) is $\beta$, so a new rule is produced
+\lstinline{Act $\to$ ItemAct item Fltr and Prop}
+
+ \item[\bf alignment:] Utterance $x$ and derivation $y$ are compared and if they align almost perfectly, a new rule is produced.
+As an example, for \lstinline{$x =$ throw item} and \lstinline{$y =$ drop item}, a new rule is added
+ \lstinline{ItemAct $\to$ throw $::=$ drop}.
+\end{itemize}
+%
+In order to avoid unintended generalizations, the implementation
+of grammar induction introduces many restrictions for the above three methods, 
+such as stopping the search after finding the
+first alignment match, and limiting the differences in size between matches.
+We dropped some of those restrictions in order to induce more rules,
+and observed no significant penalty on overall user experience.
+Unintended generalization happens nonetheless, but their effect is dampened when
+users choose between multiple offered behaviors, which dynamically updates the
+parameters of the model in the semantic parser.
+This effectively removes unintended generalizations from the system over time.
+
+We add one additional new improvement to the process of grammar induction.
+Sometimes users, especially those not very adept at programming in the core
+language, will define their utterances specific to the state of the world rather
+than in the most general form.
+In Example~\ref{ex:pick-3-items}, such a specific definition might be
+\lstinline{pick 3 items $=$ pick item; pick item; pick item}. This definition,
+however, will not generalize to
+\lstinline{pick 2 items} using any of the described methods.
+A solution would be to explore the space of semantically equivalent definitions and feed them as an additional
+input into the previous three methods to obtain more meaningful new rules.
+Currently, the exploration is limited only to rule-based search for hidden loops. In our
+example, the definition equivalent to \lstinline{pick item; pick item; pick item}
+would be \lstinline{repeat 3 times pick item}, which would generalize
+correctly. The mentioned changes turned out to be useful in practice.
