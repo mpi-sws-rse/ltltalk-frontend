@@ -21,7 +21,7 @@ class Information extends Component {
 			<div className="About">
 				<div>
 					<img src={MPI_SWS_logo} alt="example voxel structure" height={height} />
-					<p>The project temporarily named LASRE (Language Acquisition System in a Robotic Environment) is a web interface for controlling a robot in a simulated environment. The interface also provides the ability for the user to define new commands which the system learns and generalizes off of.</p>
+					<p>The project temporarily named LASRE (Language Acquisition System in a Robotic Environment) is a web interface for controlling a robot in a simulated environment. The interface also provides the ability for the user to define new commands which the system learns and generalizes off of.</p> <p><a href="https://wiki.mpi-klsb.mpg.de/documentation/WebResources/Imprint">imprint </a> and <a href="https://www.mpi-sws.org/data-protection"> data protection</a> info</p>
         <h2>Tutorial</h2>
           <ul>
             <li>Please complete the step-by-step tutorial provided <Link to={{ pathname: "/tutorial" }}>here</Link></li>
