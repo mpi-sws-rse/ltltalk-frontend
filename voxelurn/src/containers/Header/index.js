@@ -10,7 +10,7 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
   <div className="Header">
     <div className="Header-logo">
       <span>Flipper</span>
-      <span className="Header-sublogo">an MPI-SWS project</span>
+      <span className="Header-sublogo">talk to your robot</span>
       <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/imprint/">[Imprint]</a> </span>
       <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/data-protection/">[Data protection]</a> </span>
     </div>

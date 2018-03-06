@@ -21,14 +21,24 @@ class Information extends Component {
 			<div className="About">
 				<div>
 					<img src={MPI_SWS_logo} alt="example voxel structure" height={height} />
-					<p>Flipper is a natural language  interface for defining task for a robot. If Flipper can not understand your command, 
+					<p>Flipper is a natural language  robot interface. If Flipper can not understand your command, 
 					you can define it using its <Link to={{pathname: "/syntaxsemantics"}}>core language</Link>. Flipper then learns from your definition 
-					and generalizes new rules for future use.</p>
-        <h2>Tutorial</h2>
+					and generalizes new rules for future use (for you and the others).</p>
+		<h2>Quick start</h2>
+		<ul>
+			<li> open the <Link to={{pathname: "/build"}}> Play tab</Link> and write a command <b>visit red</b> </li>
+			<li> that command is not the part of core language. Unless somebody already naturalized it, Flipper won't know what to do </li>
+			<li> write <b>visit world containing item has color red</b>. Pres 'try', 'accept' and finally 'finish definition' </li>
+			<li> next time you (or somebody else) write <b>visit triangle</b>, Flipper will understand you </li>
+            
+		</ul>
+        <h2>More</h2>
           <ul>
-            <li>Please complete the step-by-step tutorial provided <Link to={{ pathname: "/tutorial" }}>here</Link></li>
-            <li>You may also find it useful to reference a <Link to={{ pathname: "/reference" }}>list of example commands</Link></li>
-            <li>After the tutorial, try to come up with new, complex commands!</li>
+          <li>After finishing <Link to = {{pathname: "/tutorial"}}>the tutorial</Link>, try to solve <Link to={{ pathname: "/tasks" }}>these tasks</Link></li>
+          <li> For the details on Flipper, check out the paper</li>
+          <li>Check the implementation in github repository </li>
+          <li>Flipper is based on the concept of naturalizing a formal language, described in <a href="http://www.voxelurn.com/#/about">Voxelurn building interface</a> </li>
+          
           </ul>
         </div></div>
 		)
