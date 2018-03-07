@@ -28,7 +28,7 @@ class Information extends Component {
 		<ul>
 			<li> open the <Link to={{pathname: "/build"}}> Play tab</Link> and write a command <b>visit red</b> </li>
 			<li> that command is not the part of core language. Unless somebody already naturalized it, Flipper won't know what to do </li>
-			<li> write <b>visit world containing item has color red</b>. Pres 'try', 'accept' and finally 'finish definition' </li>
+			<li> write <b>visit world containing item has color red</b>. Pres 'try', 'accept' and finally 'finish definition' (as shown in this short <a href="https://youtu.be/4ayT8Iktqm8">video demo</a>) </li>
 			<li> next time you (or somebody else) write <b>visit triangle</b>, Flipper will understand you </li>
             
 		</ul>
