@@ -16,11 +16,11 @@ class Information extends Component {
    * <Link to={{ pathname: "/community", query: this.props.query }} activeClassName="active" target="_blank">voxel structures</Link>.{' '}
    */
 	render() {
-		const height = "150px";
+		const height = "50px";
 		return (
 			<div className="About">
 				<div>
-					<img src={MPI_SWS_logo} alt="example voxel structure" height={height} />
+					<img src={MPI_SWS_logo} alt="MPI-SWS logo" height={height} />
 					<p>Flipper is a natural language  robot interface. If Flipper can not understand your command, 
 					you can define it using its <Link to={{pathname: "/syntaxsemantics"}}>core language</Link>. Flipper then learns from your definition 
 					and generalizes new rules for future use (for you and the others).</p>
@@ -35,8 +35,8 @@ class Information extends Component {
         <h2>More</h2>
           <ul>
           <li>After finishing <Link to = {{pathname: "/tutorial"}}>the tutorial</Link>, try to solve <Link to={{ pathname: "/tasks" }}>these tasks</Link></li>
-          <li> For the details on Flipper, check out the paper</li>
-          <li>Check the implementation in github repository </li>
+          <li> For the details on Flipper, check out <a href="https://arxiv.org/abs/1803.02238">the paper</a></li>
+          <li>Check the implementation in <a href="https://github.com/mpi-sws-rse/flipper">this github repository </a></li>
           <li>Flipper is based on the concept of naturalizing a formal language, described in <a href="http://www.voxelurn.com/#/about">Voxelurn building interface</a> </li>
           
           </ul>
