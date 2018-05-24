@@ -11,8 +11,8 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
     <div className="Header-logo">
       <span>Flipper</span>
       <span className="Header-sublogo">talk to your robot</span>
-      <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/imprint/">[Imprint]</a> </span>
-      <span className="Header-subsublogo"> <a href="https://www.mpi-sws.org/data-protection/">[Data protection]</a> </span>
+      <span className="Header-subsublogo"> <a href="https://imprint.mpi-klsb.mpg.de/sws/flipper">[Imprint]</a> </span>
+      <span className="Header-subsublogo"> <a href="https://data-protection.mpi-klsb.mpg.de/sws/flipper">[Data protection]</a> </span>
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></Link>
