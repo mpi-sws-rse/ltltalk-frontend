@@ -154,6 +154,7 @@ const Actions = {
   acceptPath: (text, selectedResp) => {
     return (dispatch, getState) => {
       const { responses, history } = getState().world
+      const { sessionId } = getState().user
 
       const selected = responses[selectedResp]
 
@@ -178,6 +179,10 @@ const Actions = {
 
       selected.worldMap = currentState.worldMap;
       selected.robot = currentState.robot;
+      
+      const query = `(:accept ${JSON.stringify(text)} ${selected.formulas.map(f => JSON.stringify(f)).join(" ")})`
+      SEMPREquery({ q: query, sessionId: sessionId }, () => { })
+
 
       dispatch({
         type: Constants.ACCEPT,
@@ -188,19 +193,18 @@ const Actions = {
     }
   },
 
-  acceptNone: (text) => {
-    return (dispatch, getState) => {
-      const { sessionId } = getState().user
-      const { responses } = getState().world
-
-      const formulas = responses.reduce((acc, r) => acc.concat(r.formulas), [])
-
-      // Do I need to processMacros() here?
-      const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
-      SEMPREquery({ q: query, sessionId: sessionId }, () => { })
-
-      dispatch(Logger.log({ type: "acceptNone", msg: { query: text } }))
-    }
+  acceptNone: (text) => 
+  {
+	  return (dispatch, getState) => {
+		  const { sessionId } = getState().user
+		  const { responses } = getState().world
+		  const formulas = responses.reduce((acc, r) => acc.concat(r.formulas), [])
+		
+		  // Do I need to processMacros() here?
+		  const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
+		  SEMPREquery({ q: query, sessionId: sessionId }, () => { })
+		  dispatch(Logger.log({ type: "acceptNone", msg: { query: text } }))
+	  }
   },
 
   define: (idx) => {
