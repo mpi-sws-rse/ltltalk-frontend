@@ -1,9 +1,10 @@
 .SidePanel {
   /*top: 50px;*/
   right: 0;
+  top: 60%;
   width: 350px !important;
   background-color: #FFF;
-  height: 350px;
+  height: auto;
   position: absolute;
   box-shadow: 0 4px 8px rgba(51,51,51,0.15);
   display: flex;
