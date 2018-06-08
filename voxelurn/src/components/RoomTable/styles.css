@@ -4,6 +4,8 @@
   text-align: left;
   margin-top: 4%;
   background-color: white;
+  position: absolute;
+  left: 10%;
 }
 
 .RoomTable table {
