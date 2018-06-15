@@ -39,20 +39,18 @@ class SharePanel extends Component {
           </div>
         </div>
         <div className="SidePanel-content">
-          <div>
             <div className="SharePanel-buttons">
                 <div className="yourstructs">
                   <table>
                     <tbody>
                     <tr>
                       <td><button id="controlPanel-clear" onClick={() => this.clear()}>Reset</button></td>
-                      <td><div>Reset world to initial state. <br /> (Learned commands are remembered)</div></td>
+                      <td><div className="Explanation">Reset world to initial state. <br /> (Learned commands are remembered)</div></td>
                     </tr>
                     </tbody>
                   </table>
                 </div>
             </div>
-          </div>
         </div>
       </div>
     )

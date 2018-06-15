@@ -1,10 +1,10 @@
 .SidePanel {
   /*top: 50px;*/
   right: 0;
-  top: 60%;
-  width: 350px !important;
+  top: 60% !important;
+  width: 340px !important;
   background-color: #FFF;
-  height: 160px;
+  height: auto;
   position: absolute;
   box-shadow: 0 4px 8px rgba(51,51,51,0.15);
   display: flex;
@@ -27,7 +27,7 @@
   align-items: center;
   height: 40px;
   border-bottom: 1px solid #efefef;
-  justify-content: space-between;
+  justify-content: space-between;  
 }
 
 .Target-struct {
@@ -90,10 +90,18 @@
 }
 
 .SidePanel-content {
-  padding: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
+  height: auto;
   align-content: space-between;
-  align-items: space-between;
+  align-items: space-between;  
+}
+
+.Explanation{
+	font-size: 85%;
+	font-weight:500;
 }
