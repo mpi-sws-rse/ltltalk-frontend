@@ -16,6 +16,7 @@ import StatusMsg from "components/StatusMsg"
 import Target from "components/Target"
 import SharePanel from "components/SharePanel"
 import Win from "components/Win"
+import {DictionaryPanel} from "components/Dictionary"
 
 import "./styles.css"
 
@@ -264,6 +265,7 @@ class Build extends Component {
             </div>
           </div>
         </div>
+       <DictionaryPanel />
         {task === "target" ?
           <Target target={this.state.target} possibleSteps={this.state.possSteps} />
           :
