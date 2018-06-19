@@ -93,11 +93,11 @@ const Actions = {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
-          //console.log("sending query "+query);
+          console.log("sending query "+query);
           return SEMPREquery(cmds)
             .then((response) => {
-            	//console.log("received response: "+JSON.stringify(response));
-            	//console.log(response);
+            	console.log("received response: "+JSON.stringify(response));
+            	console.log(response);
               if (!response)
                 throw new Error("empty_response");
 
@@ -107,6 +107,7 @@ const Actions = {
               }
 
               const formval = parseSEMPRE(response.candidates)
+              console.log(formval);
              
 
               if (formval === null || formval === undefined) {
@@ -118,7 +119,7 @@ const Actions = {
 
                 const responses = formval;
              
-
+                console.log(query);
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
                 dispatch({
                   type: Constants.TRY_QUERY,
@@ -198,7 +199,7 @@ const Actions = {
       // Do I need to processMacros() here?
       const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
       SEMPREquery({ q: query, sessionId: sessionId }, () => { })
-
+      
       dispatch(Logger.log({ type: "acceptNone", msg: { query: text } }))
     }
   },
@@ -363,7 +364,46 @@ const Actions = {
       })
       persistStore(getStore(), { whitelist: ['world', 'user'] }, () => { }).purge()
     }
-  }
+  },
+  
+  dictionary: () => {
+	  return (dispatch, getState) => {
+	      const { sessionId } = getState().user
+		  const sempreQuery= "(:dictionary)"
+			  
+		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
+		    .then((r) => {
+		    	console.log("received dictionary")
+            	console.log(r);
+            	
+		        if (r.lines && r.lines.length > 0) {
+		            /* Display errors and quit if there errors */
+		            alert(`There were error(s): ${r.lines.join(", ")}`)
+		            return
+		        }
+		         
+		        const dictionary = JSON.parse(r.stats.dictionary)
+		        dispatch({
+		        	type: Constants.DICTIONARY,
+		        	dictionary: dictionary
+				})
+			})
+	  }
+  },
 }
+
+const json =  ('[{"rhs":"gather $Color","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":1},'
+		+   '{"rhs":"gather $Property","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":2},'
+		+   '{"rhs":"drop all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":3},'
+		+   '{"rhs":"$ItemActionFragment all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":4},'
+		+   '{"rhs":"all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":5},'
+		+   '{"rhs":"pick all","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":6},'
+		+   '{"rhs":"$ItemActionFragment $CountedItem","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":7},'
+		+   '{"rhs":"go $Direction","uid":"6yyw176mqx","head":"go left","body":"move left","index":8},'
+		+   '{"rhs":"go $Number $Direction","uid":"6yyw176mqx","head":"go 4 left","body":"repeat 4 times go left","index":9},'
+		+   '{"rhs":"line $Direction","uid":"6yyw176mqx","head":"line left","body":"strict { while robot has item { move left ; drop item } }","index":10},'
+		+   '{"rhs":"gather $Property $Property","uid":"fqnl8usll7","head":"gather red triangle","body":"foreach point in world containing item has color red and has shape triangle { visit point ; pick item has color red and has shape triangle }","index":11},'
+		+   '{"rhs":"drop all $Color","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":12},'
+		+   '{"rhs":"$ItemActionFragment all $Property","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":13}]')
 
 export default Actions

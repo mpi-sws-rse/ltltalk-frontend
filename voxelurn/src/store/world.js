@@ -19,7 +19,8 @@ const initialState = {
   //popup: { active: true, text: "No error yet!" },
   defining: false,
   //exampleQuery: "add red 3 times",
-  defineN: null
+  defineN: null,
+  dictionary: [],
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -109,6 +110,9 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, history: trimmedHistory, query: initialState.query, status: initialState.status, responses: initialState.responses }
     case Constants.CLEAR:
       return initialState
+      
+    case Constants.DICTIONARY:
+      return { ...state, dictionary: action.dictionary}
     default:
       return state
   }

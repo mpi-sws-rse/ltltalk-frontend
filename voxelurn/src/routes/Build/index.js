@@ -16,7 +16,7 @@ import StatusMsg from "components/StatusMsg"
 import Target from "components/Target"
 import SharePanel from "components/SharePanel"
 import Win from "components/Win"
-import {DictionaryPanel} from "components/Dictionary"
+import DictionaryPanel from "components/Dictionary"
 
 import "./styles.css"
 

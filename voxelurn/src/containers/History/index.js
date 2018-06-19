@@ -156,6 +156,7 @@ class History extends Component {
 
   define(idx) {
     this.props.dispatch(Actions.define(idx))
+    this.props.dispatch(Actions.dictionary()) //added to update the dictionary after accepting a definition
   }
 
   render() {

@@ -4,7 +4,7 @@
 
 import React, { Component, PropTypes } from "react"
 import classnames from "classnames"
-import Logger from "actions/logger"
+import Actions from "actions/world"
 import { connect } from "react-redux"
 
 
@@ -12,21 +12,19 @@ import "./styles.css"
 
 class DictionaryPanel extends Component {
 	static propTypes = {
-	    dictionary: PropTypes.array,
-	    
-	    status: PropTypes.string,
-	    query: PropTypes.string,
 	    dispatch: PropTypes.func,
+	    dictionary: PropTypes.array
 	 }
 	
 	constructor(props) {
 		super(props)
 		this.state = ({
-			collapsed: false,
+			collapsed: true,
 		})
 	}
 	
-
+	//TODO add a shouldComponentUpdate
+	
 	render() {
 		return (
 			<div className={classnames("Dictionary", {"collapsed": this.state.collapsed})}>
@@ -36,24 +34,35 @@ class DictionaryPanel extends Component {
 		          	this.setState({ collapsed: !this.state.collapsed })}
 		          className="Dictionary-header-arrow">
 		            {(() => {
-		              if (this.state.collapsed) return (<span>&larr;</span>)
-		              return (<span>&rarr;</span>)
+		              if (this.state.collapsed) {
+		            	  return (<span>&larr;</span>)
+		              }
+		              else {
+		          		  this.props.dispatch(Actions.dictionary())
+		            	  return (<span>&rarr;</span>)
+		              }
 		            })()}
 		          </div>
 		        </div>
-		        <Dictionary />
+		        <Dictionary dictionary={this.props.dictionary}/>
 			</div>
 		)
 	}
 }
 
-class Dictionary extends Component{
+export class Dictionary extends Component{
+	static PropTypes= {
+		dictionary: PropTypes.array
+	}
+	
 	constructor(props) {
 		super(props)
 		this.state={
-			dictionary: JSON.parse(json),
+			dictionary: this.props.dictionary,
 		}
+		console.log(this.state)
 	}
+
 	
 	getDictionaryCells(){
 		const dictionary = this.state.dictionary.slice();
@@ -63,9 +72,14 @@ class Dictionary extends Component{
 			)
 		}) 
 		return arr
-	}
+	} 
+	
+	//look at componentDidMount to affect the state after rendering 
+	//because even though the props are effectively passed with the dictionary,
+	//the constructor is not called anymore after first rendering
 	
 	render(){
+		console.log(this.state)
 		return (
 				<div className="Dictionary-content">
 		        	<table width="100%">
@@ -81,7 +95,7 @@ class Dictionary extends Component{
 	}
 }
 
-class DictionaryElement extends Component{
+class DictionaryElement extends Component{	
 	constructor(props){
 		super(props)
 		this.handleHovering = this.handleHovering.bind(this)
@@ -104,15 +118,6 @@ class DictionaryElement extends Component{
 			index: this.state.index,
 			isHovering: !this.state.isHovering,
 		}))
-	}
-	
-	getInnerText(){
-		if (this.state.isHovering) {
-			return (this.state.head + "" + this.state.body)
-		}
-		else {
-			return (this.state.rhs)
-		}
 	}
 	
 	render () {
@@ -140,39 +145,8 @@ class DictionaryElement extends Component{
 		
 	}
 }
-
 const mapStateToProps = (state) => ({
-	dictionary: state.logger.dictionary,
+  dictionary: state.world.dictionary
 })
 
-export default connect(mapStateToProps)(Dictionary)
-export {DictionaryPanel}
-
-
-const json =  ('[{"rhs":"gather $Color","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":1},'
-+   '{"rhs":"gather $Property","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":2},'
-+   '{"rhs":"drop all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":3},'
-+   '{"rhs":"$ItemActionFragment all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":4},'
-+   '{"rhs":"all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":5},'
-+   '{"rhs":"pick all","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":6},'
-+   '{"rhs":"$ItemActionFragment $CountedItem","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":7},'
-+   '{"rhs":"go $Direction","uid":"6yyw176mqx","head":"go left","body":"move left","index":8},'
-+   '{"rhs":"go $Number $Direction","uid":"6yyw176mqx","head":"go 4 left","body":"repeat 4 times go left","index":9},'
-+   '{"rhs":"line $Direction","uid":"6yyw176mqx","head":"line left","body":"strict { while robot has item { move left ; drop item } }","index":10},'
-+   '{"rhs":"gather $Property $Property","uid":"fqnl8usll7","head":"gather red triangle","body":"foreach point in world containing item has color red and has shape triangle { visit point ; pick item has color red and has shape triangle }","index":11},'
-+   '{"rhs":"drop all $Color","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":12},'
-+   '{"rhs":"$ItemActionFragment all $Property","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":13}]')
-
-//[{"rhs":"gather $Color","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":1},
-//{"rhs":"gather $Property","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":2},
-//{"rhs":"drop all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":3},
-//{"rhs":"$ItemActionFragment all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":4},
-//{"rhs":"all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":5},
-//{"rhs":"pick all","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":6},
-//{"rhs":"$ItemActionFragment $CountedItem","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":7},
-//{"rhs":"go $Direction","uid":"6yyw176mqx","head":"go left","body":"move left","index":8},
-//{"rhs":"go $Number $Direction","uid":"6yyw176mqx","head":"go 4 left","body":"repeat 4 times go left","index":9},
-//{"rhs":"line $Direction","uid":"6yyw176mqx","head":"line left","body":"strict { while robot has item { move left ; drop item } }","index":10},
-//{"rhs":"gather $Property $Property","uid":"fqnl8usll7","head":"gather red triangle","body":"foreach point in world containing item has color red and has shape triangle { visit point ; pick item has color red and has shape triangle }","index":11},
-//{"rhs":"drop all $Color","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":12},
-//{"rhs":"$ItemActionFragment all $Property","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":13}]
+export default connect(mapStateToProps)(DictionaryPanel)
