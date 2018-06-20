@@ -23,6 +23,17 @@ class DictionaryPanel extends Component {
 		})
 	}
 	
+	shouldComponentUpdate(nextProps, nextState){
+		if (this.props.dictionary.length !== nextProps.dictionary.length ||
+			this.state.collapsed !== nextState.collapsed) {
+			return true
+			
+		}
+		else{
+			return false
+		}
+	}
+	
 	//TODO add a shouldComponentUpdate
 	
 	render() {
@@ -44,7 +55,7 @@ class DictionaryPanel extends Component {
 		            })()}
 		          </div>
 		        </div>
-		        <Dictionary dictionary={this.props.dictionary}/>
+		        {!this.state.collapsed && <Dictionary dictionary={this.props.dictionary}/>}
 			</div>
 		)
 	}
@@ -58,14 +69,21 @@ export class Dictionary extends Component{
 	constructor(props) {
 		super(props)
 		this.state={
-			dictionary: this.props.dictionary,
+			dictionary: props.dictionary,
 		}
-		console.log(this.state)
 	}
-
+	
+	shouldComponentUpdate(nextProps){
+		if (this.props.dictionary.length !== nextProps.dictionary.length) {
+			return true
+		}
+		else{
+			return false
+		}
+	}
 	
 	getDictionaryCells(){
-		const dictionary = this.state.dictionary.slice();
+		const dictionary = this.props.dictionary.slice();
 		const arr = dictionary.map((el) => {
 			return (
 				<DictionaryElement key={el.index} rule={el} />
@@ -73,13 +91,8 @@ export class Dictionary extends Component{
 		}) 
 		return arr
 	} 
-	
-	//look at componentDidMount to affect the state after rendering 
-	//because even though the props are effectively passed with the dictionary,
-	//the constructor is not called anymore after first rendering
-	
+
 	render(){
-		console.log(this.state)
 		return (
 				<div className="Dictionary-content">
 		        	<table width="100%">
@@ -119,6 +132,7 @@ class DictionaryElement extends Component{
 			isHovering: !this.state.isHovering,
 		}))
 	}
+
 	
 	render () {
 		if (this.state.isHovering) {

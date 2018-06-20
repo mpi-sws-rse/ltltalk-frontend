@@ -373,9 +373,6 @@ const Actions = {
 			  
 		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
 		    .then((r) => {
-		    	console.log("received dictionary")
-            	console.log(r);
-            	
 		        if (r.lines && r.lines.length > 0) {
 		            /* Display errors and quit if there errors */
 		            alert(`There were error(s): ${r.lines.join(", ")}`)
