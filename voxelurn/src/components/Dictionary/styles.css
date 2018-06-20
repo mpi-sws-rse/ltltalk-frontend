@@ -12,22 +12,26 @@
   overflow: hidden;
 }
 
+@media (max-height: 600px) {
+  .Dictionary {
+    top: 50px;
+  }
+}
+
 .Dictionary-header {
+  font-size: 1.8rem;
+  font-weight: 900;
   padding: 10px 15px;
   display: flex;
   align-items: center;
   height: 40px;
+  min-height: 40px;
   border-bottom: 1px solid #efefef;
   justify-content: space-between;
 }
 
 .Dictionary-header-arrow{
 	cursor: pointer;
-}
-
-.Dictionary-header-name{
-	font-size: 1.8rem;
-  	font-weight: 900;
 }
 
 .Dictionary-content{

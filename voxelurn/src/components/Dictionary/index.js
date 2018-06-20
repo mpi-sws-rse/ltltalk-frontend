@@ -22,7 +22,8 @@ class DictionaryPanel extends Component {
 			collapsed: true,
 		})
 	}
-	
+
+	//force update when an induced rule is added
 	shouldComponentUpdate(nextProps, nextState){
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
 			this.state.collapsed !== nextState.collapsed) {
@@ -59,7 +60,7 @@ class DictionaryPanel extends Component {
 	}
 }
 
-export class Dictionary extends Component{
+class Dictionary extends Component{
 	static PropTypes= {
 		dictionary: PropTypes.array
 	}
@@ -80,6 +81,11 @@ export class Dictionary extends Component{
 		}
 	}
 	
+	//scroll to top after update
+	componentDidUpdate(){
+		this.refs.list.scrollTop = 0
+	}
+	
 	getDictionaryCells(){
 		const dictionary = this.props.dictionary.slice();
 		const arr = dictionary.map((el) => {
@@ -92,7 +98,7 @@ export class Dictionary extends Component{
 
 	render(){
 		return (
-				<div className="Dictionary-content">
+				<div className="Dictionary-content" ref="list">
 		        	<table width="100%">
 		        		<tbody>
 			        	<tr className="Explanation">

@@ -370,7 +370,9 @@ const Actions = {
 	  return (dispatch, getState) => {
 	      const { sessionId } = getState().user
 		  const sempreQuery= "(:dictionary)"
-			  
+		  	  
+		  console.log("Dictionary request")
+
 		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
 		    .then((r) => {
 		        if (r.lines && r.lines.length > 0) {
