@@ -33,9 +33,7 @@ class DictionaryPanel extends Component {
 			return false
 		}
 	}
-	
-	//TODO add a shouldComponentUpdate
-	
+		
 	render() {
 		return (
 			<div className={classnames("Dictionary", {"collapsed": this.state.collapsed})}>
