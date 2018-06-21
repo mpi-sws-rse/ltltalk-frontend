@@ -13,9 +13,7 @@ import RoomTable from "components/RoomTable"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
-import Target from "components/Target"
 import SharePanel from "components/SharePanel"
-import Win from "components/Win"
 import DictionaryPanel from "components/Dictionary"
 
 import "./styles.css"
@@ -266,14 +264,7 @@ class Build extends Component {
           </div>
         </div>
        <DictionaryPanel />
-        {task === "target" ?
-          <Target target={this.state.target} possibleSteps={this.state.possSteps} />
-          :
-          <SharePanel />
-        }
-        {this.state.win &&
-          <Win targetIdx={this.state.targetIdx} nSteps={history.length} nBlocks={currentState.length} restart={() => this.props.dispatch(Actions.clear())} />
-        }
+       <SharePanel />
       </div>
     );
   }
