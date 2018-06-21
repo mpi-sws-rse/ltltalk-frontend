@@ -13,7 +13,7 @@ import RoomTable from "components/RoomTable"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
-import SharePanel from "components/SharePanel"
+import ResetPanel from "components/ResetPanel"
 import DictionaryPanel from "components/Dictionary"
 
 import "./styles.css"
@@ -264,7 +264,7 @@ class Build extends Component {
           </div>
         </div>
        <DictionaryPanel />
-       <SharePanel />
+       <ResetPanel />
       </div>
     );
   }
