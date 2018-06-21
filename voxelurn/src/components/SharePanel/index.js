@@ -9,43 +9,26 @@ import "./styles.css"
 class SharePanel extends Component {
   constructor(props) {
     super(props)
-
-    // changed for debugging
-    this.state = { collapsed: true }
   }
 
-  share() {
-    this.props.dispatch(Actions.share())
-  }
+
 
   clear() {
     this.props.dispatch(WorldActions.clear())
   }
 
-  deleteStruct() {
-    this.props.dispatch(Actions.deleteStruct(this.refs.deleteSelect.value))
-  }
 
   render() {
     return (
-      <div className={classnames("SidePanel", { "collapsed": this.state.collapsed })}>
-        <div className="SidePanel-header">
-          <span className="SidePanel-header-name">Control Panel</span>
-          <div onClick={() => this.setState({ collapsed: !this.state.collapsed })} className="SidePanel-header-arrow">
-            {(() => {
-              if (this.state.collapsed) return (<span>&larr;</span>)
-              return (<span>&rarr;</span>)
-            })()}
-          </div>
-        </div>
+      <div className="SidePanel">
         <div className="SidePanel-content">
             <div className="SharePanel-buttons">
                 <div className="yourstructs">
                   <table>
                     <tbody>
                     <tr>
+                      <td className="Explanation">Reset world to initial state. <br /> (Learned commands are remembered)</td>
                       <td><button id="controlPanel-clear" onClick={() => this.clear()}>Reset</button></td>
-                      <td><div className="Explanation">Reset world to initial state. <br /> (Learned commands are remembered)</div></td>
                     </tr>
                     </tbody>
                   </table>
