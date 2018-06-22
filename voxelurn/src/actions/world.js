@@ -96,7 +96,7 @@ const Actions = {
           console.log("sending query "+query);
           return SEMPREquery(cmds)
             .then((response) => {
-            	console.log("received response: "+JSON.stringify(response));
+            	//console.log("received response: "+JSON.stringify(response));
             	console.log(response);
               if (!response)
                 throw new Error("empty_response");
@@ -379,10 +379,10 @@ const Actions = {
 		            /* Display errors and quit if there errors */
 		            alert(`There were error(s): ${r.lines.join(", ")}`)
 		            return
-		        }
-		         
+                }
 		        const dictionary = JSON.parse(r.stats.dictionary)
-		        dispatch({
+                //console.log(dictionary)
+                dispatch({
 		        	type: Constants.DICTIONARY,
 		        	dictionary: dictionary
 				})
