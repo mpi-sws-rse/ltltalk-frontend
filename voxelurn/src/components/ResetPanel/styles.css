@@ -8,9 +8,7 @@
 }
 
 .SharePanel-buttons .yourstructs {
-  //width: 200px;
   width: 100%;
-  //font-size: 0.7em;
 }
 
 .SharePanel-buttons .yourstructs button {
@@ -31,7 +29,6 @@
 }
 
 #controlPanel-clear {
-  //background-color: rgb(200,150,150);
   background-color: rgb(79, 148, 205);
   color: white;
 }

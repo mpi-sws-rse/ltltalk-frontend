@@ -15,33 +15,54 @@ class DictionaryPanel extends Component {
 	    dispatch: PropTypes.func,
 	    dictionary: PropTypes.array
 	 }
-	
 	constructor(props) {
 		super(props)
+		this.reload = this.reload.bind(this)
 		this.state = ({
 			collapsed: true,
+			reload: false
 		})
 	}
 
-	//force update when an induced rule is added
+	/* force update when an induced rule is added
+	 * when the dictionary is opened or closed
+	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
-			this.state.collapsed !== nextState.collapsed) {
+			this.state.collapsed !== nextState.collapsed ||
+			nextState.reload) {
+				if (nextState.reload){
+					this.setState({
+						collapsed: nextState.collapsed,
+						reload: false
+					})
+				}
 			return true
 		}
 		else{
 			return false
 		}
 	}
-		
+	
+	//force rerendering by changing the state
+	reload() {
+		this.setState({
+			collapsed: this.state.collapsed,
+			reload: true
+		})
+	}
+
 	render() {
 		return (
 			<div className={classnames("Dictionary", {"collapsed": this.state.collapsed})}>
 				<div className="Dictionary-header">
+				  <div id="dictionaryReload" onClick={this.reload}>
+				  	 &#x21BA;
+				  </div>
 		          <span className="Dictionary-header-name">Dictionary</span>
 		          <div onClick={() => 
 		          	this.setState({ collapsed: !this.state.collapsed })}
-		          className="Dictionary-header-arrow">
+		          	className="Dictionary-header-arrow">
 		            {(() => {
 		              if (this.state.collapsed) {
 		            	  return (<span>&larr;</span>)
@@ -74,16 +95,13 @@ class Dictionary extends Component{
 		}
 	}
 	
+
 	shouldComponentUpdate(nextProps, nextState){
 		//dictionary changed
 		if (this.props.dictionary.length !== nextProps.dictionary.length) {
 			return true
 		}
-		//cell has been clicked
-		else if (this.state.prevClick !== nextState.prevClick) {
-			return true
-		}
-		//cell has been clicked
+		//a cell has been clicked
 		else if (this.state.prevClick !== nextState.prevClick) {
 			return true
 		}
@@ -100,10 +118,12 @@ class Dictionary extends Component{
 		let prevClick = this.state.prevClick
 		//there is an element that is already expanded
 		if (prevClick >0) {
+			//expanded cell has been clicked, so we need to reset the cell
 			if (prevClick === i) {
 				clicked[prevClick] = false
 				prevClick = -1
 			} 
+			//a different cell has been clicked, so expand that cell and reset the first one
 			else {
 				clicked[prevClick] = false
 				clicked[i] = true
@@ -121,16 +141,18 @@ class Dictionary extends Component{
 		})
 	}
 	
-	//scroll to top after update
+	//scroll to top after adding a rule
 	componentDidUpdate(prevProps){
 		if (this.props.dictionary.length !== prevProps.dictionary.length){
-			this.refs.list.scrollTop = 0	
-			const clicked = this.state.clicked
-			clicked[this.state.prevClick] = false
-			this.setState({
-				clicked: clicked,
-				prevClick: -1
-			})
+			this.refs.list.scrollTop = 0
+			if (this.state.prevClick > 0) {	
+				const clicked = this.state.clicked
+				clicked[this.state.prevClick] = false
+				this.setState({
+					clicked: clicked,
+					prevClick: -1
+				})
+			}
 		}
 	}
 	
@@ -150,7 +172,6 @@ class Dictionary extends Component{
 	} 
 
 	render(){
-
 		return (
 				<div className="Dictionary-content" ref="list">
 		        	<table>

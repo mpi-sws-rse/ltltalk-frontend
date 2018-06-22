@@ -74,7 +74,8 @@
 }
 
 .Dictionary.collapsed .Dictionary-header-name,
-.Dictionary.collapsed .Dictionary-content{
+.Dictionary.collapsed .Dictionary-content,
+.Dictionary.collapsed #dictionaryReload{
 	display: none;
 }
 
@@ -89,4 +90,11 @@ td.head{
 
 td.body{
   width: 60% !important;
+}
+
+#dictionaryReload {
+  float: right;
+  height: auto;
+  cursor: pointer;
+  text-align: right;
 }
