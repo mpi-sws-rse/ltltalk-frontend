@@ -99,7 +99,7 @@ class Dictionary extends Component{
 	render(){
 		return (
 				<div className="Dictionary-content" ref="list">
-		        	<table width="100%">
+		        	<table>
 		        		<tbody>
 			        	<tr className="Explanation">
 			        		<td colSpan="2">Hover over a rule to see an example</td>
@@ -115,7 +115,7 @@ class Dictionary extends Component{
 class DictionaryElement extends Component{	
 	constructor(props){
 		super(props)
-		this.handleHovering = this.handleHovering.bind(this)
+		this.handleClick = this.handleClick.bind(this)
 		this.state={
 			rhs: this.props.rule.rhs,
 			uid: this.props.rule.uid,
@@ -126,7 +126,7 @@ class DictionaryElement extends Component{
 		}
 	}
 	
-	handleHovering() {
+	handleClick() {
 		this.setState(({
 			rhs: this.state.rhs,
 			uid: this.state.uid,
@@ -139,28 +139,21 @@ class DictionaryElement extends Component{
 
 	
 	render () {
-		if (this.state.isHovering) {
+		return (
+			<tr 
+				className="DictionaryElement"
+				onClick={this.handleClick}
+			>
+			{(() => {if (this.state.isHovering) {
 			return(
-			<tr 
-				className="DictionaryElement"
-				onMouseEnter={this.handleHovering}
-				onMouseLeave={this.handleHovering}
-			>
-				<td colSpan="1" width="40%">{this.state.head}</td>
-				<td colSpan="1" width="60%">{this.state.body}</td>
-			</tr>)
-		}
-		else {
+				[<td className="head" colSpan="1" key="head">{this.state.head}</td>,
+				<td className="body" colSpan="1" key="body">{this.state.body}</td>]
+			)}
+			else {
 			return (
-			<tr 
-				className="DictionaryElement"
-				onMouseEnter={this.handleHovering}
-				onMouseLeave={this.handleHovering}
-			>
 				<td colSpan="2">{this.state.rhs}</td>
+			)}})()}
 			</tr>)
-		}
-		
 	}
 }
 const mapStateToProps = (state) => ({
