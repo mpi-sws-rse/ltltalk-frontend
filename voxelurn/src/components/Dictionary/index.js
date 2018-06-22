@@ -28,7 +28,6 @@ class DictionaryPanel extends Component {
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
 			this.state.collapsed !== nextState.collapsed) {
 			return true
-			
 		}
 		else{
 			return false
@@ -67,42 +66,97 @@ class Dictionary extends Component{
 	
 	constructor(props) {
 		super(props)
+		const length = this.props.dictionary.length;
 		this.state={
-			dictionary: props.dictionary,
+			clicked: Array(length+1).fill(false), 
+			//+1 to length to make up for off by one when using rule.index to index the array 
+			prevClick: -1
 		}
 	}
 	
-	shouldComponentUpdate(nextProps){
+	shouldComponentUpdate(nextProps, nextState){
+		//dictionary changed
 		if (this.props.dictionary.length !== nextProps.dictionary.length) {
+			return true
+		}
+		//cell has been clicked
+		else if (this.state.prevClick !== nextState.prevClick) {
+			return true
+		}
+		//cell has been clicked
+		else if (this.state.prevClick !== nextState.prevClick) {
 			return true
 		}
 		else{
 			return false
 		}
 	}
-	
-	//scroll to top after update
-	componentDidUpdate(){
-		this.refs.list.scrollTop = 0
+
+	/** 
+	 * Function to allow the clicking of a rule to expand the head and body used to induce it
+	*/
+	handleClick(i){
+		const clicked = this.state.clicked.slice()
+		let prevClick = this.state.prevClick
+		//there is an element that is already expanded
+		if (prevClick >0) {
+			if (prevClick === i) {
+				clicked[prevClick] = false
+				prevClick = -1
+			} 
+			else {
+				clicked[prevClick] = false
+				clicked[i] = true
+				prevClick = i
+			}
+		}
+		//no element is expanded
+		else {
+			clicked[i] = true
+			prevClick = i
+		}
+		this.setState({
+			clicked: clicked,
+			prevClick: prevClick
+		})
 	}
 	
+	//scroll to top after update
+	componentDidUpdate(prevProps){
+		if (this.props.dictionary.length !== prevProps.dictionary.length){
+			this.refs.list.scrollTop = 0	
+			const clicked = this.state.clicked
+			clicked[this.state.prevClick] = false
+			this.setState({
+				clicked: clicked,
+				prevClick: -1
+			})
+		}
+	}
+	
+	//get array of HTML elements to represent the rules
 	getDictionaryCells(){
 		const dictionary = this.props.dictionary.slice();
 		const arr = dictionary.map((el) => {
 			return (
-				<DictionaryElement key={el.index} rule={el} />
+				<DictionaryElement 
+				key={el.index} 
+				rule={el} 
+				clicked={this.state.clicked[el.index]} 
+				onClick={() => this.handleClick(el.index)}/>
 			)
 		}) 
 		return arr
 	} 
 
 	render(){
+
 		return (
 				<div className="Dictionary-content" ref="list">
 		        	<table>
 		        		<tbody>
 			        	<tr className="Explanation">
-			        		<td colSpan="2">Hover over a rule to see an example</td>
+			        		<td colSpan="2">Click on a rule to see an example</td>
 			        	</tr>
 		        			{this.getDictionaryCells()}
 		        		</tbody>
@@ -112,50 +166,28 @@ class Dictionary extends Component{
 	}
 }
 
-class DictionaryElement extends Component{	
-	constructor(props){
-		super(props)
-		this.handleClick = this.handleClick.bind(this)
-		this.state={
-			rhs: this.props.rule.rhs,
-			uid: this.props.rule.uid,
-			head: this.props.rule.head,
-			body:this.props.rule.body,
-			index: this.props.rule.index,
-			isHovering: false,
-		}
-	}
-	
-	handleClick() {
-		this.setState(({
-			rhs: this.state.rhs,
-			uid: this.state.uid,
-			head: this.state.head,
-			body: this.state.body,
-			index: this.state.index,
-			isHovering: !this.state.isHovering,
-		}))
-	}
-
-	
-	render () {
-		return (
-			<tr 
-				className="DictionaryElement"
-				onClick={this.handleClick}
-			>
-			{(() => {if (this.state.isHovering) {
-			return(
-				[<td className="head" colSpan="1" key="head">{this.state.head}</td>,
-				<td className="body" colSpan="1" key="body">{this.state.body}</td>]
-			)}
+/** 
+ * Functional react component to represent a rule
+*/
+function DictionaryElement(props){	
+	const rule = props.rule
+	return (
+		<tr className="DictionaryElement"
+			onClick={props.onClick}>
+		{(() => 
+		{if (props.clicked) {
+			return ([
+				<td className="head" colSpan="1" key="head">{rule.head}</td>,
+				<td className="body" colSpan="1" key="body">{rule.body}</td>
+			])}
 			else {
 			return (
-				<td colSpan="2">{this.state.rhs}</td>
-			)}})()}
-			</tr>)
-	}
+				<td colSpan="2">{rule.rhs}</td>
+			)}
+		})()}
+		</tr>)
 }
+
 const mapStateToProps = (state) => ({
   dictionary: state.world.dictionary
 })
