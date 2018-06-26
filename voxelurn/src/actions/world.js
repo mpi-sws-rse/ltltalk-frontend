@@ -389,6 +389,21 @@ const Actions = {
 			})
 	  }
   },
+  
+  deleteRule: (idx) => {
+	  return (dispatch, getState) => {
+		  const { sessionId } = getState().user
+		  const sempreQuery= "(:dictionary " + idx + ")"
+		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
+		  	.then((r) => {
+		        if (r.lines && r.lines.length > 0) {
+		            /* Display errors and quit if there errors */
+		            alert(`There were error(s): ${r.lines.join(", ")}`)
+		            return
+                }
+		  	})
+	  }
+  },
 }
 
 const json =  ('[{"rhs":"gather $Color","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":1},'
