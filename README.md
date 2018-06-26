@@ -1,17 +1,21 @@
-This system offers a language for controlling robots and specifying environments. Afterwards, user can define his natural language commands to define subroutines of the core-language and the system has to infer the parameters, context etc. The inference takes place across all the system user having an end goal to give late user an option to immediately use intuitive commands rather than the core language.
+# Flipper 
 
+Flipper is a natural language interface for describing high level
+task specifications for robots that are compiled into robot actions. It
+starts with a formal core language for task planning that allows expressing
+temporal specifications and uses a semantic parser to provide a natural
+language interface. Flipper provides immediate visual feedback by executing an
+automatically constructed plan of the task in a graphical user interface. This
+allows the user to resolve potentially ambiguous interpretations. Flipper
+extends itself via naturalization: users of Flipper can define new commands,
+which are generalized and added as new rules to the core language, gradually
+growing a more and more natural task specification language. A rule inferred from the definition of one user is available to all future users. This means that 
+eventually a newcomer to Flipper won't need to know the core language at all.  
 
-# Use case
-## Phase1
-A user is given a map with walls and doors shown in it and the rewards somewhere around the map. He has to specify what the robot has to do and his goal is to maximize the reward. The environment is specified completely (user doesn't have to tell if the doors are opened or closed etc.)
-
-## Phase2
-A user is given a map with walls and doors shown in it and the rewards somewhere around the map. 
-The rewards can appear and disappear and the walls can open and close. He has to specify what the robot has to do and his goal is to maximize the reward. 
-User also has to specify the environment behavior for the robot (such as - if the doors would open or close, if the rewards would appear or disappear etc.) If the 
-specification is unrealizable, the system warns the user about the root cause (and then the user has to change environment assumptions or change the specification.)
 
 # Technical details
-The setup of the system is described [here](/voxelurn).
-The system is inspired by the [Voxelurn system](https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md), that performs the same naturalization process for a simple world of Voxels.
-The semantic parser is developed in a [separate repository](https://gitlab.mpi-sws.org/gavran/sempre-interactive).
+ - you can try out Flipper [here](http://flipper.mpi-sws.org/#/about) and check out [the paper](https://arxiv.org/abs/1803.02238)
+ - the setup of the system is described [here](/voxelurn).
+ - the fork of semantic parser used with flipper is available [here](https://github.com/mpi-sws-rse/sempre-interactive-flipper)
+ - the system is inspired by the [Voxelurn system](https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md), that performs the same naturalization process for building in a simple world of Voxels.
+
