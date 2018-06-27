@@ -19,8 +19,7 @@ class DictionaryPanel extends Component {
 		super(props)
 		this.reload = this.reload.bind(this)
 		this.state = ({
-			collapsed: true,
-			reload: false
+			collapsed: true
 		})
 	}
 
@@ -29,14 +28,7 @@ class DictionaryPanel extends Component {
 	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
-			this.state.collapsed !== nextState.collapsed ||
-			nextState.reload) {
-				if (nextState.reload){
-					this.setState({
-						collapsed: nextState.collapsed,
-						reload: false
-					})
-				}
+			this.state.collapsed !== nextState.collapsed){
 			return true
 		}
 		else{
@@ -46,10 +38,7 @@ class DictionaryPanel extends Component {
 	
 	//force rerendering by changing the state
 	reload() {
-		this.setState({
-			collapsed: this.state.collapsed,
-			reload: true
-		})
+		  this.props.dispatch(Actions.dictionary())
 	}
 
 	render() {
