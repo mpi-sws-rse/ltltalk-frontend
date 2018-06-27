@@ -15,9 +15,11 @@ class DictionaryPanel extends Component {
 	    dispatch: PropTypes.func,
 	    dictionary: PropTypes.array
 	 }
-	constructor(props) {
+
+	 constructor(props) {
 		super(props)
 		this.reload = this.reload.bind(this)
+		this.deleteRule=this.deleteRule.bind(this)
 		this.state = ({
 			collapsed: true,
 			reload: false
@@ -28,15 +30,16 @@ class DictionaryPanel extends Component {
 	 * when the dictionary is opened or closed
 	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
+		console.log(this.props.dictionary.length + " update "+nextProps.dictionary.length)
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
-			this.state.collapsed !== nextState.collapsed ||
-			nextState.reload) {
-				if (nextState.reload){
-					this.setState({
-						collapsed: nextState.collapsed,
-						reload: false
-					})
-				}
+			this.state.collapsed !== nextState.collapsed) {
+			return true
+		}
+		if (nextState.reload){
+			this.setState({
+				collapsed: nextState.collapsed,
+				reload: false
+			})
 			return true
 		}
 		else{
@@ -52,7 +55,15 @@ class DictionaryPanel extends Component {
 		})
 	}
 
+	
+	deleteRule(index){
+		console.log(index)
+//		this.props.dispatch(Actions.deleteRule(index))
+	}
+
+
 	render() {
+		console.log(this.props.dictionary.length)
 		return (
 			<div className={classnames("Dictionary", {"collapsed": this.state.collapsed})}>
 				<div className="Dictionary-header">
@@ -74,7 +85,9 @@ class DictionaryPanel extends Component {
 		            })()}
 		          </div>
 		        </div>
-		        {!this.state.collapsed && <Dictionary dictionary={this.props.dictionary}/>}
+				{!this.state.collapsed && <Dictionary   delete={this.deleteRule}
+														sessionId={this.props.sessionId}
+														dictionary={this.props.dictionary}/>}
 			</div>
 		)
 	}
@@ -162,10 +175,12 @@ class Dictionary extends Component{
 		const arr = dictionary.map((el) => {
 			return (
 				<DictionaryElement 
-				key={el.index} 
-				rule={el} 
-				clicked={this.state.clicked[el.index]} 
-				onClick={() => this.handleClick(el.index)}/>
+						key={el.index} 
+						rule={el} 
+						clicked={this.state.clicked[el.index]} 
+						onClick={() => this.handleClick(el.index)}
+						delete={this.props.delete}
+						sessionId={this.props.sessionId}/>
 			)
 		}) 
 		return arr
@@ -177,7 +192,7 @@ class Dictionary extends Component{
 		        	<table>
 		        		<tbody>
 			        	<tr className="Explanation">
-			        		<td colSpan="2">Click on a rule to see an example</td>
+			        		<td colSpan="3">Click on a rule to see an example</td>
 			        	</tr>
 		        			{this.getDictionaryCells()}
 		        		</tbody>
@@ -190,27 +205,39 @@ class Dictionary extends Component{
 /** 
  * Functional react component to represent a rule
 */
-function DictionaryElement(props){	
-	const rule = props.rule
-	return (
-		<tr className="DictionaryElement"
-			onClick={props.onClick}>
-		{(() => 
-		{if (props.clicked) {
-			return ([
-				<td className="head" colSpan="1" key="head">{rule.head}</td>,
-				<td className="body" colSpan="1" key="body">{rule.body}</td>
-			])}
+function DictionaryElement(props) {
+		const rule = props.rule
+		return (
+			<tr className="DictionaryElement"
+				onClick={props.onClick}>
+			{(() => 
+			{if (props.clicked) {
+				if (props.sessionId === rule.uid) {
+					return ([
+						<td className="deleteButton" colSpan="1" key="button">
+							<button onClick={() => {props.delete(rule.index)}}> X </button>
+						</td>,
+						<td className="headwithButton" colSpan="1" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])}
+				else {
+					return ([
+						<td className="headwithoutButton" colSpan="2" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])
+				}
+			}
 			else {
-			return (
-				<td colSpan="2">{rule.rhs}</td>
-			)}
-		})()}
-		</tr>)
+				return (
+					<td colSpan="3">{rule.rhs}</td>
+				)}
+			})()}
+			</tr>)
 }
 
 const mapStateToProps = (state) => ({
-  dictionary: state.world.dictionary
+  dictionary: state.world.dictionary,
+  sessionId: state.user.sessionId
 })
 
 export default connect(mapStateToProps)(DictionaryPanel)
