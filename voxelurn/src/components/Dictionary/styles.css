@@ -89,13 +89,18 @@ td.deleteButton{
   border-right: 0px solid;
 }
 
-td.head{
+td.headButton{
   width: 35% !important;
   border-left: 0px solid;
 }
 
 td.body{
   width: 55% !important;
+}
+
+td.headWidthButton{
+  width: 45% !important;
+  border-left: 0px solid;
 }
 
 .deleteButton button{

@@ -55,9 +55,9 @@ class DictionaryPanel extends Component {
 	}
 
 	
+	//Dispatches the action to delete the rule
 	deleteRule(index){
-		console.log(index)
-//		this.props.dispatch(Actions.deleteRule(index))
+		this.props.dispatch(Actions.deleteRule(index))
 	}
 
 
@@ -167,7 +167,7 @@ class Dictionary extends Component{
 		}
 	}
 	
-	//get array of HTML elements to represent the rules
+	//get array of React elements (tr) to represent the list rules
 	getDictionaryCells(){
 		const dictionary = this.props.dictionary.slice();
 		const arr = dictionary.map((el) => {
@@ -190,7 +190,8 @@ class Dictionary extends Component{
 		        	<table>
 		        		<tbody>
 			        	<tr className="Explanation">
-			        		<td colSpan="3">Click on a rule to see an example</td>
+			        		<td colSpan="3">Click on a rule to see an example<br />
+			        						Click the cross to delete a rule you defined</td>
 			        	</tr>
 		        			{this.getDictionaryCells()}
 		        		</tbody>
@@ -202,6 +203,8 @@ class Dictionary extends Component{
 
 /** 
  * Functional react component to represent a rule
+ * A dictionary element can be clicked to show the head and body used to induce the rule originally.
+ * If the user who defined a rule clicks on the rule, they are shown a button to delete the rule.
 */
 function DictionaryElement(props) {
 		const rule = props.rule
@@ -210,14 +213,20 @@ function DictionaryElement(props) {
 				onClick={props.onClick}>
 			{(() => 
 			{if (props.clicked) {
-				return ([
-					<td className="deleteButton" colSpan="1" key="button">
-						<button onClick={() => {props.delete(rule.index)}}> X </button>
-					</td>,
-					<td className="head" colSpan="1" key="head">{rule.head}</td>,
-					<td className="body" colSpan="1" key="body">{rule.body}</td>
-				])}
-			else {
+				if (props.sessionId == rule.uid){
+					return ([
+				         <td className="deleteButton" colSpan="1" key="button">
+							<button onClick={() => {props.delete(rule.index)}}> X </button>
+						</td>,
+						<td className="headButton" colSpan="1" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])} 
+				else {
+					return ([
+						<td className="headWithoutButton" colSpan="2" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])} 
+			} else {
 				return (
 					<td colSpan="3">{rule.rhs}</td>
 				)}
