@@ -43,7 +43,6 @@
   border-collapse: collapse; 
   width: 320px;
   min-width: 320px;
-  table-layout: fixed;
 }
 
 .Dictionary-content tr, 
@@ -86,25 +85,22 @@
 }
 
 td.deleteButton{
-  width:5% !important;
+  width:10% !important;
   border-right: 0px solid;
 }
 
-td.headwithButton{
+td.head{
   width: 35% !important;
   border-left: 0px solid;
 }
 
-td.headwithoutButton{
-  width: 40% !important;
-}
-
 td.body{
-  width: 60% !important;
+  width: 55% !important;
 }
 
 .deleteButton button{
   font-size: 0.7em;
+  padding: 3px 6px;
   height:auto;
 }
 

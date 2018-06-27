@@ -30,16 +30,15 @@ class DictionaryPanel extends Component {
 	 * when the dictionary is opened or closed
 	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
-		console.log(this.props.dictionary.length + " update "+nextProps.dictionary.length)
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
-			this.state.collapsed !== nextState.collapsed) {
-			return true
-		}
-		if (nextState.reload){
-			this.setState({
-				collapsed: nextState.collapsed,
-				reload: false
-			})
+			this.state.collapsed !== nextState.collapsed ||
+			nextState.reload) {
+				if (nextState.reload){
+					this.setState({
+						collapsed: nextState.collapsed,
+						reload: false
+					})
+				}
 			return true
 		}
 		else{
@@ -63,7 +62,6 @@ class DictionaryPanel extends Component {
 
 
 	render() {
-		console.log(this.props.dictionary.length)
 		return (
 			<div className={classnames("Dictionary", {"collapsed": this.state.collapsed})}>
 				<div className="Dictionary-header">
@@ -212,21 +210,13 @@ function DictionaryElement(props) {
 				onClick={props.onClick}>
 			{(() => 
 			{if (props.clicked) {
-				if (props.sessionId === rule.uid) {
-					return ([
-						<td className="deleteButton" colSpan="1" key="button">
-							<button onClick={() => {props.delete(rule.index)}}> X </button>
-						</td>,
-						<td className="headwithButton" colSpan="1" key="head">{rule.head}</td>,
-						<td className="body" colSpan="1" key="body">{rule.body}</td>
-					])}
-				else {
-					return ([
-						<td className="headwithoutButton" colSpan="2" key="head">{rule.head}</td>,
-						<td className="body" colSpan="1" key="body">{rule.body}</td>
-					])
-				}
-			}
+				return ([
+					<td className="deleteButton" colSpan="1" key="button">
+						<button onClick={() => {props.delete(rule.index)}}> X </button>
+					</td>,
+					<td className="head" colSpan="1" key="head">{rule.head}</td>,
+					<td className="body" colSpan="1" key="body">{rule.body}</td>
+				])}
 			else {
 				return (
 					<td colSpan="3">{rule.rhs}</td>
