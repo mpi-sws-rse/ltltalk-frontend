@@ -58,6 +58,7 @@ class DictionaryPanel extends Component {
 	//Dispatches the action to delete the rule
 	deleteRule(index){
 		this.props.dispatch(Actions.deleteRule(index))
+		this.props.dispatch(Actions.dictionary())
 	}
 
 

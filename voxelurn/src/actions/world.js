@@ -393,7 +393,7 @@ const Actions = {
   deleteRule: (idx) => {
 	  return (dispatch, getState) => {
 		  const { sessionId } = getState().user
-		  const sempreQuery= "(:dictionary " + idx + ")"
+		  const sempreQuery= "(:delete " + idx + ")"
 		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
 		  	.then((r) => {
 		        if (r.lines && r.lines.length > 0) {
