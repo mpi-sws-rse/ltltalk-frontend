@@ -406,18 +406,4 @@ const Actions = {
   },
 }
 
-const json =  ('[{"rhs":"gather $Color","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":1},'
-		+   '{"rhs":"gather $Property","uid":"6yyw176mqx","head":"gather red","body":"foreach point in world containing item has color red { visit point ; pick every item has color red }","index":2},'
-		+   '{"rhs":"drop all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":3},'
-		+   '{"rhs":"$ItemActionFragment all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":4},'
-		+   '{"rhs":"all","uid":"6yyw176mqx","head":"drop all","body":"drop every item","index":5},'
-		+   '{"rhs":"pick all","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":6},'
-		+   '{"rhs":"$ItemActionFragment $CountedItem","uid":"6yyw176mqx","head":"pick all","body":"pick every item","index":7},'
-		+   '{"rhs":"go $Direction","uid":"6yyw176mqx","head":"go left","body":"move left","index":8},'
-		+   '{"rhs":"go $Number $Direction","uid":"6yyw176mqx","head":"go 4 left","body":"repeat 4 times go left","index":9},'
-		+   '{"rhs":"line $Direction","uid":"6yyw176mqx","head":"line left","body":"strict { while robot has item { move left ; drop item } }","index":10},'
-		+   '{"rhs":"gather $Property $Property","uid":"fqnl8usll7","head":"gather red triangle","body":"foreach point in world containing item has color red and has shape triangle { visit point ; pick item has color red and has shape triangle }","index":11},'
-		+   '{"rhs":"drop all $Color","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":12},'
-		+   '{"rhs":"$ItemActionFragment all $Property","uid":"l9ers2dvop","head":"drop all red","body":"while robot has item has color red { drop item has color red }","index":13}]')
-
 export default Actions
