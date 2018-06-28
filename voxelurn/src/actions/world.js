@@ -401,6 +401,11 @@ const Actions = {
 		            alert(`There were error(s): ${r.lines.join(", ")}`)
 		            return
                 }
+		        //Force change to the dictionary to force rerendering
+		        dispatch({
+		        	type: Constants.DICTIONARY,
+		        	dictionary: []
+				})
 		  	})
 	  }
   },
