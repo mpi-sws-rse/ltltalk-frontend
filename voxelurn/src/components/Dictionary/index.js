@@ -23,12 +23,18 @@ class DictionaryPanel extends Component {
 		})
 	}
 
-	/* force update when an induced rule is added
+	/* force update when an induced rule is added or removed
 	 * when the dictionary is opened or closed
 	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
 			this.state.collapsed !== nextState.collapsed){
+			return true
+		}
+		//Defined a rule (to catch changes not caught by the change in dictionary length)
+		else if(this.props.defining !== nextProps.defining) {
+			console.log("defined")
+	
 			return true
 		}
 		else{
@@ -199,7 +205,8 @@ function DictionaryElement(props){
 }
 
 const mapStateToProps = (state) => ({
-  dictionary: state.world.dictionary
+  dictionary: state.world.dictionary,
+  defining: state.world.defining
 })
 
 export default connect(mapStateToProps)(DictionaryPanel)
