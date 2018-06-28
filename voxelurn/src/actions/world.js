@@ -93,11 +93,11 @@ const Actions = {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
           const cmds = { q: query, sessionId: sessionId }
-          //console.log("sending query "+query);
+          console.log("sending query "+query);
           return SEMPREquery(cmds)
             .then((response) => {
             	//console.log("received response: "+JSON.stringify(response));
-            	//console.log(response);
+            	console.log(response);
               if (!response)
                 throw new Error("empty_response");
 
@@ -107,6 +107,7 @@ const Actions = {
               }
 
               const formval = parseSEMPRE(response.candidates)
+              console.log(formval);
              
 
               if (formval === null || formval === undefined) {
@@ -118,7 +119,7 @@ const Actions = {
 
                 const responses = formval;
              
-
+                console.log(query);
                 dispatch(Logger.log({ type: "try", msg: { query: q, responses: formval.length } }))
                 dispatch({
                   type: Constants.TRY_QUERY,
@@ -193,18 +194,20 @@ const Actions = {
     }
   },
 
-  acceptNone: (text) => 
-  {
-	  return (dispatch, getState) => {
-		  const { sessionId } = getState().user
-		  const { responses } = getState().world
-		  const formulas = responses.reduce((acc, r) => acc.concat(r.formulas), [])
-		
-		  // Do I need to processMacros() here?
-		  const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
-		  SEMPREquery({ q: query, sessionId: sessionId }, () => { })
-		  dispatch(Logger.log({ type: "acceptNone", msg: { query: text } }))
-	  }
+
+  acceptNone: (text) => {
+    return (dispatch, getState) => {
+      const { sessionId } = getState().user
+      const { responses } = getState().world
+
+      const formulas = responses.reduce((acc, r) => acc.concat(r.formulas), [])
+
+      // Do I need to processMacros() here?
+      const query = `(:reject ${JSON.stringify(text)} ${formulas.map(f => JSON.stringify(f)).join(" ")})`
+      SEMPREquery({ q: query, sessionId: sessionId }, () => { })
+      
+      dispatch(Logger.log({ type: "acceptNone", msg: { query: text } }))
+    }
   },
 
   define: (idx) => {
@@ -367,7 +370,31 @@ const Actions = {
       })
       persistStore(getStore(), { whitelist: ['world', 'user'] }, () => { }).purge()
     }
-  }
+  },
+  
+  dictionary: () => {
+	  return (dispatch, getState) => {
+	      const { sessionId } = getState().user
+		  const sempreQuery= "(:dictionary)"
+		  	  
+		  console.log("Dictionary request")
+
+		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
+		    .then((r) => {
+		        if (r.lines && r.lines.length > 0) {
+		            /* Display errors and quit if there errors */
+		            alert(`There were error(s): ${r.lines.join(", ")}`)
+		            return
+                }
+		        const dictionary = JSON.parse(r.stats.dictionary)
+                //console.log(dictionary)
+                dispatch({
+		        	type: Constants.DICTIONARY,
+		        	dictionary: dictionary
+				})
+			})
+	  }
+  },
 }
 
 export default Actions
