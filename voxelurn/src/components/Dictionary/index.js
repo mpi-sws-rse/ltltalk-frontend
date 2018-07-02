@@ -52,6 +52,7 @@ class DictionaryPanel extends Component {
 	
 	//Dispatches the action to delete the rule
 	deleteRule(index){
+		console.log("Delete request " + index)
 		this.props.dispatch(Actions.deleteRule(index))
 		this.props.dispatch(Actions.dictionary())
 	}
@@ -96,8 +97,7 @@ class Dictionary extends Component{
 		super(props)
 		const length = this.props.dictionary.length;
 		this.state={
-			clicked: Array(length+1).fill(false), 
-			//+1 to length to make up for off by one when using rule.index to index the array 
+			clicked: Array(length).fill(false), 
 			prevClick: -1
 		}
 	}
@@ -124,7 +124,7 @@ class Dictionary extends Component{
 		const clicked = this.state.clicked.slice()
 		let prevClick = this.state.prevClick
 		//there is an element that is already expanded
-		if (prevClick >0) {
+		if (prevClick >= 0) {
 			//expanded cell has been clicked, so we need to reset the cell
 			if (prevClick === i) {
 				clicked[prevClick] = false
@@ -152,7 +152,7 @@ class Dictionary extends Component{
 	componentDidUpdate(prevProps){
 		if (this.props.dictionary.length !== prevProps.dictionary.length){
 			this.refs.list.scrollTop = 0
-			if (this.state.prevClick > 0) {	
+			if (this.state.prevClick >= 0) {	
 				const clicked = this.state.clicked
 				clicked[this.state.prevClick] = false
 				this.setState({
