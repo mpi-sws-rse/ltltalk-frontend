@@ -12,4 +12,14 @@ After processing of the request by the back end, a response is received by the `
 The function parses the JSON string and dispatches an action of type `dictionary` to the store. 
 The reducer defined in `store/world.js` passes the dictionary to the state of the store. 
 
+##Adding a new rule
+When adding a new rule, the dictionary is reset to be empty, which forces the dictionary to send a request and reflect the changes to the log files.
+However, this solution to a previous bug where the dictionary was not updating consistently because of asynchronous calls doesn't solve the bug for when the dictionary is initially empty, and a reload button was added for the user to force a new dictionary request.
+
+##Deleting an induced rule
+The option is offered to the user to delete a rule they have previously defined themselves. 
+They can see the button only if their session ID matched the ID of the user who defined that rule.
+As of now, the deletion affects the log files, and is not reversible.
+Deleting a rule dispatches an action of type `dictionary` with an empty dictionary that forces the dictionary to be requested again by the system, and updates the front end to reflect the changes in back end.
+
 Read more about implementing Dictionary in the back end [here](https://github.com/akshalaniche/sempre-interactive-flipper/blob/master/DictionaryBackEnd.md)
