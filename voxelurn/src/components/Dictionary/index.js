@@ -15,20 +15,28 @@ class DictionaryPanel extends Component {
 	    dispatch: PropTypes.func,
 	    dictionary: PropTypes.array
 	 }
-	constructor(props) {
+
+	 constructor(props) {
 		super(props)
 		this.reload = this.reload.bind(this)
+		this.deleteRule=this.deleteRule.bind(this)
 		this.state = ({
 			collapsed: true
 		})
 	}
 
-	/* force update when an induced rule is added
+	/* force update when an induced rule is added or removed
 	 * when the dictionary is opened or closed
 	 * or when the reload button is clicked*/
 	shouldComponentUpdate(nextProps, nextState){
 		if (this.props.dictionary.length !== nextProps.dictionary.length ||
 			this.state.collapsed !== nextState.collapsed){
+			return true
+		}
+		//Defined a rule (to catch changes not caught by the change in dictionary length)
+		else if(this.props.defining !== nextProps.defining) {
+			console.log("defined")
+	
 			return true
 		}
 		else{
@@ -40,6 +48,15 @@ class DictionaryPanel extends Component {
 	reload() {
 		  this.props.dispatch(Actions.dictionary())
 	}
+
+	
+	//Dispatches the action to delete the rule
+	deleteRule(index){
+		console.log("Delete request " + index)
+		this.props.dispatch(Actions.deleteRule(index))
+		this.props.dispatch(Actions.dictionary())
+	}
+
 
 	render() {
 		return (
@@ -63,7 +80,9 @@ class DictionaryPanel extends Component {
 		            })()}
 		          </div>
 		        </div>
-		        {!this.state.collapsed && <Dictionary dictionary={this.props.dictionary}/>}
+				{!this.state.collapsed && <Dictionary   delete={this.deleteRule}
+														sessionId={this.props.sessionId}
+														dictionary={this.props.dictionary}/>}
 			</div>
 		)
 	}
@@ -78,8 +97,7 @@ class Dictionary extends Component{
 		super(props)
 		const length = this.props.dictionary.length;
 		this.state={
-			clicked: Array(length+1).fill(false), 
-			//+1 to length to make up for off by one when using rule.index to index the array 
+			clicked: Array(length).fill(false), 
 			prevClick: -1
 		}
 	}
@@ -106,7 +124,7 @@ class Dictionary extends Component{
 		const clicked = this.state.clicked.slice()
 		let prevClick = this.state.prevClick
 		//there is an element that is already expanded
-		if (prevClick >0) {
+		if (prevClick >= 0) {
 			//expanded cell has been clicked, so we need to reset the cell
 			if (prevClick === i) {
 				clicked[prevClick] = false
@@ -134,7 +152,7 @@ class Dictionary extends Component{
 	componentDidUpdate(prevProps){
 		if (this.props.dictionary.length !== prevProps.dictionary.length){
 			this.refs.list.scrollTop = 0
-			if (this.state.prevClick > 0) {	
+			if (this.state.prevClick >= 0) {	
 				const clicked = this.state.clicked
 				clicked[this.state.prevClick] = false
 				this.setState({
@@ -145,16 +163,18 @@ class Dictionary extends Component{
 		}
 	}
 	
-	//get array of HTML elements to represent the rules
+	//get array of React elements (tr) to represent the list rules
 	getDictionaryCells(){
 		const dictionary = this.props.dictionary.slice();
 		const arr = dictionary.map((el) => {
 			return (
 				<DictionaryElement 
-				key={el.index} 
-				rule={el} 
-				clicked={this.state.clicked[el.index]} 
-				onClick={() => this.handleClick(el.index)}/>
+						key={el.index} 
+						rule={el} 
+						clicked={this.state.clicked[el.index]} 
+						onClick={() => this.handleClick(el.index)}
+						delete={this.props.delete}
+						sessionId={this.props.sessionId}/>
 			)
 		}) 
 		return arr
@@ -166,7 +186,8 @@ class Dictionary extends Component{
 		        	<table>
 		        		<tbody>
 			        	<tr className="Explanation">
-			        		<td colSpan="2">Click on a rule to see an example</td>
+			        		<td colSpan="3">Click on a rule to see an example<br />
+			        						Click the cross to delete a rule you defined</td>
 			        	</tr>
 		        			{this.getDictionaryCells()}
 		        		</tbody>
@@ -178,28 +199,41 @@ class Dictionary extends Component{
 
 /** 
  * Functional react component to represent a rule
+ * A dictionary element can be clicked to show the head and body used to induce the rule originally.
+ * If the user who defined a rule clicks on the rule, they are shown a button to delete the rule.
 */
-function DictionaryElement(props){	
-	const rule = props.rule
-	return (
-		<tr className="DictionaryElement"
-			onClick={props.onClick}>
-		{(() => 
-		{if (props.clicked) {
-			return ([
-				<td className="head" colSpan="1" key="head">{rule.head}</td>,
-				<td className="body" colSpan="1" key="body">{rule.body}</td>
-			])}
-			else {
-			return (
-				<td colSpan="2">{rule.rhs}</td>
-			)}
-		})()}
-		</tr>)
+function DictionaryElement(props) {
+		const rule = props.rule
+		return (
+			<tr className="DictionaryElement"
+				onClick={props.onClick}>
+			{(() => 
+			{if (props.clicked) {
+				if (props.sessionId == rule.uid){
+					return ([
+				         <td className="deleteButton" colSpan="1" key="button">
+							<button onClick={() => {props.delete(rule.index)}}> X </button>
+						</td>,
+						<td className="headButton" colSpan="1" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])} 
+				else {
+					return ([
+						<td className="headWithoutButton" colSpan="2" key="head">{rule.head}</td>,
+						<td className="body" colSpan="1" key="body">{rule.body}</td>
+					])} 
+			} else {
+				return (
+					<td colSpan="3">{rule.rhs}</td>
+				)}
+			})()}
+			</tr>)
 }
 
 const mapStateToProps = (state) => ({
-  dictionary: state.world.dictionary
+  dictionary: state.world.dictionary,
+  sessionId: state.user.sessionId,
+  defining: state.world.defining
 })
 
 export default connect(mapStateToProps)(DictionaryPanel)

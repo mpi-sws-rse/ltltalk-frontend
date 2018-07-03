@@ -395,6 +395,26 @@ const Actions = {
 			})
 	  }
   },
+  
+  deleteRule: (idx) => {
+	  return (dispatch, getState) => {
+		  const { sessionId } = getState().user
+		  const sempreQuery= "(:delete " + idx + ")"
+		  SEMPREquery({ q: sempreQuery, sessionId: sessionId })
+		  	.then((r) => {
+		        if (r.lines && r.lines.length > 0) {
+		            /* Display errors and quit if there errors */
+		            alert(`There were error(s): ${r.lines.join(", ")}`)
+		            return
+                }
+		        //Force change to the dictionary to force rerendering
+		        dispatch({
+		        	type: Constants.DICTIONARY,
+		        	dictionary: []
+				})
+		  	})
+	  }
+  },
 }
 
 export default Actions

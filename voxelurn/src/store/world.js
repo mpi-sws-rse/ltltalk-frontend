@@ -54,7 +54,7 @@ export default function reducer(state = initialState, action = {}) {
       }]
       if (collapsedHistory.length === 0) collapsedHistory = initialState.history
       else if (collapsedHistory.length === 1) collapsedHistory = [...initialState.history, ...collapsedHistory]
-      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.TRY }
+      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.TRY, dictionary: [] }
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
     ///////

@@ -84,12 +84,29 @@
 	padding: 5px;
 }
 
-td.head{
-  width: 40% !important;
+td.deleteButton{
+  width:10% !important;
+  border-right: 0px solid;
+}
+
+td.headButton{
+  width: 35% !important;
+  border-left: 0px solid;
 }
 
 td.body{
-  width: 60% !important;
+  width: 55% !important;
+}
+
+td.headWidthButton{
+  width: 45% !important;
+  border-left: 0px solid;
+}
+
+.deleteButton button{
+  font-size: 0.7em;
+  padding: 3px 6px;
+  height:auto;
 }
 
 #dictionaryReload {
