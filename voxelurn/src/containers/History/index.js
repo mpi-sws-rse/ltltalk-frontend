@@ -11,14 +11,14 @@ class HistoryItem extends Component {
     if (this.props.text !== nextProps.text || this.props.stepN !== nextProps.stepN ||
       this.props.selected !== nextProps.selected || this.props.defining !== nextProps.defining ||
       this.props.firstDefining !== nextProps.firstDefining || this.props.tentative !== nextProps.tentative ||
-      this.props.last !== nextProps.last || this.props.interpretation !== nextProps.interpretation) {
+      this.props.last !== nextProps.last) {
       return true
     }
     return false
   }
 
   render() {
-    const { text, stepN, selected, defining, firstDefining, revert, setDefineN, resetDefineN, openDefine, doubleClick, tentative, last, remove, setPin, interpretation } = this.props
+    const { text, stepN, selected, defining, firstDefining, revert, setDefineN, resetDefineN, openDefine, doubleClick, tentative, last, remove, setPin } = this.props
     return (
       <div
         onClick={() => revert()}
@@ -41,8 +41,7 @@ class HistoryItem extends Component {
             <button onClick={(e) => { e.stopPropagation(); setPin() }}>{DEFINE_THIS}</button>
           }
         </div>
-        {tentative && <div className={classnames("HistoryItem-interpretation", {"active": tentative})}>{interpretation}</div>}
-      </div>
+		</div>
     )
   }
 }
@@ -202,18 +201,26 @@ class History extends Component {
           )
         })}
         {status === STATUS.ACCEPT &&
-          <HistoryItem
-            key="new"
-            text={query}
-            stepN={history.length + 1}
-            revert={() => this.setPin()}
-            openDefine={() => this.setPin()}
-            setPin={() => this.setPin()}
-            tentative
-            setDefineN={() => { }}
-            resetDefineN={() => { }}
-            interpretation={interpretation}
-          />
+         <div style={{display:'flex'}}>
+          	<HistoryItem
+            	key="new"
+            	text={query}
+            	stepN={history.length + 1}
+            	revert={() => this.setPin()}
+           	 	openDefine={() => this.setPin()}
+            	setPin={() => this.setPin()}
+            	tentative
+            	setDefineN={() => { }}
+            	resetDefineN={() => { }}
+          	/>
+          	<div className="HistoryItem-inter">
+          		<text>
+          			Interpretation:
+          			<br />
+          			{interpretation}
+          	   </text>
+          	 </div>
+          </div>
         }
       </div>
     )
