@@ -11,15 +11,14 @@ class HistoryItem extends Component {
     if (this.props.text !== nextProps.text || this.props.stepN !== nextProps.stepN ||
       this.props.selected !== nextProps.selected || this.props.defining !== nextProps.defining ||
       this.props.firstDefining !== nextProps.firstDefining || this.props.tentative !== nextProps.tentative ||
-      this.props.last !== nextProps.last) {
+      this.props.last !== nextProps.last || this.props.interpretation !== nextProps.interpretation) {
       return true
     }
     return false
   }
 
   render() {
-    const { text, stepN, selected, defining, firstDefining, revert, setDefineN, resetDefineN, openDefine, doubleClick, tentative, last, remove, setPin } = this.props
-
+    const { text, stepN, selected, defining, firstDefining, revert, setDefineN, resetDefineN, openDefine, doubleClick, tentative, last, remove, setPin, interpretation } = this.props
     return (
       <div
         onClick={() => revert()}
@@ -42,6 +41,7 @@ class HistoryItem extends Component {
             <button onClick={(e) => { e.stopPropagation(); setPin() }}>{DEFINE_THIS}</button>
           }
         </div>
+        {tentative && <div className={classnames("HistoryItem-interpretation", {"active": tentative})}>{interpretation}</div>}
       </div>
     )
   }
@@ -78,6 +78,7 @@ class History extends Component {
     defining: PropTypes.bool,
     query: PropTypes.string,
     status: PropTypes.string,
+    interpretation: PropTypes.string,
 
     dispatch: PropTypes.func
   }
@@ -103,6 +104,8 @@ class History extends Component {
       return true
     } else if (this.props.history[this.props.history.length - 1].type !== nextProps.history[nextProps.history.length - 1].type) {
       /* update if define this button has been clicked */
+      return true
+    } else if (this.props.interpretation !== nextProps.interpretation){
       return true
     }
 
@@ -160,8 +163,7 @@ class History extends Component {
   }
 
   render() {
-    const { history, current_history_idx, defineN, defining, status, query } = this.props
-
+    const { history, current_history_idx, defineN, defining, status, query, interpretation} = this.props
     const lastPinIdx = history.length - 1 - history.slice().reverse().findIndex(h => h.type === "pin")
 
     return (
@@ -210,6 +212,7 @@ class History extends Component {
             tentative
             setDefineN={() => { }}
             resetDefineN={() => { }}
+            interpretation={interpretation}
           />
         }
       </div>
