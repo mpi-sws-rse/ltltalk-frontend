@@ -31,7 +31,7 @@ function combine(vsTmp, v) {
     vs.paths = [v.path];
     vs.status = v.status;
     vs.formula = v.formula;
-    vs.formulas = [vs.formula];
+    vs.prettyString = v.prettyString;    
     vs.prob = parseFloat(v.prob);
     vs.probs = [v.prob];
     vs.pprob = parseFloat(v.pprob);
@@ -47,7 +47,6 @@ function combine(vsTmp, v) {
     vs.value = v.value;
     vs.prob += parseFloat(v.prob);
     vs.pprob += parseFloat(v.pprob);
-
     vs.paths.push(v.path);
     vs.score = Math.max(vs.score, parseFloat(v.score));
     vs.maxprob = Math.max(vs.maxprob, parseFloat(v.prob));
@@ -76,6 +75,7 @@ export function parseSEMPRE(valid) {
       qapair.rank = i;
       qapair.prob = valid[i].prob;
       qapair.pprob = valid[i].pprob;
+      qapair.prettyString = valid[i].prettyString;
       lstqapairs.push(qapair);
     } catch (e) {
       lstqapairs.push({ path: [], formula: "", rank: i, error: valid[i].value, score: 0, prob: 0, pprob: 0 })
