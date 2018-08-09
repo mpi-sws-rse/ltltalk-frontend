@@ -213,7 +213,7 @@ class Build extends Component {
       //currentState = diff(currentState, responses[this.state.selectedResp].value)
       let response = JSON.parse(JSON.stringify(responses[this.state.selectedResp])); 
       currentPath = response.path;
-      interpretation = response.prettyString;
+      interpretation = "Interpretation " + (this.state.selectedResp + 1) + ": " + response.prettyString;
       //currentPath = JSON.parse(JSON.stringify(responses[this.state.selectedResp].path));
       if (response.status.length === 0) {
         popup.active = false;
@@ -241,7 +241,7 @@ class Build extends Component {
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
         </div>
         <div className="Build-command">
-          <History interpretation={interpretation}/>
+          <History />
           <ActionPopup
             active={popup.active}
             text={popup.text} />
@@ -251,7 +251,7 @@ class Build extends Component {
             onUp={() => this.upSelected()}
             onDown={() => this.downSelected()} />
           <div className="Build-status">
-            <StatusMsg status={status} />
+            <StatusMsg status={status} text={interpretation}/>
             <div className="Build-actions">
               {status === STATUS.ACCEPT &&
                 <div>
