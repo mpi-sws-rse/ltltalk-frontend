@@ -28,10 +28,9 @@ function combine(vsTmp, v) {
     vs = {};
     //vs.value = v.value;
     vs.path = v.path;
-    vs.paths = [v.path];
     vs.status = v.status;
     vs.formula = v.formula;
-    vs.prettyString = v.prettyString;    
+    vs.formulas = [vs.formula];
     vs.prob = parseFloat(v.prob);
     vs.probs = [v.prob];
     vs.pprob = parseFloat(v.pprob);
@@ -47,12 +46,13 @@ function combine(vsTmp, v) {
     vs.value = v.value;
     vs.prob += parseFloat(v.prob);
     vs.pprob += parseFloat(v.pprob);
-    vs.paths.push(v.path);
+
     vs.score = Math.max(vs.score, parseFloat(v.score));
     vs.maxprob = Math.max(vs.maxprob, parseFloat(v.prob));
     vs.maxpprob = Math.max(vs.maxpprob, parseFloat(v.pprob));
     vs.rank = Math.min(vs.rank, v.rank);
     vs.probs.push(v.prob);
+    vs.formulas.push(v.formula);
     vs.count += 1;
     vs.error = v.error;
     vs.lines = v.lines;
@@ -75,7 +75,6 @@ export function parseSEMPRE(valid) {
       qapair.rank = i;
       qapair.prob = valid[i].prob;
       qapair.pprob = valid[i].pprob;
-      qapair.prettyString = valid[i].prettyString;
       lstqapairs.push(qapair);
     } catch (e) {
       lstqapairs.push({ path: [], formula: "", rank: i, error: valid[i].value, score: 0, prob: 0, pprob: 0 })
@@ -87,7 +86,7 @@ export function parseSEMPRE(valid) {
   const nbestdict = lstqapairs.reduce((nbd, nbest) => {
     const mynbd = nbd;
     //const key = JSON.stringify(nbest.value);
-    const key = JSON.stringify(nbest.formula);
+    const key = JSON.stringify(nbest.path);
     mynbd[key] = combine(nbd[key], nbest);
     return mynbd;
   }, {});
