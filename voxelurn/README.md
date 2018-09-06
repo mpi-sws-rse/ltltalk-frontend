@@ -12,13 +12,13 @@ Currently in progress, and focuses on a blocks world.
 
 #### Installation
 
-To install, simply run `yarn install`. This will install all the needed node dependencies. (Install yarn as described [here](https://yarnpkg.com/lang/en/docs/install/)
+To install, simply run `yarn install`. This will install all the needed node dependencies. (Install yarn as described [here](https://yarnpkg.com/lang/en/docs/install/).)
 
 #### Development
 
 We use [react-scripts]([https://github.com/facebookincubator/create-react-app]) to handle the building and running of the client.
 
-To run locally with hot reload, run `yarn start`.
+To run locally with hot reload, run `yarn start`. (If there is a problem with running this command saying that node doesn't exist, check if you only have `nodejs` and if so, create a simlink `node`)
 
 By default, the client tries to connect to the servers specified in "constants/strings.js". But, if you wish the client to connect to a different instance of SEMPRE or the community server, you can set environment variables to override the URLs they try to connect. The following environmental variables will tell the client which server to connect to:
 
