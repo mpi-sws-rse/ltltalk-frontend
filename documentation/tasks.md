@@ -4,8 +4,8 @@ There are seven sets of tasks ahead. Please, read all of them first to get the r
 
 ---
 
-Now start solving them (if you haven't already, check the <a href="/#/tutorial" target="_blank">tutorial section</a> to get you started). After finishing each set of tasks, reset the environment (an arrow on the right-hand side and then `RESET`). Remember, reseting only affects front-end, all the learnt rules are preserved.
-While you can solve the tasks in the best way you see fit, there is a benefit in trying to provide a general solution (that would work in more than one situation) because you can reuse solutions as building blocks in the tasks that follow. It might also be useful to define some basic building blocks that are not tasks themselves (e.g. `pick green` for `pick item has color green`)
+Now start solving them (if you haven't already, check the <a href="/#/tutorial" target="_blank">tutorial section</a> to get you started). After finishing each set of tasks, reset the environment (blue `RESET` button). Remember, reseting only affects front-end, all the learnt rules are preserved.
+While you can solve the tasks in the best way you see fit, there is a benefit in trying to provide a general solution (that would work in more than one situation) because you can reuse solutions as building blocks in the tasks that follow. It might also be useful to define some basic building blocks that are not tasks themselves (e.g. `pick green` for `pick item is green`). 
 
 ---
 *reset the environment*
@@ -14,7 +14,6 @@ While you can solve the tasks in the best way you see fit, there is a benefit in
 - Get one green square
 - Visit any field containing both a yellow item and a circle-shaped item (may be the same item)
 - Pick a yellow item from that space
-- If possible, pick a square shaped item (from that space).
 
 
 
@@ -24,27 +23,29 @@ While you can solve the tasks in the best way you see fit, there is a benefit in
 
 2.
 
- - Visit empty space
+ - Visit empty space (here a general definition is needed)
  - Get one green circle, one red triangle and one yellow square. Put those items to different empty spaces on the map
- - Visit any field containing both a triangle-shaped item and a green item (may be the same item) and pick only if these are two different items (one that is green, one that is triangular)
+ - Visit any field containing both a triangle-shaped item and a green item (may be the same item) and pick up all the items from that field
 
 ---
 
-*reset the environment*
-
-3.
- - Bring all items to room1
- - Pick exactly 3 red items
- - Build a tower at any field consisting of exactly 2 red, 2 green and 2 blue items.
-
----
 
 *reset the environment*
 
- 4.
+ 3.
  - Get one red triangle
  - Collect all red items
  - Put all blue items to room3
+
+---
+
+
+*reset the environment*
+
+4.
+ - Bring all items to room1
+ - Pick exactly 3 red items
+ - Build a tower at any field consisting of exactly 2 red, 2 green and 2 blue items.
 
 ---
 
