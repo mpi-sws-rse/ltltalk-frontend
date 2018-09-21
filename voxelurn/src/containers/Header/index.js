@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react"
-//import { SLACK_OAUTH_URL } from "constants/strings"
+import {IMPRINT, DATA_PROTECTION} from "constants/strings"
 import { Link } from "react-router"
 import { connect } from "react-redux"
 //import Actions from "actions/world"
@@ -9,8 +9,10 @@ import "./styles.css"
 const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
   <div className="Header">
     <div className="Header-logo">
-      <span>LASRE</span>
-      <span className="Header-sublogo">an MPI-SWS project</span>
+      <span>Flipper</span>
+      <span className="Header-sublogo">talk to your robot</span>
+      <span className="Header-subsublogo"> <a href={IMPRINT}>[Imprint]</a> </span>
+      <span className="Header-subsublogo"> <a href={DATA_PROTECTION}>[Data protection]</a> </span>
     </div>
     <div className="Header-nav">
       <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></Link>

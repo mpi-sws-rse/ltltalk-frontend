@@ -106,10 +106,14 @@ The world and its state are represented by
 
 ---
 **$LimitedItem**
- - \<every $Item\>                         :: \<$Item\>
- - \<$Item\>                              :: nondeterministically chosen `i ∈ <$Item>`
+ - |every $Item|                         :: |$Item|
+ - |$Item|                              :: nondeterministically chosen `i ∈ |$Item|`
+ 
+ 
 **$Item**
- - \<item $Filter\>                         :: `{i ∈ I: Filter(i) == true}`
+ - |item $Filter|                         :: `{i ∈ I: Filter(i) == true}`
+ 
+ 
  **$Filter**
  - \<is c\>        :: `λi. i.color == c`
  - \<is s\>        :: `λi. i.shape == s`
@@ -121,53 +125,53 @@ The world and its state are represented by
 ---
 
 **Locations**
- - \<[x1, y1]\> :: `(x1, y1)∈M`
- - \<`current`\> :: `r.current`
- - \<[$Point_1, $Point_2,...,$Point_n]\> :: `{<$Point_1>,<$Point_2>,...,<$Point_n>} ⊆ M`
- - \<`world`\> :: `M`
- - \<$Area1 or $Area2\> :: `<$Area1> ∪ <$Area2>`
- - \<$Area1 and $Area2\> :: `<$Area1> ∩ <$Area2>`
- - \<$Area1 minus $Area2\> :: `<$Area1>  \ <$Area2>`
- - \<area with corners $Point1 and $Point2\> :: `{ l ∈ M \ O:   $Point1.x ≤ l.x ≤ $Point2.x ∧ $Point1.y ≤ l.y ≤ $Point2.y}`
- - \<$Area containing $Item\> ::  `<$Area> ∩ {pos(i): i ∈ $Item ∩ I_w}`
- - \<[$Area_1, $Area_2,..., $Area_n]\> ::  `{<$Area_1>, <$Area_2>,...,<$Area_n>} ⊆ 2^M`
- - \<rooms\> :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points
- - \<$Collection containing $Item\> ::  `{a ∈ $Collection: ∃ i ∈ <$Item> ∩ I_w. i.position ∈ a}`
+ - |[x1, y1]| :: `(x1, y1)∈M`
+ - |`current`| :: `r.current`
+ - |[$Point_1, $Point_2,...,$Point_n]| :: `{|$Point_1|,|$Point_2|,...,|$Point_n|} ⊆ M`
+ - |`world`| :: `M`
+ - |$Area1 or $Area2| :: `|$Area1| ∪ |$Area2|`
+ - |$Area1 and $Area2| :: `|$Area1| ∩ |$Area2|`
+ - |$Area1 minus $Area2| :: `|$Area1|  \ |$Area2|`
+ - |area with corners $Point1 and $Point2| :: `{ l ∈ M \ O:   $Point1.x ≤ l.x ≤ $Point2.x ∧ $Point1.y ≤ l.y ≤ $Point2.y}`
+ - |$Area containing $Item| ::  `|$Area| ∩ {pos(i): i ∈ $Item ∩ I_w}`
+ - |[$Area_1, $Area_2,..., $Area_n]| ::  `{|$Area_1|, |$Area_2|,...,|$Area_n|} ⊆ 2^M`
+ - |rooms| :: `{room_1, room_2,... room_n}`, where `room_k ⊆ M` is a predefined subset of all points
+ - |$Collection containing $Item| ::  `{a ∈ $Collection: ∃ i ∈ |$Item| ∩ I_w. i.position ∈ a}`
 
 ---
 
 
 **Specifications**
 
-  - \<visit $Location while avoiding $Area\> :: if there is a path in `G` from `r` to `g` (if `$Location` is a point, then `g=$Location`; if it is an area, then `g` is any element of  `$Location`, and if it is a collection of areas, then `g` is any element of any element of`$Location`) that never goes through `l ∈ Area \ g`, then `r.current := g`.  otherwise, action is considered unrealizable
+  - |visit $Location while avoiding $Area| :: if there is a path in `G` from `r` to `g` (if `$Location` is a point, then `g=$Location`; if it is an area, then `g` is any element of  `$Location`, and if it is a collection of areas, then `g` is any element of any element of`$Location`) that never goes through `l ∈ Area \ g`, then `r.current := g`.  otherwise, action is considered unrealizable
 
-  - \<move $Direction\> :: `<visit newPos>` where `newPos` is defined by `newPos = r.current + (Direction.x, Direction.y)`, with choices for direction being `up = (0, 1)`, `down = (0,-1)`, `left = (-1,0)`, `right = (1,0)`
-  - \<pick $LimitedItem\>  :: let `itemSet2 = {i ∈ $LimitedItem ∩ I_w: pos(i) == r.current}`. Then, `I_r = I_r ∪ itemSet2` and `I_w = I_w \ itemSet2`. If `itemSet2` is an empty set, the specification is considered unrealizable
-  - \<drop $LimitedItem\> :: let `itemSet2 = LimitedItem ∩ I_r`. Then, `I_w = I_w ∪ itemSet2` and `∀i ∈ itemSet2: pos(i) = r.current`. If `itemSet2` is an empty set, the specification is considered unrealizable
-  - \<strict $Spec\> :: if $Spec is unrealizable, nothing happens (otherwise, `<Spec>`). Note: this command is always considered realizable
+  - |move $Direction| :: `|visit newPos|` where `newPos` is defined by `newPos = r.current + (Direction.x, Direction.y)`, with choices for direction being `up = (0, 1)`, `down = (0,-1)`, `left = (-1,0)`, `right = (1,0)`
+  - |pick $LimitedItem|  :: let `itemSet2 = {i ∈ $LimitedItem ∩ I_w: pos(i) == r.current}`. Then, `I_r = I_r ∪ itemSet2` and `I_w = I_w \ itemSet2`. If `itemSet2` is an empty set, the specification is considered unrealizable
+  - |drop $LimitedItem| :: let `itemSet2 = LimitedItem ∩ I_r`. Then, `I_w = I_w ∪ itemSet2` and `∀i ∈ itemSet2: pos(i) = r.current`. If `itemSet2` is an empty set, the specification is considered unrealizable
+  - |strict $Spec| :: if $Spec is unrealizable, nothing happens (otherwise, `|Spec|`). Note: this command is always considered realizable
 
 ---
 
 **Situations**
 
- - \<$Item at $Area\> ::   `∃ i ∈ $Item ∩ I_w: pos(i) ∈ $Area `
- - \<$Item at $Point\> ::  `∃ i ∈ Item ∩ I_w : pos(i) = $Point `
- - \<robot has $Item\> ::   `∃ i ∈ $Item ∩ I_r`
- - \<robot at $Point\> ::  `r.current == $Point`
- - \<robot at $Area\> ::  `r.current ∈ $Area`
- - \<possible $Spec\> :: if specification `$Spec` is realizable, return true, otherwise false*
- - \<$Sit1 and $Sit2\> ::  `<$Sit1> ∧ <$Sit2>`
- - \<$Sit1 or $Sit2\> :: `<$Sit1> ∨ <$Sit2>`
- - \<not $Sit\> ::`¬ <$Sit>`
+ - |$Item at $Area| ::   `∃ i ∈ $Item ∩ I_w: pos(i) ∈ $Area `
+ - |$Item at $Point| ::  `∃ i ∈ Item ∩ I_w : pos(i) = $Point `
+ - |robot has $Item| ::   `∃ i ∈ $Item ∩ I_r`
+ - |robot at $Point| ::  `r.current == $Point`
+ - |robot at $Area| ::  `r.current ∈ $Area`
+ - |possible $Spec| :: if specification `$Spec` is realizable, return true, otherwise false*
+ - |$Sit1 and $Sit2| ::  `|$Sit1| ∧ |$Sit2|`
+ - |$Sit1 or $Sit2| :: `|$Sit1| ∨ |$Sit2|`
+ - |not $Sit| ::`¬ |$Sit|`
 
 ---
 
- -  \<{$ST}\> :: `<$ST>`
- - \<$ST1; $ST2\> :: `$ST1` (with semantics `<$ST1>` gets executed and once it is finished `ST2` (with semantics `<$ST2>`) gets executed. If any of the two is unrealizable, the whole command is unrealizable
- - \<if $Sit $ST1\>  :: If `<$Sit>`, `<$ST>` gets executed (otherwise nothing happens)
- - \<while $Sit $ST\> ::  While `<Sit>` evaluates to true, `<$ST>`. If in any iteration `$Sit` holds true and `$ST` is unrealizable, the whole command is unrealizable
- - \<foreach point in $Area $ST\> :: `$ST(p), ∀ p ∈ Area` in an unspecified order. If in any iteration `$ST` is unrealizable, the whole command is unrealizable
- - \<foreach area in $Collection $ST\> :: `$ST(a), ∀ a ∈ Collection` in an unspecified order. If in any iteration `$ST` is unrealizable, the whole command is unrealizable
- - \<repeat n times $ST\> ::  `<$ST; $ST; ...; $ST>` (n times). If in any iteration `$ST` is unrealizable, the whole command is unrealizable
+ -  |{$ST}| :: `|$ST|`
+ - |$ST1; $ST2| :: `$ST1` (with semantics `|$ST1|` gets executed and once it is finished `ST2` (with semantics `|$ST2|`) gets executed. If any of the two is unrealizable, the whole command is unrealizable
+ - |if $Sit $ST1|  :: If `|$Sit|`, `|$ST|` gets executed (otherwise nothing happens)
+ - |while $Sit $ST| ::  While `|Sit|` evaluates to true, `|$ST|`. If in any iteration `$Sit` holds true and `$ST` is unrealizable, the whole command is unrealizable
+ - |foreach point in $Area $ST| :: `$ST(p), ∀ p ∈ Area` in an unspecified order. If in any iteration `$ST` is unrealizable, the whole command is unrealizable
+ - |foreach area in $Collection $ST| :: `$ST(a), ∀ a ∈ Collection` in an unspecified order. If in any iteration `$ST` is unrealizable, the whole command is unrealizable
+ - |repeat n times $ST| ::  `|$ST; $ST; ...; $ST|` (n times). If in any iteration `$ST` is unrealizable, the whole command is unrealizable
 
 

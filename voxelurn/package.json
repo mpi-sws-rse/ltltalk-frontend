@@ -1,11 +1,11 @@
 {
-  "name": "lasre",
+  "name": "flipper",
   "description": "teach the computer your language",
   "repository": {
     "type": "git",
     "url": ""
   },
-  "author": "Brendon Boldt <brendonboldt@mpi-sws.org>",
+  "author": "Brendon Boldt <brendonboldt@gmail.com>, Ivan Gavran <gavran@mpi-sws.org",
   "license": "MIT",
   "homepage": "",
   "devDependencies": {
@@ -38,7 +38,9 @@
   },
   "scripts": {
     "start": "NODE_PATH=./src react-scripts start",
-    "start:local": "REACT_APP_SEMPRE_SERVER=http://localhost:8410 REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts start",
+    "start:local": "REACT_APP_SEMPRE_SERVER=http://127.0.0.1:8410 REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts start",
+    "start:production": "REACT_APP_SEMPRE_SERVER=//flipper.mpi-sws.org/ REACT_APP_IMPRINT_LINK=https://imprint.mpi-klsb.mpg.de/sws/flipper.mpi-sws.org REACT_APP_DATA_PROTECTION_LINK=https://data-protection.mpi-klsb.mpg.de/sws/flipper.mpi-sws.org NODE_PATH=./src react-scripts start",
+    "start:test": "REACT_APP_SEMPRE_SERVER=//flipper-test.mpi-sws.org/ REACT_APP_IMPRINT_LINK=https://imprint.mpi-klsb.mpg.de/sws/flipper-test.mpi-sws.org REACT_APP_DATA_PROTECTION_LINK=https://data-protection.mpi-klsb.mpg.de/sws/flipper-test.mpi-sws.org NODE_PATH=./src react-scripts start",
     "build": "NODE_PATH=./src react-scripts build",
     "build:local": "REACT_APP_SEMPRE_SERVER=http://localhost:8410 REACT_APP_COMMUNITY_SERVER=http://localhost:8403 NODE_PATH=./src react-scripts build",
     "test": "NODE_PATH=./src react-scripts test --env=jsdom",
