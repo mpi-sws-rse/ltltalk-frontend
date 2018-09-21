@@ -22,13 +22,13 @@ class Information extends Component {
 				<div>
 					<img src={MPI_SWS_logo} alt="MPI-SWS logo" height={height} />
 					<p>Flipper is a natural language  robot interface. If Flipper can not understand your command, 
-					you can define it using its <Link to={{pathname: "/syntaxsemantics"}}>core language</Link>. Flipper then learns from your definition 
-					and generalizes new rules for future use (for you and the others).</p>
+					you can define it using its <Link to={{pathname: "/syntaxsemantics"}}>core language</Link>. Flipper then learns from your definition, induces 
+					new rules for future use (for you and the others) and in some cases generalizes your definition to a more suitable one.</p>
 		<h2>Quick start</h2>
 		<ul>
 			<li> open the <Link to={{pathname: "/build"}}> Play tab</Link> and write a command <b>visit red</b> </li>
 			<li> that command is not the part of core language. Unless somebody already naturalized it, Flipper won't know what to do </li>
-			<li> write <b>visit world containing item has color red</b>. Pres 'try', 'accept' and finally 'finish definition' (as shown in this short <a href="https://youtu.be/4ayT8Iktqm8">video demo</a>) </li>
+			<li> write <b>visit world containing item is red</b>. Pres 'try', 'accept' and finally 'finish definition' (as shown in this short <a href="https://youtu.be/Fv7BAqHmNYo">video demo</a>) </li>
 			<li> next time you (or somebody else) write <b>visit triangle</b>, Flipper will understand you </li>
             
 		</ul>
