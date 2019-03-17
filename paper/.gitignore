@@ -1,8 +1,0 @@
-*.aux
-*.log
-*.gz
-*.bbl
-*.dvi
-*.blg
-*.pdf
-.DS_Store
