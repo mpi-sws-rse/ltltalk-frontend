@@ -30,8 +30,6 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
-    //popup: PropTypes.object,
-
     roomMarkers: PropTypes.array,
     pointMarkers: PropTypes.array
   }
@@ -54,39 +52,17 @@ class Build extends Component {
     //Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
     //Mousetrap.bind("command+shift+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.redo()) })
 
-    /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
-     * otherwise, set a current structure id for the currently working sturct */
-
-  /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
-     * otherwise, set a current structure id for the currently working sturct */
-    console.log("#########BUild")
-    console.log(this.props.location)
-    // if (Object.keys(this.props.location.query).indexOf("taskid") !== -1) {
-    //   this.props.dispatch(UserActions.setTask("target"))
-    //   this.setTarget()
-    // } else {
-    //   this.props.dispatch(LoggerActions.setStructureId())
-    // }
+  
 
     const query = queryString.parse(this.props.location.query);
-    console.log("#########Query")
-
-    console.log(query)
 
     if (Object.keys(query).indexOf("taskid") !== -1) {
       this.props.dispatch(UserActions.setTask("target"))
       this.setTarget()
     }
-    // } else {
-    //   this.props.dispatch(LoggerActions.setStructureId())
-    // }
+    
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.world.status === "accept" && nextProps.world.status === "define") {
-  //     this.handleQuery(this.props.world.query)
-  //   }
-  // }
 
   componentDidUpdate(prevProps) {
     /* Whenever there is a status change, reset the selected response */

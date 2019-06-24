@@ -27,8 +27,6 @@ class Layout extends Component {
 
     /* Open Logging Socket */
     this.props.dispatch(Logger.open())
-    console.log("##############")
-    console.log(this.props) // "?filter=top&origin=im"
 
   }
 
