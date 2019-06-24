@@ -130,9 +130,6 @@ const Actions = {
     return (dispatch, getState) => {
       /* Set structure Id */
       const routing = getState().routing
-
-      console.log("Routing....")
-      console.log(routing)
       let structureId = ""
       const location = routing.location || routing.locationBeforeTransitions
 
@@ -141,9 +138,6 @@ const Actions = {
 
 
       const query = queryString.parse(location.query);
-
-      console.log("qiersss....")
-      console.log(query)
       const sidParam = query.sid
 
       if (sidParam) {
@@ -347,3 +341,4 @@ const Actions = {
 }
 
 export default Actions
+
