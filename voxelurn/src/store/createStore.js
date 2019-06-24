@@ -19,6 +19,8 @@ export default (initialState = {}) => {
     }
   }
 
+
+  console.log("Inside store section..................")
   /* Now, create the store */
   const store = createStore(
     makeRootReducer(),

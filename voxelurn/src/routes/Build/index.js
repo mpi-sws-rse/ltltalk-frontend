@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import Actions from "actions/world"
 import LoggerActions from "actions/logger"
 import UserActions from "actions/user"
@@ -15,6 +15,10 @@ import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
 import ResetPanel from "components/ResetPanel"
 import DictionaryPanel from "components/Dictionary"
+// import DashboardBox from "components/DashboardBox"
+import PropTypes from 'prop-types';
+import queryString from 'query-string';
+import { withRouter } from "react-router-dom";
 
 import "./styles.css"
 
@@ -52,12 +56,30 @@ class Build extends Component {
 
     /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
      * otherwise, set a current structure id for the currently working sturct */
-    if (Object.keys(this.props.location.query).indexOf("taskid") !== -1) {
+
+  /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
+     * otherwise, set a current structure id for the currently working sturct */
+    console.log("#########BUild")
+    console.log(this.props.location)
+    // if (Object.keys(this.props.location.query).indexOf("taskid") !== -1) {
+    //   this.props.dispatch(UserActions.setTask("target"))
+    //   this.setTarget()
+    // } else {
+    //   this.props.dispatch(LoggerActions.setStructureId())
+    // }
+
+    const query = queryString.parse(this.props.location.query);
+    console.log("#########Query")
+
+    console.log(query)
+
+    if (Object.keys(query).indexOf("taskid") !== -1) {
       this.props.dispatch(UserActions.setTask("target"))
       this.setTarget()
-    } else {
-      this.props.dispatch(LoggerActions.setStructureId())
     }
+    // } else {
+    //   this.props.dispatch(LoggerActions.setStructureId())
+    // }
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -226,8 +248,16 @@ class Build extends Component {
     return (
       <div className="Build">
         <div className="Build-info" >
+{/* 
+        <DashboardBox
+           blocks={currentState}
+           isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} 
+           width={600}
+           height={200}/> */}
           <RoomTable
           />
+          
+
         </div>
         <div className="Build-world">
           <Setting
@@ -285,4 +315,4 @@ const mapStateToProps = (state) => ({
   current_history_idx: state.world.current_history_idx
 })
 
-export default connect(mapStateToProps)(Build)
+export default  withRouter(connect(mapStateToProps)(Build))

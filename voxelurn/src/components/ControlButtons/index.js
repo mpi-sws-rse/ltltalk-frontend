@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from "react"
+import React, { Component} from "react"
 import { connect } from "react-redux"
 //import classnames from "classnames"
 //import Actions from "actions/world"
@@ -8,6 +8,8 @@ import { worldConfig } from "constants/defaultMap"
 import "./styles.css"
 
 import Constants from "constants/actions"
+import PropTypes from 'prop-types';
+
 
 class ControlButtons extends Component {
   static propTypes = {

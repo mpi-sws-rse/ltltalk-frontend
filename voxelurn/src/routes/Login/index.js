@@ -1,4 +1,6 @@
-import { hashHistory } from "react-router"
+import { hashHistory } from "react-router-dom"
+// import { hashHistory } from "react-router"
+
 import { connect } from "react-redux"
 import Actions from "actions/logger"
 
