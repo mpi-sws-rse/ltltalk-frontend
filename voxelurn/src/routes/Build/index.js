@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import Actions from "actions/world"
 import LoggerActions from "actions/logger"
 import UserActions from "actions/user"
@@ -15,6 +15,10 @@ import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
 import ResetPanel from "components/ResetPanel"
 import DictionaryPanel from "components/Dictionary"
+// import DashboardBox from "components/DashboardBox"
+import PropTypes from 'prop-types';
+import queryString from 'query-string';
+import { withRouter } from "react-router-dom";
 
 import "./styles.css"
 
@@ -26,8 +30,6 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
-    //popup: PropTypes.object,
-
     roomMarkers: PropTypes.array,
     pointMarkers: PropTypes.array
   }
@@ -50,21 +52,17 @@ class Build extends Component {
     //Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
     //Mousetrap.bind("command+shift+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.redo()) })
 
-    /* If there is a ?taskid=N as a URL parameter, set the task as 'target',
-     * otherwise, set a current structure id for the currently working sturct */
-    if (Object.keys(this.props.location.query).indexOf("taskid") !== -1) {
+  
+
+    const query = queryString.parse(this.props.location.query);
+
+    if (Object.keys(query).indexOf("taskid") !== -1) {
       this.props.dispatch(UserActions.setTask("target"))
       this.setTarget()
-    } else {
-      this.props.dispatch(LoggerActions.setStructureId())
     }
+    
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.world.status === "accept" && nextProps.world.status === "define") {
-  //     this.handleQuery(this.props.world.query)
-  //   }
-  // }
 
   componentDidUpdate(prevProps) {
     /* Whenever there is a status change, reset the selected response */
@@ -226,8 +224,16 @@ class Build extends Component {
     return (
       <div className="Build">
         <div className="Build-info" >
+{/* 
+        <DashboardBox
+           blocks={currentState}
+           isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} 
+           width={600}
+           height={200}/> */}
           <RoomTable
           />
+          
+
         </div>
         <div className="Build-world">
           <Setting
@@ -285,4 +291,4 @@ const mapStateToProps = (state) => ({
   current_history_idx: state.world.current_history_idx
 })
 
-export default connect(mapStateToProps)(Build)
+export default  withRouter(connect(mapStateToProps)(Build))

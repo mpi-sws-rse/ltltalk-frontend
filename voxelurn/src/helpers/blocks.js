@@ -45,6 +45,8 @@ export function adjustRobot(r, b) {
   }
 }
 
+
+
 export function rotateBlock (b, rotational, width = 1) {
 	let x = b.x;
 	let y = b.y;
@@ -128,6 +130,53 @@ export function rotateBlock (b, rotational, width = 1) {
       }
     }
   }
+
+
+ export function moveRobotByKeys(steps,ref){
+
+//      const node = this.refs.blocksCanvas;
+
+        const ctx = ref.getContext('2d');
+        ctx.fillRect(0,0, 100, 100);
+        console.log("updating")
+        console.log(ctx)
+      ref.addEventListener('keydown', function(e) {
+
+//      window.addEventListener('keydown', function(e) {
+
+//      const active = document.activeElement;
+//
+//      console.log(active)
+//      console.log("we are in move funct")
+
+
+
+      if(e.keyCode === 40 ) {
+         /* Up arrow key is alias for clicking up */
+        console.log("key up is pressed")
+        console.log("block pf")
+        console.log(steps)
+
+       // ToDo action
+      //  robotStep + 1;
+//      removeRobot(blocks);
+
+      }
+      if(e.keyCode === 38) {
+       /* Down arrow key is alias for clicking down */
+
+       console.log("key down is pressed")
+
+        //ToDo Action
+        steps=+ 1;
+        console.log("block is")
+        console.log(steps)
+
+
+
+      }
+    });
+ }
 
   // Maybe it would be better to move the robot instead of recreating it?
   export function updateRobot(blocks, robot, step, path, factor) {

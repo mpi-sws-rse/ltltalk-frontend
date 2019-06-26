@@ -4,6 +4,10 @@ import Actions from "actions/user"
 import LoggerActions from "actions/logger"
 import Logger from "actions/logger"
 import Header from "containers/Header"
+import queryString from 'query-string';
+import { withRouter } from "react-router-dom";
+
+
 
 import "normalize.css"
 import "./styles.css"
@@ -23,16 +27,22 @@ class Layout extends Component {
 
     /* Open Logging Socket */
     this.props.dispatch(Logger.open())
+
   }
 
   render() {
+    // const query = queryString.parse(this.props.location.search);
+
+    const query = queryString.parse(this.props.location.query);
+
+
     return (
       <div className="container">
-        <Header query={this.props.location.query} />
+        <Header query={query} />
         {this.props.children}
       </div>
     )
   }
 }
 
-export default connect()(Layout)
+export default withRouter(connect()(Layout))

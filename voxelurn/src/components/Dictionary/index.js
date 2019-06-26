@@ -2,11 +2,12 @@
  * DictionaryItem: a single element of the Dictionary list
  */
 
-import React, { Component, PropTypes } from "react"
+import React, { Component } from "react"
 import classnames from "classnames"
 import Actions from "actions/world"
 import { connect } from "react-redux"
 
+import PropTypes from 'prop-types';
 
 import "./styles.css"
 
@@ -89,7 +90,7 @@ class DictionaryPanel extends Component {
 }
 
 class Dictionary extends Component{
-	static PropTypes= {
+	static propTypes= {
 		dictionary: PropTypes.array
 	}
 	

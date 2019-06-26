@@ -1,8 +1,10 @@
-import React, { Component, PropTypes } from "react"
+import React, { Component } from "react"
 import { connect } from "react-redux"
 import Actions from "actions/world"
 import classnames from "classnames"
 import { STATUS, DEFINE_THIS, FINISH_DEFINITION } from "constants/strings"
+import PropTypes from 'prop-types';
+
 
 import "./styles.css"
 

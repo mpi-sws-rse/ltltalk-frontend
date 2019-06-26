@@ -12,13 +12,16 @@ import {
   rotateBlock,
   removeRobot,
   resolveZ,
-  updateRobot
+  updateRobot,
+  moveRobotByKeys
 } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
 
 import { worldConfig } from "constants/defaultMap"
 import { worldAngle } from "constants/world"
+import PropTypes from 'prop-types';
+
 
 // Default z-axis scaling for blocks
 const heightScaling = 0.25;
@@ -71,14 +74,14 @@ export const computeEquality = (struct1, struct2) => {
 
 class Blocks extends React.Component {
   static propTypes = {
-    blocks: React.PropTypes.array,
-    path: React.PropTypes.array,
-    pointMarkers: React.PropTypes.array,
-    roomMarkers: React.PropTypes.array,
-    robot: React.PropTypes.object,
-    isoConfig: React.PropTypes.object,
-    width: React.PropTypes.number,
-    height: React.PropTypes.number
+    blocks: PropTypes.array,
+    path: PropTypes.array,
+    pointMarkers: PropTypes.array,
+    roomMarkers: PropTypes.array,
+    robot: PropTypes.object,
+    isoConfig: PropTypes.object,
+    width: PropTypes.number,
+    height: PropTypes.number
   }
 
   static defaultProps = {
@@ -141,6 +144,9 @@ class Blocks extends React.Component {
     );
 
     this.setState({ iso: iso })
+
+        moveRobotByKeys(0,this.refs.blocksCanvas)
+
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -195,6 +201,9 @@ class Blocks extends React.Component {
     }
     // Robot speed factor
     const factor = 5;
+
+    // console.log("blocks areL")
+    // console.log(argBlocks)
     
     let updatedBlocks = updateRobot(argBlocks, robot, robotStep, path, factor);
     if (robotStep === 0) {
@@ -241,9 +250,14 @@ class Blocks extends React.Component {
     this.renderGrid(minScalar)
     this.renderBlocks(blocks.filter((b) => b.z >= -0.5), minScalar)
 
+
     removeRobot(blocks);
+//      this.movesRobot(robotStep,blocks)
+
+
 
     if (path && robotStep < path.length * factor) {
+
       window.requestAnimationFrame(() => this.renderEverything(blocks, robot, path, robotStep + 1));
     } else {
       counter--;
@@ -347,6 +361,42 @@ class Blocks extends React.Component {
     return factor * graystandard + (1 - factor) * value;
   }
 
+
+
+
+//  movesRobot(robotStep,blocks) {
+//    const node = this.refs.blocksCanvas;
+//    //  node.addEventListener('keydown', function(e) {
+//
+//      window.addEventListener('keydown', function(e) {
+//
+//      const active = document.activeElement;
+//      if(e.keyCode === 40 ) {
+//         /* Up arrow key is alias for clicking up */
+//        console.log("key up is pressed")
+//
+//       // ToDo action
+//      //  robotStep + 1;
+////      removeRobot(blocks);
+//
+//      }
+//      if(e.keyCode === 38) {
+//       /* Down arrow key is alias for clicking down */
+//
+//       console.log("key down is pressed")
+//
+//        //ToDo Action
+//        robotStep=+ 1;
+//        console.log("block is")
+//        console.log(robotStep)
+//
+//
+//
+//      }
+//    });
+//  }
+
+
   //makeBlock(x, y, z, highlighted = false, scale = this.config.scale, type = null) {
   makeBlock(block, highlighted = false, scale = this.config.scale) {
     const { rotation, centerPoint} = this.config
@@ -448,6 +498,7 @@ class Blocks extends React.Component {
       </div>
     )
   }
+
 }
 
 export default Blocks

@@ -1,15 +1,12 @@
-import React, { Component, PropTypes } from "react"
+import React, { Component } from "react"
 import classnames from "classnames"
 import { connect } from "react-redux"
+import PropTypes from 'prop-types';
 
 import "./styles.css"
 
-//import Constants from "constants/actions"
-
 class ActionPopup extends Component {
   static propTypes = {
-    /* injected by Redux */
-    //popup: PropTypes.object,
     text: PropTypes.string,
     active: PropTypes.bool,
     dispatch: PropTypes.func
@@ -43,9 +40,6 @@ class ActionPopup extends Component {
   }
 
   render() {
-    //let text = this.props.text;
-    //if (text.length === 0)
-      //text = "...";
 
     return (
       <div className="ActionPopup">
