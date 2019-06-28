@@ -8,7 +8,7 @@ import History from "containers/History"
 import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
 import ActionPopup from "components/ActionPopup"
-import RoomTable from "components/RoomTable"
+
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
@@ -230,8 +230,7 @@ class Build extends Component {
            isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} 
            width={600}
            height={200}/> */}
-          <RoomTable
-          />
+        
           
 
         </div>
