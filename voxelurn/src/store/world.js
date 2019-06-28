@@ -64,8 +64,6 @@ export default function reducer(state = initialState, action = {}) {
     ///////
     case Constants.UPDATE_POINT_MARKERS:
       return { ...state, pointMarkers: action.pointMarkers }
-    case Constants.UPDATE_ROOM_MARKERS:
-      return { ...state, roomMarkers: action.roomMarkers }
     ///////
     case Constants.RESET_RESPONSES:
       return { ...state, status: STATUS.TRY, query: "", responses: [] }

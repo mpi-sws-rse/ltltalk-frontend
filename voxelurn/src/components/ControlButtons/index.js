@@ -49,37 +49,6 @@ class ControlButtons extends Component {
     return str;
   }
 
-  onCellHover(event) {
-    this.props.dispatch({
-      type: Constants.UPDATE_ROOM_MARKERS,
-      roomMarkers: [...worldConfig.roomPoints[event.target.innerHTML]]
-    })
-  }
-
-  onCellLeave() {
-    this.props.dispatch({
-      type: Constants.UPDATE_ROOM_MARKERS,
-      roomMarkers: []
-    })
-  }
-
-  getTableCells() {
-    //let str = "";
-    let keys = Object.keys(worldConfig.roomPoints);
-    keys = keys.sort((a,b) => a > b);
-    let arr = [];
-    for (let room of keys) {
-        arr.push((
-          <tr
-            key={room}
-            onMouseOver={this.onCellHover.bind(this)}
-            onMouseOut={this.onCellLeave.bind(this)}
-          ><td>{room}</td></tr>
-      ));
-    }
-    return arr;
-  }
-
   render() {
     return (
       <div className="ControlButtons">
