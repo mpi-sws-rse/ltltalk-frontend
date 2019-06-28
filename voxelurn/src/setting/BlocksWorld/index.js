@@ -77,7 +77,7 @@ class Blocks extends React.Component {
     blocks: PropTypes.array,
     path: PropTypes.array,
     pointMarkers: PropTypes.array,
-    roomMarkers: PropTypes.array,
+    colorGrids: PropTypes.array,
     robot: PropTypes.object,
     isoConfig: PropTypes.object,
     width: PropTypes.number,
@@ -220,7 +220,7 @@ class Blocks extends React.Component {
     
     // TODO Move this to its own function
     let pm = this.props.pointMarkers;
-    let rm = this.props.roomMarkers;
+    let rm = this.props.colorGrids;
     if (!rm) rm = [];
     if (!pm) pm = [];
     for (let i = 0; i < updatedBlocks.length; ++i) {

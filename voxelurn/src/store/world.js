@@ -11,11 +11,11 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   pointMarkers: [], 
-  // Originally we used roomMarkers to highlight room when hovering over the room table.
+  // Originally we used colorGrids to highlight room when hovering over the room table.
   // Later we won't have rooms.
-  // We can rename roomMarkers as something like coloredGrids, which contains the array of grids that are blue (or whatever color)
+  // We can rename colorGrids as something like coloredGrids, which contains the array of grids that are blue (or whatever color)
   // And we do not to change anything else
-  roomMarkers: [ [3, 7], [5, 1], [9, 5] ], 
+  colorGrids: [ [3, 7], [5, 1], [9, 5] ], 
   //robotStep: 0, // How far is the robot along its visual simulation
   current_history_idx: -1,
   status: STATUS.TRY,

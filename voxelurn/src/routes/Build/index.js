@@ -30,7 +30,7 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
-    roomMarkers: PropTypes.array,
+    colorGrids: PropTypes.array,
     pointMarkers: PropTypes.array
   }
 
@@ -191,7 +191,7 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, pointMarkers, roomMarkers, history,
+    const { status, responses, pointMarkers, colorGrids, history,
         current_history_idx, task } = this.props
 
     /* The current state should be the history element at the last position, or
@@ -240,7 +240,7 @@ class Build extends Component {
             path={currentPath}
             robot={robot}
             pointMarkers={pointMarkers}
-            roomMarkers={roomMarkers}
+            colorGrids={colorGrids}
             width={1650}
             height={1200}
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
@@ -283,7 +283,7 @@ const mapStateToProps = (state) => ({
   history: state.world.history,
   task: state.user.task,
   responses: state.world.responses,
-  roomMarkers: state.world.roomMarkers,
+  colorGrids: state.world.colorGrids,
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   //popup: state.world.popup,
