@@ -81,7 +81,8 @@ class Blocks extends React.Component {
     robot: PropTypes.object,
     isoConfig: PropTypes.object,
     width: PropTypes.number,
-    height: PropTypes.number
+    height: PropTypes.number,
+    handleMoveRobot: PropTypes.func
   }
 
   static defaultProps = {
@@ -494,7 +495,14 @@ class Blocks extends React.Component {
   render() {
     return (
       <div>
-      <canvas id="blocksCanvas" className="Blocks" ref="blocksCanvas" width={this.props.width} height={this.props.height} />
+      <canvas 
+      id="blocksCanvas" 
+      className="Blocks" 
+      ref="blocksCanvas" 
+      width={this.props.width} 
+      height={this.props.height} 
+      tabIndex="1"
+      onKeyDown={(event) => this.props.handleMoveRobot(event)}/>
       </div>
     )
   }

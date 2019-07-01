@@ -25,10 +25,41 @@ const initialState = {
   //exampleQuery: "add red 3 times",
   defineN: null,
   dictionary: [],
+  walls: worldConfig.walls,
+  robot: worldConfig.robot
 }
 
 export default function reducer(state = initialState, action = {}) {
+  let nextPosition;
+  const currentRobot = state.robot;
+  const currentX = currentRobot.x;
+  const currentY = currentRobot.y;
+
   switch (action.type) {
+
+    case Constants.MOVE_ROBOT_UP:
+			nextPosition = { x: currentX, y: currentY + 1 };
+			console.log('I am in reducer');
+			console.log(nextPosition);
+			console.log(state.walls);
+			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
+      else return { ...state, robot: { ...currentRobot, y: currentY + 1 } };
+      
+		case Constants.MOVE_ROBOT_DOWN:
+			nextPosition = { x: currentX, y: currentY - 1 };
+			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, y: currentY - 1 } };
+
+		case Constants.MOVE_ROBOT_LEFT:
+			nextPosition = { x: currentX - 1, y: currentY };
+			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, x: currentX - 1 } };
+
+		case Constants.MOVE_ROBOT_RIGHT:
+			nextPosition = { x: currentX + 1, y: currentY };
+			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
+      else return { ...state, robot: { ...currentRobot, x: currentX + 1 } };   
+
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
     case Constants.REVERT:

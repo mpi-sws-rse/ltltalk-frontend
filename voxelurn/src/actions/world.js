@@ -34,6 +34,39 @@ function sendContext(history, current_history_idx, sessionId) {
 }
 
 const Actions = {
+
+  moveRobotUp: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_UP
+			});
+		};
+	},
+
+	moveRobotDown: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_DOWN
+			});
+		};
+	},
+
+	moveRobotLeft: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_LEFT
+			});
+		};
+	},
+
+	moveRobotRight: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_RIGHT
+			});
+		};
+	},
+
   setQuery: (query) => {
     return (dispatch) => {
       dispatch({

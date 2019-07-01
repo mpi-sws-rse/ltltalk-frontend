@@ -44,6 +44,8 @@ class Build extends Component {
       possSteps: 33,
       win: false
     }
+
+    this.handleMoveRobot = this.handleMoveRobot.bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +95,34 @@ class Build extends Component {
     this.setState({ target: randomTarget[2], possSteps: randomTarget[1], targetIdx: randomTarget[0] })
 
     this.props.dispatch(LoggerActions.log({ type: "start", msg: { targetIdx: randomTarget[0], target: randomTarget[2] } }))
+  }
+
+  handleMoveRobot(event) {
+		var ARROW_KEY_LEFT = 37;
+		var ARROW_KEY_UP = 38;
+		var ARROW_KEY_RIGHT = 39;
+		var ARROW_KEY_DOWN = 40;
+
+		switch (event.keyCode) {
+			case ARROW_KEY_UP:
+				this.props.dispatch(Actions.moveRobotUp());
+				break;
+
+			case ARROW_KEY_DOWN:
+				this.props.dispatch(Actions.moveRobotDown());
+				break;
+
+			case ARROW_KEY_LEFT:
+				this.props.dispatch(Actions.moveRobotLeft());
+				break;
+
+			case ARROW_KEY_RIGHT:
+				this.props.dispatch(Actions.moveRobotRight());
+				break;
+
+			default:
+				break;
+		}
   }
 
   handleQuery(query) {
@@ -200,7 +230,8 @@ class Build extends Component {
     if (idx > history.length - 1) idx = history.length - 1
     let currentState = history[idx].worldMap;
     // TODO This might be unnecessary
-    let robot = history[idx].robot;
+    // let robot = history[idx].robot;
+    let robot = this.props.robot;
     let currentPath = [];// = history[idx].path;
 
     let interpretation = "";
@@ -236,6 +267,7 @@ class Build extends Component {
         </div>
         <div className="Build-world">
           <Setting
+            handleMoveRobot={this.handleMoveRobot}
             blocks={currentState}
             path={currentPath}
             robot={robot}
@@ -287,7 +319,8 @@ const mapStateToProps = (state) => ({
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   //popup: state.world.popup,
-  current_history_idx: state.world.current_history_idx
+  current_history_idx: state.world.current_history_idx,
+  robot: state.world.robot
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))
