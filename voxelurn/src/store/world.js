@@ -26,12 +26,14 @@ const initialState = {
   defineN: null,
   dictionary: [],
   walls: worldConfig.walls,
-  robot: worldConfig.robot
+  robot: worldConfig.robot,
+  keyPressHist: []
 }
 
 export default function reducer(state = initialState, action = {}) {
   let nextPosition;
   const currentRobot = state.robot;
+  const currentKeyPressHist = state.keyPressHist;
   const currentX = currentRobot.x;
   const currentY = currentRobot.y;
 
@@ -43,22 +45,22 @@ export default function reducer(state = initialState, action = {}) {
 			console.log(nextPosition);
 			console.log(state.walls);
 			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, y: currentY + 1 } };
+      else return { ...state, robot: { ...currentRobot, y: currentY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
       
 		case Constants.MOVE_ROBOT_DOWN:
 			nextPosition = { x: currentX, y: currentY - 1 };
 			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, y: currentY - 1 } };
+			else return { ...state, robot: { ...currentRobot, y: currentY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
 
 		case Constants.MOVE_ROBOT_LEFT:
 			nextPosition = { x: currentX - 1, y: currentY };
 			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, x: currentX - 1 } };
+			else return { ...state, robot: { ...currentRobot, x: currentX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
 
 		case Constants.MOVE_ROBOT_RIGHT:
 			nextPosition = { x: currentX + 1, y: currentY };
 			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, x: currentX + 1 } };   
+      else return { ...state, robot: { ...currentRobot, x: currentX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
 
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
