@@ -222,7 +222,7 @@ class Build extends Component {
 
   render() {
     const { status, responses, pointMarkers, colorGrids, history,
-        current_history_idx, task } = this.props
+        current_history_idx, task, isKeyPressEnabled } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -231,7 +231,10 @@ class Build extends Component {
     let currentState = history[idx].worldMap;
     // TODO This might be unnecessary
     // let robot = history[idx].robot;
-    let robot = this.props.robot;
+    console.log(this.props.isKeyPressEnabled);
+    let robot;
+    if (this.props.isKeyPressEnabled) robot = this.props.robot;
+    else robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;
 
     let interpretation = "";
@@ -302,7 +305,7 @@ class Build extends Component {
             </div>
           </div>
         </div>
-       <DictionaryPanel />
+       {/* <DictionaryPanel /> */}
        <ResetPanel />
       </div>
     );
@@ -320,7 +323,8 @@ const mapStateToProps = (state) => ({
   defineN: state.world.defineN,
   //popup: state.world.popup,
   current_history_idx: state.world.current_history_idx,
-  robot: state.world.robot
+  robot: state.world.robot,
+  isKeyPressEnabled: state.world.isKeyPressEnabled
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

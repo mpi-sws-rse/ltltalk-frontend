@@ -35,6 +35,22 @@ function sendContext(history, current_history_idx, sessionId) {
 
 const Actions = {
 
+  enableKeyPress: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.ENABLE_KEY_PRESS
+			});
+		};
+  },
+  
+  disableKeyPress: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.DISABLE_KEY_PRESS
+			});
+		};
+	},
+
   moveRobotUp: () => {
 		return (dispatch) => {
 			dispatch({
@@ -145,6 +161,11 @@ const Actions = {
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
+                alert('Please provide a definition by moving the robot with the arrow keys');
+                document.getElementById('blocksCanvas').focus();
+                dispatch({
+                  type: Constants.ENABLE_KEY_PRESS
+                });
                 return false
               } else {
                 /* Remove no-ops */

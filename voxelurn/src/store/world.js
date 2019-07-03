@@ -27,7 +27,8 @@ const initialState = {
   dictionary: [],
   walls: worldConfig.walls,
   robot: worldConfig.robot,
-  keyPressHist: []
+  keyPressHist: [],
+  isKeyPressEnabled: false
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -36,8 +37,26 @@ export default function reducer(state = initialState, action = {}) {
   const currentKeyPressHist = state.keyPressHist;
   const currentX = currentRobot.x;
   const currentY = currentRobot.y;
+  const idx = state.history.length - 1;
 
   switch (action.type) {
+    
+    case Constants.ENABLE_KEY_PRESS:
+      const robotStartState = state.history[idx].robot;
+      return { ...state, robot: robotStartState, isKeyPressEnabled: true };
+
+    case Constants.DISABLE_KEY_PRESS: 
+      const lastHistory = { ...state.history[idx], type: null, robot: currentRobot, worldMap: worldConfig.worldMap };
+      return { 
+        ...state, 
+        // history: [ ...state.history, { worldMap: worldConfig.worldMap, robot: currentRobot } ], 
+        history: [ ...state.history.splice(0, idx), lastHistory ],
+        isKeyPressEnabled: false,
+        defining: false, 
+        defineN: null, 
+        query: "", 
+        status: STATUS.TRY 
+      }; 
 
     case Constants.MOVE_ROBOT_UP:
 			nextPosition = { x: currentX, y: currentY + 1 };

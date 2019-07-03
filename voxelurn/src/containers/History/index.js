@@ -49,30 +49,45 @@ class HistoryItem extends Component {
   }
 }
 
-const HistoryPin = ({ text, head, define, defining, remove, query }) => {
-  return (
-    <div className={classnames("HistoryPin", { "head": head })}>
-      {!defining ?
-        text
-        :
-        query !== "" ? query : <span>&nbsp;</span>
-      }
-      <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
-      {head &&
-        <button onClick={(e) => { e.stopPropagation(); define() }}>{FINISH_DEFINITION}</button>
-      }
-    </div>
-  )
-}
+class HistoryPin extends Component {
 
-HistoryPin.propTypes = {
-  text: PropTypes.string,
-  head: PropTypes.bool,
-  openDefine: PropTypes.func,
-  defining: PropTypes.bool
+  static propTypes = {
+    text: PropTypes.string,
+    head: PropTypes.bool,
+    openDefine: PropTypes.func,
+    defining: PropTypes.bool,
+  }
+
+  render() {
+    const { text, head, define, defining, remove, query } = this.props;
+      return (
+        <div className={classnames("HistoryPin", { "head": head })}>
+          {!defining ?
+            text
+            :
+            query !== "" ? query : <span>&nbsp;</span>
+          }
+          <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
+          {head &&
+            <button onClick={(e) => { 
+                e.stopPropagation(); 
+                // define(); 
+                this.props.handleFinishDefinition();
+            }}>
+              {FINISH_DEFINITION}
+            </button>
+          }
+        </div>
+      );    
+  }
 }
 
 class History extends Component {
+  constructor(props) {
+    super(props);
+    this.handleFinishDefinition = this.handleFinishDefinition.bind(this);
+  }
+  
   static propTypes = {
     history: PropTypes.array,
     current_history_idx: PropTypes.number,
@@ -112,6 +127,9 @@ class History extends Component {
     return false
   }
 
+  handleFinishDefinition() {
+    this.props.dispatch(Actions.disableKeyPress());
+  }
   scrollToBottom() {
     this.refs.list.scrollTop = this.refs.list.scrollHeight;
   }
@@ -173,6 +191,7 @@ class History extends Component {
 
           if (h.type === "pin") return (
             <HistoryPin
+              handleFinishDefinition={this.handleFinishDefinition}
               key={idx}
               text={h.text}
               head={idx === lastPinIdx}
