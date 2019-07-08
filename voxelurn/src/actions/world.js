@@ -51,6 +51,14 @@ const Actions = {
 		};
 	},
 
+  robotPickItem: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.ROBOT_PICK_ITEM
+			});
+		};
+  },
+   
   moveRobotUp: () => {
 		return (dispatch) => {
 			dispatch({
@@ -161,8 +169,6 @@ const Actions = {
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
-                alert('Please provide a definition by moving the robot with the arrow keys');
-                document.getElementById('blocksCanvas').focus();
                 dispatch({
                   type: Constants.ENABLE_KEY_PRESS
                 });
@@ -179,7 +185,7 @@ const Actions = {
                   type: Constants.TRY_QUERY,
                   responses: responses
                 })
-
+                console.log(responses);
                 return true
               }
             })

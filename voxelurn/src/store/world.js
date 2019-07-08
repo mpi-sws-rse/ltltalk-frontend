@@ -11,75 +11,143 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   pointMarkers: [], 
-  // Originally we used colorGrids to highlight room when hovering over the room table.
-  // Later we won't have rooms.
-  // We can rename colorGrids as something like coloredGrids, which contains the array of grids that are blue (or whatever color)
-  // And we do not to change anything else
-  colorGrids: [ [3, 7], [5, 1], [9, 5] ], 
-  //robotStep: 0, // How far is the robot along its visual simulation
+
+  // The blue grids are called "waters".
+  // Items (that are not carried by the robot) cannot be on waters.
+  // But the robot can. And the robot can step on a water grid while carrying items.
+  // These 3 points are arbitrarily chosen. 
+  // Chuntong.
+  waterMarkers: [ [3, 7], [5, 1], [9, 5] ], 
+
+  // Same format as waterMarkers. An array of coordinates.
+  // Chuntong.
+  wallMarkers: worldConfig.walls,
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
-  //popup: { active: true, text: "No error yet!" },
   defining: false,
-  //exampleQuery: "add red 3 times",
   defineN: null,
+
+  // The dictionary panel has been deleted. 
+  // This dictionary property is useless.
+  // But deleting it will involve refactoring many other places.
+  // So leave it here for now. 
+  // Chuntong.
   dictionary: [],
-  walls: worldConfig.walls,
+  
+  // Manipulate this property only when key press is enabled.
+  // Do NOT do anything with it when key press is disabled.
+  // Upon enabling key press, 
+  // set the robot property here as the current robot state (i.e. the robot state in the latest history entry).
+  // Upon disabling key press, remember to store the robot state in the latest history entry.
+  // Chuntong.
   robot: worldConfig.robot,
+
+  // Keys that the user pressed. 
+  // Remember to empty the array upon disabling key press.
+  // I know this is not the best implementation.
+  // We should probably store the old key press history and make a new key press history,
+  // instead of emptying the old key press history.
+  // But it works for now. We can change it later.
+  // Chuntong.
   keyPressHist: [],
+
+  // Make this true when the user enters a command that the server cannot understand.
+  // The user will be asked to provide a definition by moving the robot and / or instructing the robot
+  // to pick items, with key presses. When the user finishes defining, turn this back to false.
+  // Chuntong. 
   isKeyPressEnabled: false
+
+  // These lines were commented out by previous people.
+  // I don't know if they are useful. Just put them here in case we need them later. 
+  // Chuntong.
+  //robotStep: 0, // How far is the robot along its visual simulation
+  //popup: { active: true, text: "No error yet!" },
+  //exampleQuery: "add red 3 times",
 }
 
 export default function reducer(state = initialState, action = {}) {
-  let nextPosition;
+  let nextRobotPosition;
   const currentRobot = state.robot;
   const currentKeyPressHist = state.keyPressHist;
-  const currentX = currentRobot.x;
-  const currentY = currentRobot.y;
+  const currentRobotX = currentRobot.x;
+  const currentRobotY = currentRobot.y;
   const idx = state.history.length - 1;
 
   switch (action.type) {
     
     case Constants.ENABLE_KEY_PRESS:
+      // The code here is pretty self explanatory.
+      // Remember to read the description of the robot property in the initial state.
+      // Chuntong.
+      document.getElementById('blocksCanvas').focus();
       const robotStartState = state.history[idx].robot;
       return { ...state, robot: robotStartState, isKeyPressEnabled: true };
 
     case Constants.DISABLE_KEY_PRESS: 
-      const lastHistory = { ...state.history[idx], type: null, robot: currentRobot, worldMap: worldConfig.worldMap };
+      // Upon disabling key press, make a new history entry
+      // This new history entry contains the same info as the entry before it, EXCEPT that  
+      // the robot has been moved and / or has picked up items.
+      // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
+      // Chuntong.
+      const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
         ...state, 
-        // history: [ ...state.history, { worldMap: worldConfig.worldMap, robot: currentRobot } ], 
-        history: [ ...state.history.splice(0, idx), lastHistory ],
+        history: [ ...state.history.splice(0, idx), newHistoryEntry ],
         isKeyPressEnabled: false,
         defining: false, 
         defineN: null, 
-        query: "", 
+        query: "",
         status: STATUS.TRY 
       }; 
 
+    case Constants.ROBOT_PICK_ITEM:
+      // Remember that items that are not carried by the robot are considered 
+      // "points" (or "block") in the world map.
+      // A point has x and y coordinates and a type (e.g. 'item').
+      // When an item gets picked up by the robot, 
+      // we need to remove it from the world map, therefore I am creating a new world map.
+      // Chuntong.
+      let newWorldMap = [];
+      let carriedItems = currentRobot.items.map(item => item);
+      let currentWorldMap = state.history[idx].worldMap;
+      for (let i = 0; i < currentWorldMap.length; i ++) {
+        if (currentWorldMap[i].x === currentRobotX && 
+            currentWorldMap[i].y === currentRobotY &&  
+            currentWorldMap[i].type === 'item') 
+          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+        else newWorldMap.push(currentWorldMap[i]);    
+      }
+      const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+      return { ...state, 
+               history: [ ...state.history.splice(0, idx), currentHistory ], 
+               robot: { ...state.robot, items: carriedItems} 
+            }; 
+
+    // Note: The up, down, right and left cases contain some duplicated code.
+    // We can refactor and reduce duplication later.
+    // Chuntong.        
     case Constants.MOVE_ROBOT_UP:
-			nextPosition = { x: currentX, y: currentY + 1 };
-			console.log('I am in reducer');
-			console.log(nextPosition);
-			console.log(state.walls);
-			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, y: currentY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
+      nextRobotPosition = { x: currentRobotX, y: currentRobotY + 1 };
+      // If nextRobotPosition is a wall, don't move robot, don't change state.
+      if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+      // Else move robot up and update key press history
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
       
 		case Constants.MOVE_ROBOT_DOWN:
-			nextPosition = { x: currentX, y: currentY - 1 };
-			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, y: currentY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
+			nextRobotPosition = { x: currentRobotX, y: currentRobotY - 1 };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
 
 		case Constants.MOVE_ROBOT_LEFT:
-			nextPosition = { x: currentX - 1, y: currentY };
-			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, x: currentX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
+			nextRobotPosition = { x: currentRobotX - 1, y: currentRobotY };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
 
 		case Constants.MOVE_ROBOT_RIGHT:
-			nextPosition = { x: currentX + 1, y: currentY };
-			if (state.walls.find((pos) => pos.x === nextPosition.x && pos.y === nextPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, x: currentX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
+			nextRobotPosition = { x: currentRobotX + 1, y: currentRobotY };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
 
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
@@ -140,7 +208,12 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.REMOVE_PIN:
       let newHistoryWithoutPin = state.history.slice()
       newHistoryWithoutPin.splice(action.idx, 1)
-      return { ...state, history: newHistoryWithoutPin, current_history_idx: initialState.current_history_idx }
+      return { ...state, 
+               history: newHistoryWithoutPin, 
+               current_history_idx: initialState.current_history_idx,
+               isKeyPressEnabled: false,
+               robot: newHistoryWithoutPin[newHistoryWithoutPin.length - 1].robot 
+             }
     case Constants.MARK_PIN:
       const markedHistory = state.history.slice()
       const index = action.idx ? action.idx : markedHistory.length - 1

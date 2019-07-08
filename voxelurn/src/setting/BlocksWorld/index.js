@@ -77,12 +77,12 @@ class Blocks extends React.Component {
     blocks: PropTypes.array,
     path: PropTypes.array,
     pointMarkers: PropTypes.array,
-    colorGrids: PropTypes.array,
+    waterMarkers: PropTypes.array,
     robot: PropTypes.object,
     isoConfig: PropTypes.object,
     width: PropTypes.number,
     height: PropTypes.number,
-    handleMoveRobot: PropTypes.func
+    handleRobotKeyPress: PropTypes.func
   }
 
   static defaultProps = {
@@ -221,7 +221,7 @@ class Blocks extends React.Component {
     
     // TODO Move this to its own function
     let pm = this.props.pointMarkers;
-    let rm = this.props.colorGrids;
+    let rm = this.props.waterMarkers;
     if (!rm) rm = [];
     if (!pm) pm = [];
     for (let i = 0; i < updatedBlocks.length; ++i) {
@@ -502,7 +502,7 @@ class Blocks extends React.Component {
       width={this.props.width} 
       height={this.props.height} 
       tabIndex="1"
-      onKeyDown={(event) => this.props.handleMoveRobot(event)}/>
+      onKeyDown={(event) => this.props.handleRobotKeyPress(event)}/>
       </div>
     )
   }

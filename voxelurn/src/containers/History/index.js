@@ -40,8 +40,10 @@ class HistoryItem extends Component {
             <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
           }
           <div className="HistoryItem-text-text">{text}</div>
-          {(last || tentative) && !defining &&
-            <button onClick={(e) => { e.stopPropagation(); setPin() }}>{DEFINE_THIS}</button>
+          {(tentative) && !defining &&
+            <button onClick={(e) => { e.stopPropagation(); setPin(); this.props.handleStartDefinition(); }}>
+              {DEFINE_THIS}
+            </button>
           }
         </div>
       </div>
@@ -86,6 +88,7 @@ class History extends Component {
   constructor(props) {
     super(props);
     this.handleFinishDefinition = this.handleFinishDefinition.bind(this);
+    this.handleStartDefinition = this.handleStartDefinition.bind(this);
   }
   
   static propTypes = {
@@ -130,6 +133,11 @@ class History extends Component {
   handleFinishDefinition() {
     this.props.dispatch(Actions.disableKeyPress());
   }
+
+  handleStartDefinition() {
+    this.props.dispatch(Actions.enableKeyPress());
+  }
+
   scrollToBottom() {
     this.refs.list.scrollTop = this.refs.list.scrollHeight;
   }
@@ -222,6 +230,7 @@ class History extends Component {
         })}
         {status === STATUS.ACCEPT &&
           <HistoryItem
+            handleStartDefinition={this.handleStartDefinition}
             key="new"
             text={query}
             stepN={history.length + 1}

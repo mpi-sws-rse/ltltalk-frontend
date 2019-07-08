@@ -30,7 +30,7 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
-    colorGrids: PropTypes.array,
+    waterMarkers: PropTypes.array,
     pointMarkers: PropTypes.array
   }
 
@@ -45,7 +45,7 @@ class Build extends Component {
       win: false
     }
 
-    this.handleMoveRobot = this.handleMoveRobot.bind(this);
+    this.handleRobotKeyPress = this.handleRobotKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -97,26 +97,31 @@ class Build extends Component {
     this.props.dispatch(LoggerActions.log({ type: "start", msg: { targetIdx: randomTarget[0], target: randomTarget[2] } }))
   }
 
-  handleMoveRobot(event) {
-		var ARROW_KEY_LEFT = 37;
-		var ARROW_KEY_UP = 38;
-		var ARROW_KEY_RIGHT = 39;
-		var ARROW_KEY_DOWN = 40;
+  handleRobotKeyPress(event) {
+		const KEY_LEFT = 37;
+		const KEY_UP = 38;
+		const KEY_RIGHT = 39;
+    const KEY_DOWN = 40;
+    const KEY_PICK = 80;
 
 		switch (event.keyCode) {
-			case ARROW_KEY_UP:
+      case KEY_PICK:
+        this.props.dispatch(Actions.robotPickItem());
+        break;
+        
+			case KEY_UP:
 				this.props.dispatch(Actions.moveRobotUp());
 				break;
 
-			case ARROW_KEY_DOWN:
+			case KEY_DOWN:
 				this.props.dispatch(Actions.moveRobotDown());
 				break;
 
-			case ARROW_KEY_LEFT:
+			case KEY_LEFT:
 				this.props.dispatch(Actions.moveRobotLeft());
 				break;
 
-			case ARROW_KEY_RIGHT:
+			case KEY_RIGHT:
 				this.props.dispatch(Actions.moveRobotRight());
 				break;
 
@@ -221,7 +226,7 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, pointMarkers, colorGrids, history,
+    const { status, responses, pointMarkers, waterMarkers, history,
         current_history_idx, task, isKeyPressEnabled } = this.props
 
     /* The current state should be the history element at the last position, or
@@ -270,12 +275,12 @@ class Build extends Component {
         </div>
         <div className="Build-world">
           <Setting
-            handleMoveRobot={this.handleMoveRobot}
+            handleRobotKeyPress={this.handleRobotKeyPress}
             blocks={currentState}
             path={currentPath}
             robot={robot}
             pointMarkers={pointMarkers}
-            colorGrids={colorGrids}
+            waterMarkers={waterMarkers}
             width={1650}
             height={1200}
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
@@ -284,7 +289,11 @@ class Build extends Component {
           <History />
           <ActionPopup
             active={popup.active}
-            text={popup.text} />
+            text={popup.text} />  
+          <ActionPopup 
+            active={this.props.isKeyPressEnabled}
+            text="Please provide a definition by pressing arrow keys to move and pressing P to pick items"
+          />  
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
             handleShiftClick={() => this.handleShiftClick()}
@@ -318,7 +327,7 @@ const mapStateToProps = (state) => ({
   history: state.world.history,
   task: state.user.task,
   responses: state.world.responses,
-  colorGrids: state.world.colorGrids,
+  waterMarkers: state.world.waterMarkers,
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   //popup: state.world.popup,
