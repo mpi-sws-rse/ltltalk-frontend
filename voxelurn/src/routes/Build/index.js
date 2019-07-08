@@ -296,7 +296,10 @@ class Build extends Component {
             text={popup.text} />  
           <ActionPopup 
             active={this.props.isKeyPressEnabled}
-            text="Please provide a definition by pressing arrow keys to move and pressing P to pick items"
+            text="Please provide a definition. \n 
+                  Press arrow keys to move. \n 
+                  Press P to pick all items at current location. \n
+                  Press enter to finish definition."
           />  
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
