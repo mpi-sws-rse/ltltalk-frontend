@@ -103,8 +103,12 @@ class Build extends Component {
 		const KEY_RIGHT = 39;
     const KEY_DOWN = 40;
     const KEY_PICK = 80;
+    const KEY_ENTER = 13;
 
 		switch (event.keyCode) {
+      case KEY_ENTER:
+        this.props.dispatch(Actions.disableKeyPress());
+        break;
       case KEY_PICK:
         this.props.dispatch(Actions.robotPickItem());
         break;
