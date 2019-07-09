@@ -90,6 +90,7 @@ export default function reducer(state = initialState, action = {}) {
       // the robot has been moved and / or has picked up items.
       // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
       // Chuntong.
+      console.log(state.keyPressHist)
       document.activeElement.blur();
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
@@ -99,7 +100,8 @@ export default function reducer(state = initialState, action = {}) {
         defining: false, 
         defineN: null, 
         query: "",
-        status: STATUS.TRY 
+        status: STATUS.TRY,
+        keyPressHist: [] 
       }; 
 
     case Constants.ROBOT_PICK_ITEM:
@@ -122,7 +124,8 @@ export default function reducer(state = initialState, action = {}) {
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
       return { ...state, 
                history: [ ...state.history.splice(0, idx), currentHistory ], 
-               robot: { ...state.robot, items: carriedItems} 
+               robot: { ...state.robot, items: carriedItems},
+               keyPressHist: [ ...currentKeyPressHist, 'pick' ] 
             }; 
 
     // Note: The up, down, right and left cases contain some duplicated code.
