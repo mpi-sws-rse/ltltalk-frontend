@@ -296,9 +296,9 @@ class Build extends Component {
             text={popup.text} />  
           <ActionPopup 
             active={this.props.isKeyPressEnabled}
-            text="Please provide a definition. \n 
-                  Press arrow keys to move. \n 
-                  Press P to pick all items at current location. \n
+            text="Please provide a definition. 
+                  Press arrow keys to move. 
+                  Press P to pick all items at current location. 
                   Press enter to finish definition."
           />  
           <CommandBar
