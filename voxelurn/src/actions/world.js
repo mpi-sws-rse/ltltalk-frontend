@@ -7,7 +7,7 @@ import { getStore } from "../"
 import { STATUS } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
-function sendContext(history, current_history_idx, sessionId) {
+function sendContext( { history, current_history_idx, sessionId, waterMarkers, keyPressHist } ) {
   let contextCommand = "(:context)"
 
   if (history.length > 0) {
@@ -23,6 +23,8 @@ function sendContext(history, current_history_idx, sessionId) {
     const totalState = JSON.stringify(JSON.stringify({
       robot: robotContext,
       world: currentState,
+      waterMarkers,
+      keyPressHist,
       rooms: rooms
     }));
     contextCommand = `(:context ${totalState})`;
@@ -145,14 +147,14 @@ const Actions = {
   tryQuery: (q) => {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
-      const { history, current_history_idx } = getState().world
+      const { history, current_history_idx, waterMarkers, keyPressHist } = getState().world
 
       dispatch({
         type: Constants.SET_STATUS,
         status: STATUS.LOADING
       })
 
-      return sendContext(history, current_history_idx, sessionId)
+      return sendContext( { history, current_history_idx, sessionId, waterMarkers, keyPressHist })
         .then((eh) => {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
