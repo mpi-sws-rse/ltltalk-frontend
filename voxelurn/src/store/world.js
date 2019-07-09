@@ -90,6 +90,7 @@ export default function reducer(state = initialState, action = {}) {
       // the robot has been moved and / or has picked up items.
       // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
       // Chuntong.
+      document.activeElement.blur();
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
         ...state, 
