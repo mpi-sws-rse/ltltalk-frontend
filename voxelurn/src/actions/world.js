@@ -49,7 +49,14 @@ const Actions = {
 				type: Constants.DISABLE_KEY_PRESS
 			});
 		};
-	},
+  },
+  enablePickItem: () =>{
+    return (dispatch) => {
+			dispatch({
+				type: Constants.ENABLE_PICK_ITEM
+			});
+		};
+  },
 
   robotPickItem: () => {
 		return (dispatch) => {
