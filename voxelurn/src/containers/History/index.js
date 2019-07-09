@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import Actions from "actions/world"
 import classnames from "classnames"
-import { STATUS, DEFINE_THIS, FINISH_DEFINITION } from "constants/strings"
+import { STATUS, REDEFINE, FINISH_DEFINITION } from "constants/strings"
 import PropTypes from 'prop-types';
 
 
@@ -42,7 +42,7 @@ class HistoryItem extends Component {
           <div className="HistoryItem-text-text">{text}</div>
           {(tentative) && !defining &&
             <button onClick={(e) => { e.stopPropagation(); setPin(); this.props.handleStartDefinition(); }}>
-              {DEFINE_THIS}
+              {REDEFINE}
             </button>
           }
         </div>
