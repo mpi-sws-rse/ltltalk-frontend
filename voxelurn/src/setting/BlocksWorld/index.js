@@ -12,8 +12,7 @@ import {
   rotateBlock,
   removeRobot,
   resolveZ,
-  updateRobot,
-  moveRobotByKeys
+  updateRobot
 } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
@@ -145,9 +144,6 @@ class Blocks extends React.Component {
     );
 
     this.setState({ iso: iso })
-
-        moveRobotByKeys(0,this.refs.blocksCanvas)
-
   }
 
   shouldComponentUpdate(prevProps, prevState) {
