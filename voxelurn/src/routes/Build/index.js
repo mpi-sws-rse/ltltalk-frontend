@@ -111,32 +111,33 @@ class Build extends Component {
 
 		switch (event.keyCode) {
       case KEY_ENTER:
-        this.props.dispatch(Actions.disableKeyPress());
-        this.props.dispatch(Actions.disableItemSelection());
+        if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
+        else this.props.dispatch(Actions.finishUserDefinition());
         break;
+        
       case KEY_PICK:
         // this.props.dispatch(Actions.robotPickItem());
-        this.props.dispatch(Actions.enableItemSelection());
+        this.props.dispatch(Actions.startItemSelection());
         break;
         
 			case KEY_UP:
+        this.props.dispatch(Actions.forceQuitItemSelection());
         this.props.dispatch(Actions.moveRobotUp());
-        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_DOWN:
+        this.props.dispatch(Actions.forceQuitItemSelection());
         this.props.dispatch(Actions.moveRobotDown());
-        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_LEFT:
+        this.props.dispatch(Actions.forceQuitItemSelection());
         this.props.dispatch(Actions.moveRobotLeft());
-        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_RIGHT:
+        this.props.dispatch(Actions.forceQuitItemSelection());
         this.props.dispatch(Actions.moveRobotRight());
-        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			default:
@@ -371,7 +372,8 @@ const mapStateToProps = (state) => ({
   //popup: state.world.popup,
   current_history_idx: state.world.current_history_idx,
   robot: state.world.robot,
-  isKeyPressEnabled: state.world.isKeyPressEnabled
+  isKeyPressEnabled: state.world.isKeyPressEnabled,
+  isItemSelectionEnabled: state.world.isItemSelectionEnabled
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

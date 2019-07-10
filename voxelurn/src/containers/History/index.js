@@ -131,11 +131,11 @@ class History extends Component {
   }
 
   handleFinishDefinition() {
-    this.props.dispatch(Actions.disableKeyPress());
+    this.props.dispatch(Actions.finishUserDefinition());
   }
 
   handleStartDefinition() {
-    this.props.dispatch(Actions.enableKeyPress());
+    this.props.dispatch(Actions.startUserDefinition());
   }
 
   scrollToBottom() {

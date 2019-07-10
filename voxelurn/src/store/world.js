@@ -1,5 +1,5 @@
 import Constants from "constants/actions"
-import { STATUS } from "constants/strings"
+import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
 const initialState = {
@@ -70,6 +70,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   let nextRobotPosition;
+  let currentWorldMap;
   const currentRobot = state.robot;
   const currentKeyPressHist = state.keyPressHist;
   const currentRobotX = currentRobot.x;
@@ -78,21 +79,23 @@ export default function reducer(state = initialState, action = {}) {
 
   switch (action.type) {
     
-    case Constants.ENABLE_KEY_PRESS:
+    case Constants.START_USER_DEFINITION:
       // The code here is pretty self explanatory.
       // Remember to read the description of the robot property in the initial state.
       // Chuntong.
       // document.getElementById('blocksCanvas').focus({ preventScroll: true });
+      document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
       return { ...state, robot: robotStartState, isKeyPressEnabled: true };
 
-    case Constants.DISABLE_KEY_PRESS: 
+    case Constants.FINISH_USER_DEFINITION: 
       // Upon disabling key press, make a new history entry
       // This new history entry contains the same info as the entry before it, EXCEPT that  
       // the robot has been moved and / or has picked up items.
       // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
       // Chuntong.
       console.log(state.keyPressHist)
+      document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
       // document.activeElement.blur();
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
@@ -106,40 +109,76 @@ export default function reducer(state = initialState, action = {}) {
         keyPressHist: [] 
       }; 
 
-    case Constants.ROBOT_PICK_ITEM:
-      // Remember that items that are not carried by the robot are considered 
-      // "points" (or "block") in the world map.
-      // A point has x and y coordinates and a type (e.g. 'item').
-      // When an item gets picked up by the robot, 
-      // we need to remove it from the world map, therefore I am creating a new world map.
-      // Chuntong.
-      let newWorldMap = [];
-      let carriedItems = currentRobot.items.map(item => item);
-      let currentWorldMap = state.history[idx].worldMap;
+    // case Constants.ROBOT_PICK_ITEM:
+    //   // Remember that items that are not carried by the robot are considered 
+    //   // "points" (or "block") in the world map.
+    //   // A point has x and y coordinates and a type (e.g. 'item').
+    //   // When an item gets picked up by the robot, 
+    //   // we need to remove it from the world map, therefore I am creating a new world map.
+    //   // Chuntong.
+    //   let newWorldMap = [];
+    //   let carriedItems = currentRobot.items.map(item => item);
+    //   let currentWorldMap = state.history[idx].worldMap;
+    //   let itemsAtCurrentLocation = [];
+    //   for (let i = 0; i < currentWorldMap.length; i ++) {
+    //     if (currentWorldMap[i].x === currentRobotX && 
+    //         currentWorldMap[i].y === currentRobotY &&  
+    //         currentWorldMap[i].type === 'item') {
+    //       carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
+    //       itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
+    //     }   
+    //     else newWorldMap.push(currentWorldMap[i]);    
+    //   }
+    //   const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+    //   return { ...state, 
+    //            history: [ ...state.history.splice(0, idx), currentHistory ], 
+    //            robot: { ...state.robot, items: carriedItems},
+    //            keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+    //            itemsAtCurrentLocation
+    //         }; 
+
+    case Constants.FORCE_QUIT_ITEM_SELECTION:
+      return { ...state,
+               isItemSelectionEnabled: false 
+             };
+
+    case Constants.START_ITEM_SELECTION:
+      currentWorldMap = state.history[idx].worldMap;
       let itemsAtCurrentLocation = [];
       for (let i = 0; i < currentWorldMap.length; i ++) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
-            currentWorldMap[i].type === 'item') {
-          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
+            currentWorldMap[i].type === 'item') { 
           itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
+        }      
+      }
+      return { ...state,
+               itemsAtCurrentLocation,
+               isItemSelectionEnabled: true};
+
+    case Constants.FINISH_ITEM_SELECTION:
+      const isSelected = (color, shape) => {
+        return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape).length === 3 && 
+        state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape)[2];
+      };
+      let newWorldMap = [];
+      currentWorldMap = state.history[idx].worldMap;
+      let carriedItems = currentRobot.items.map(item => item);
+      for (let i = 0; i < currentWorldMap.length; i ++) {
+        if (currentWorldMap[i].x === currentRobotX && 
+            currentWorldMap[i].y === currentRobotY &&  
+            currentWorldMap[i].type === 'item' &&
+            isSelected(currentWorldMap[i].color, currentWorldMap[i].shape)) {
+          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
         }   
         else newWorldMap.push(currentWorldMap[i]);    
       }
+
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
-      return { ...state, 
+      return { ...state,
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
                keyPressHist: [ ...currentKeyPressHist, 'pick' ],
-               itemsAtCurrentLocation
-            }; 
-
-    case Constants.ENABLE_ITEM_SELECTION:
-      return { ...state,
-               isItemSelectionEnabled: true};
-
-    case Constants.DISABLE_ITEM_SELECTION:
-      return { ...state,
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  

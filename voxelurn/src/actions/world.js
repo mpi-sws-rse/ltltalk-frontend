@@ -37,6 +37,14 @@ function sendContext( { history, current_history_idx, sessionId, waterMarkers, k
 
 const Actions = {
 
+  forceQuitItemSelection: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.FORCE_QUIT_ITEM_SELECTION
+			});
+		};
+  }, 
+
   toggleItemSelection: (color, shape) => {
 		return (dispatch) => {
 			dispatch({
@@ -47,34 +55,34 @@ const Actions = {
 		};
   },
 
-  enableKeyPress: () => {
+  startUserDefinition: () => {
 		return (dispatch) => {
 			dispatch({
-				type: Constants.ENABLE_KEY_PRESS
+				type: Constants.START_USER_DEFINITION
 			});
 		};
   },
   
-  disableKeyPress: () => {
+  finishUserDefinition: () => {
 		return (dispatch) => {
 			dispatch({
-				type: Constants.DISABLE_KEY_PRESS
+				type: Constants.FINISH_USER_DEFINITION
 			});
 		};
   },
 
-  enableItemSelection: () =>{
+  startItemSelection: () =>{
     return (dispatch) => {
 			dispatch({
-				type: Constants.ENABLE_ITEM_SELECTION
+				type: Constants.START_ITEM_SELECTION
 			});
 		};
   },
 
-  disableItemSelection: () =>{
+  finishItemSelection: () =>{
     return (dispatch) => {
 			dispatch({
-				type: Constants.DISABLE_ITEM_SELECTION
+				type: Constants.FINISH_ITEM_SELECTION
 			});
 		};
   },
@@ -198,7 +206,7 @@ const Actions = {
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
                 dispatch({
-                  type: Constants.ENABLE_KEY_PRESS
+                  type: Constants.START_USER_DEFINITION
                 });
                 return false
               } else {

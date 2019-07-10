@@ -22,9 +22,9 @@ class PickBox extends Component {
 	// }
 
 	handleFinishSelection(e) {
-		this.props.disableItemSelection();
+		this.props.finishItemSelection();
 	}
-	
+
 	handleItemSelection(e) {
 		const IDArray = e.target.id.split(' ');
 		this.props.toggleItemSelection(IDArray[0], IDArray[1]);
@@ -97,7 +97,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		disableItemSelection: () => dispatch(Actions.disableItemSelection()),
+		finishItemSelection: () => dispatch(Actions.finishItemSelection()),
 		toggleItemSelection: (color, shape) => dispatch(Actions.toggleItemSelection(color, shape))
 	};
 };
