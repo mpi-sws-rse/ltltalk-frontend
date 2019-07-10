@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from "react-router-redux"
+
 import world from './world'
 import user from './user'
 import logger from './logger'
+
 
 /* Combine all of our app's reducers */
 const makeRootReducer = () => {

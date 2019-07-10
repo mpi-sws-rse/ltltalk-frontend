@@ -1,8 +1,9 @@
-import React, { PropTypes } from "react"
+import React from "react"
 import {IMPRINT, DATA_PROTECTION} from "constants/strings"
-import { Link } from "react-router"
+import { NavLink } from 'react-router-dom';
 import { connect } from "react-redux"
-//import Actions from "actions/world"
+import PropTypes from 'prop-types';
+
 
 import "./styles.css"
 
@@ -15,31 +16,12 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
       <span className="Header-subsublogo"> <a href={DATA_PROTECTION}>[Data protection]</a> </span>
     </div>
     <div className="Header-nav">
-      <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></Link>
-      <Link to={{ pathname: "/build", query: query }} activeClassName="active"><div>Play</div></Link>
-      <Link to={{ pathname: "/tutorial", query: query }} activeClassName="active"><div>Tutorial</div></Link>
-      <Link to={{ pathname: "/reference", query: query }} activeClassName="active"><div>Reference</div></Link>
-      <Link to={{ pathname: "/syntaxsemantics", query: query }} activeClassName="active"><div>Syntax and Semantics</div></Link>
-      <Link to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></Link>
-  {/*
-      <Link to={{ pathname: "/community", query: query }} activeClassName="active"><div>Leaderboard</div></Link>
-      <a target="_blank" href="https://github.com/sidaw/shrdlurn/blob/master/Voxelurn.md#core-language"><div>Reference</div></a>
-      <Link to={{ pathname: "/about", query: query }} activeClassName="active"><div>Help</div></Link>
-      {signedIn &&
-        <a onClick={() => dispatch(Actions.clear())}><div>Sign Out</div></a>
-      }
-      {signedIn ?
-        <div>
-          {email}
-        </div>
-        :
-        <a className="Header-login" href={SLACK_OAUTH_URL}>
-          <div>
-            <img alt="Click to sign in with Slack" src="https://api.slack.com/img/sign_in_with_slack.png" />
-          </div>
-        </a>
-      }
-  */}
+      <NavLink to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></NavLink>
+      <NavLink to={{ pathname: "/build", query: query }} activeClassName="active"><div>Play</div></NavLink>
+      <NavLink to={{ pathname: "/tutorial", query: query }} activeClassName="active"><div>Tutorial</div></NavLink>
+      <NavLink to={{ pathname: "/reference", query: query }} activeClassName="active"><div>Reference</div></NavLink>
+      <NavLink to={{ pathname: "/syntaxsemantics", query: query }} activeClassName="active"><div>Syntax and Semantics</div></NavLink>
+      <NavLink to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></NavLink> 
     </div>
   </div>
 )

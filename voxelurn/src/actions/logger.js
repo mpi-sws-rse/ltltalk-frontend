@@ -2,6 +2,8 @@
 import Constants from "constants/actions"
 import { CUBE_MINIMUM } from "constants/strings"
 import { setStore, getStore, genSid, resizePNG } from "helpers/util"
+import queryString from 'query-string';
+
 
 function sendSocket(getState, event, payload) {
   let socket = getState().logger.socket
@@ -55,7 +57,6 @@ const Actions = {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
 
-      //const socket = io(COMMUNITY_SERVER_URL)
       const socket = null;
       if (socket === null)
         return;
@@ -128,10 +129,11 @@ const Actions = {
     return (dispatch, getState) => {
       /* Set structure Id */
       const routing = getState().routing
-
       let structureId = ""
       const location = routing.location || routing.locationBeforeTransitions
-      const sidParam = location.query.sid
+
+      const query = queryString.parse(location.query);
+      const sidParam = query.sid
 
       if (sidParam) {
         structureId = sidParam
@@ -334,3 +336,4 @@ const Actions = {
 }
 
 export default Actions
+

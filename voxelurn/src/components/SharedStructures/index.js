@@ -1,8 +1,9 @@
-import React, { Component, PureComponent, PropTypes } from "react"
+import React, { Component, PureComponent} from "react"
 import Blocks from "setting"
 import Actions from "actions/logger"
 import { connect } from "react-redux"
 import classnames from "classnames"
+import PropTypes from 'prop-types';
 
 import "./styles.css"
 

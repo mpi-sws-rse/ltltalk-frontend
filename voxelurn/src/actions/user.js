@@ -17,16 +17,13 @@ const Actions = {
       // const location = routing.location || routing.locationBeforeTransitions
       // const uidParam = location.query.uid
 
-      // if (uidParam) {
-      // sessionId = uidParam
-      // } else {
+      
       let uid = getStore("uid")
       if (!uid) {
         uid = genUid()
         setStore("uid", uid)
       }
       sessionId = uid
-      // }
 
       dispatch({
         type: Constants.SET_SESSION_ID,
