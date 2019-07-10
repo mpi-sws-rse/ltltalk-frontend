@@ -3,6 +3,7 @@ import classnames from "classnames"
 import { connect } from "react-redux"
 import PropTypes from 'prop-types';
 
+
 import "./styles.css"
 
 class PickBox extends Component {
@@ -15,7 +16,8 @@ class PickBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "..."
+      text: "This is a test for pick box section...."
+      
     };
   }
 

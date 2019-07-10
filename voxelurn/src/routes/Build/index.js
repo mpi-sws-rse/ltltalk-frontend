@@ -8,6 +8,7 @@ import History from "containers/History"
 import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
 import ActionPopup from "components/ActionPopup"
+import PickBox from "components/PickBox"
 
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
@@ -301,6 +302,14 @@ class Build extends Component {
                   Press P to pick all items at current location. 
                   Press enter to finish definition."
           />  
+
+          <PickBox 
+            active={true}
+            text="Please provide a definition. 
+                  Press arrow keys to move. 
+                  Press P to pick all items at current location. 
+                  Press enter to finish definition."
+          /> 
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
             handleShiftClick={() => this.handleShiftClick()}
