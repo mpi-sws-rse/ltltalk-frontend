@@ -497,6 +497,7 @@ class Blocks extends React.Component {
       ref="blocksCanvas" 
       width={this.props.width} 
       height={this.props.height} 
+      style={{marginTop: '22vh'}}
       tabIndex="1"
       onKeyDown={(event) => this.props.handleRobotKeyPress(event)}/>
       </div>

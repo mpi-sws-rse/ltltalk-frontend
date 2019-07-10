@@ -52,10 +52,19 @@ const Actions = {
 			});
 		};
   },
-  enablePickItem: () =>{
+
+  enableItemSelection: () =>{
     return (dispatch) => {
 			dispatch({
-				type: Constants.ENABLE_PICK_ITEM
+				type: Constants.ENABLE_ITEM_SELECTION
+			});
+		};
+  },
+
+  disableItemSelection: () =>{
+    return (dispatch) => {
+			dispatch({
+				type: Constants.DISABLE_ITEM_SELECTION
 			});
 		};
   },

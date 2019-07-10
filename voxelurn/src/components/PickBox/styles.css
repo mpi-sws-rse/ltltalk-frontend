@@ -1,6 +1,6 @@
 .PickBox {
   position: absolute;
-  bottom:70vh;
+  bottom:58vh;
   text-align: center;
   width: 100%;
   margin-top: -100px;
@@ -28,4 +28,9 @@
     visibility 0.5s 0s,
     opacity 0.5s linear;
   visibility: visible;
+}
+
+.PickBox i {
+  font-size: 2.5em;
+  margin-right: 13px;
 }

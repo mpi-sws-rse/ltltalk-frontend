@@ -112,6 +112,7 @@ class Build extends Component {
         break;
       case KEY_PICK:
         this.props.dispatch(Actions.robotPickItem());
+        this.props.dispatch(Actions.enableItemSelection());
         break;
         
 			case KEY_UP:
