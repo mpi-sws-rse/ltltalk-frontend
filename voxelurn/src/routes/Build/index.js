@@ -135,6 +135,18 @@ class Build extends Component {
 		}
   }
 
+
+  handlePickItemClick(event){
+
+
+    const selectedPicKItem = this.state.selectedPickItem;
+
+    if(selectedPicKItem >0){
+      this.props.dispatch(Actions.enablePickItem());
+
+    }
+
+  }
   handleQuery(query) {
     switch (this.props.status) {
       case STATUS.TRY:
