@@ -106,42 +106,77 @@ export default function reducer(state = initialState, action = {}) {
         keyPressHist: [] 
       }; 
 
-    case Constants.ROBOT_PICK_ITEM:
-      // Remember that items that are not carried by the robot are considered 
-      // "points" (or "block") in the world map.
-      // A point has x and y coordinates and a type (e.g. 'item').
-      // When an item gets picked up by the robot, 
-      // we need to remove it from the world map, therefore I am creating a new world map.
-      // Chuntong.
-      let newWorldMap = [];
-      let carriedItems = currentRobot.items.map(item => item);
-      let currentWorldMap = state.history[idx].worldMap;
-      let itemsAtCurrentLocation = [];
-      for (let i = 0; i < currentWorldMap.length; i ++) {
-        if (currentWorldMap[i].x === currentRobotX && 
-            currentWorldMap[i].y === currentRobotY &&  
-            currentWorldMap[i].type === 'item') {
-          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
-          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
-        }   
-        else newWorldMap.push(currentWorldMap[i]);    
-      }
-      const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
-      return { ...state, 
-               history: [ ...state.history.splice(0, idx), currentHistory ], 
-               robot: { ...state.robot, items: carriedItems},
-               keyPressHist: [ ...currentKeyPressHist, 'pick' ],
-               itemsAtCurrentLocation
-            }; 
+    // case Constants.ROBOT_PICK_ITEM:
+    //   // Remember that items that are not carried by the robot are considered 
+    //   // "points" (or "block") in the world map.
+    //   // A point has x and y coordinates and a type (e.g. 'item').
+    //   // When an item gets picked up by the robot, 
+    //   // we need to remove it from the world map, therefore I am creating a new world map.
+    //   // Chuntong.
+    //   let newWorldMap = [];
+    //   let carriedItems = currentRobot.items.map(item => item);
+    //   let currentWorldMap = state.history[idx].worldMap;
+    //   let itemsAtCurrentLocation = [];
+    //   for (let i = 0; i < currentWorldMap.length; i ++) {
+    //     if (currentWorldMap[i].x === currentRobotX && 
+    //         currentWorldMap[i].y === currentRobotY &&  
+    //         currentWorldMap[i].type === 'item') {
+    //       carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
+    //       itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+    //     }   
+    //     else newWorldMap.push(currentWorldMap[i]);    
+    //   }
+    //   const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+    //   return { ...state, 
+    //            history: [ ...state.history.splice(0, idx), currentHistory ], 
+    //            robot: { ...state.robot, items: carriedItems},
+    //            keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+    //            itemsAtCurrentLocation
+    //         }; 
 
     case Constants.ENABLE_ITEM_SELECTION:
+
+      let nWorldMap = [];
+      let cWorldMap = state.history[idx].worldMap;
+      let itemsAtCurrentLocation = [];
+      for (let i = 0; i < cWorldMap.length; i ++) {
+        if (cWorldMap[i].x === currentRobotX && 
+            cWorldMap[i].y === currentRobotY &&  
+            cWorldMap[i].type === 'item') {
+          itemsAtCurrentLocation.push([cWorldMap[i].color, cWorldMap[i].shape]);    
+        }   
+        else nWorldMap.push(cWorldMap[i]);    
+      }
+     const cHistory = { ...state.history[idx], worldMap: nWorldMap };
+
       return { ...state,
-               isItemSelectionEnabled: true};
+               isItemSelectionEnabled: true,
+               history: [ ...state.history.splice(0, idx), cHistory ], 
+               itemsAtCurrentLocation
+              };
 
     case Constants.DISABLE_ITEM_SELECTION:
+
+        let newWorldMap = [];
+        let carriedItems = currentRobot.items.map(item => item);
+        let currentWorldMap = state.history[idx].worldMap;
+        // let itemsAtCurrentLocation = [];
+        for (let i = 0; i < state.itemsAtCurrentLocation.length; i ++) {
+          if (state.itemsAtCurrentLocation[i][2] === true)
+          {
+            carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
+          }   
+          else newWorldMap.push(currentWorldMap[i]);    
+        }
+
+        const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+
+      
       return { ...state,
                isItemSelectionEnabled: false,
-               itemsAtCurrentLocation: []
+               history: [ ...state.history.splice(0, idx), currentHistory ], 
+               robot: { ...state.robot, items: carriedItems},
+               keyPressHist: [ ...currentKeyPressHist, 'pick' ]
              };  
 
     // Note: The up, down, right and left cases contain some duplicated code.

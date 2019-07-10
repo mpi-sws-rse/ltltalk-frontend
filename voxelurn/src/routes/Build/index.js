@@ -111,7 +111,7 @@ class Build extends Component {
         this.props.dispatch(Actions.disableKeyPress());
         break;
       case KEY_PICK:
-        this.props.dispatch(Actions.robotPickItem());
+        // this.props.dispatch(Actions.robotPickItem());
         this.props.dispatch(Actions.enableItemSelection());
         break;
         
