@@ -50,6 +50,7 @@ class Build extends Component {
   }
 
   componentDidMount() {
+    document.querySelector('body').addEventListener('keydown', this.handleRobotKeyPress);
     /* Bind Ctrl+Z and Crtl+Shift+Z to Undo and Redo actions respectively */
     Mousetrap.prototype.stopCallback = () => false;
     //Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
@@ -86,6 +87,7 @@ class Build extends Component {
   }
 
   componentWillUnmount() {
+    document.querySelector('body').removeEventListener('keydown', this.handleRobotKeyPress);
     /* Clean up the key undo+redo bindings */
     Mousetrap.unbind("command+z")
     Mousetrap.unbind("command+shift+z")
@@ -99,6 +101,7 @@ class Build extends Component {
   }
 
   handleRobotKeyPress(event) {
+    if (!this.props.isKeyPressEnabled) return;
 		const KEY_LEFT = 37;
 		const KEY_UP = 38;
 		const KEY_RIGHT = 39;
@@ -109,6 +112,7 @@ class Build extends Component {
 		switch (event.keyCode) {
       case KEY_ENTER:
         this.props.dispatch(Actions.disableKeyPress());
+        this.props.dispatch(Actions.disableItemSelection());
         break;
       case KEY_PICK:
         this.props.dispatch(Actions.robotPickItem());
@@ -116,19 +120,23 @@ class Build extends Component {
         break;
         
 			case KEY_UP:
-				this.props.dispatch(Actions.moveRobotUp());
+        this.props.dispatch(Actions.moveRobotUp());
+        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_DOWN:
-				this.props.dispatch(Actions.moveRobotDown());
+        this.props.dispatch(Actions.moveRobotDown());
+        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_LEFT:
-				this.props.dispatch(Actions.moveRobotLeft());
+        this.props.dispatch(Actions.moveRobotLeft());
+        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			case KEY_RIGHT:
-				this.props.dispatch(Actions.moveRobotRight());
+        this.props.dispatch(Actions.moveRobotRight());
+        this.props.dispatch(Actions.disableItemSelection());
 				break;
 
 			default:
@@ -293,7 +301,7 @@ class Build extends Component {
         </div>
         <div className="Build-world">
           <Setting
-            handleRobotKeyPress={this.handleRobotKeyPress}
+            // handleRobotKeyPress={this.handleRobotKeyPress}
             blocks={currentState}
             path={currentPath}
             robot={robot}
@@ -322,6 +330,7 @@ class Build extends Component {
                   Press arrow keys to move. 
                   Press P to pick all items at current location. 
                   Press enter to finish definition."
+                  
           /> 
           <CommandBar
             onClick={(query) => this.handleQuery(query)}

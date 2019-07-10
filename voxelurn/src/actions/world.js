@@ -37,6 +37,16 @@ function sendContext( { history, current_history_idx, sessionId, waterMarkers, k
 
 const Actions = {
 
+  toggleItemSelection: (color, shape) => {
+		return (dispatch) => {
+			dispatch({
+        type: Constants.TOGGLE_ITEM_SELECTION,
+        color,
+        shape
+			});
+		};
+  },
+
   enableKeyPress: () => {
 		return (dispatch) => {
 			dispatch({

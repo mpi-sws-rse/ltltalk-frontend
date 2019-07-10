@@ -1,6 +1,6 @@
 .PickBox {
   position: absolute;
-  bottom:58vh;
+  bottom:52vh;
   text-align: center;
   width: 100%;
   margin-top: -100px;
@@ -30,7 +30,42 @@
   visibility: visible;
 }
 
-.PickBox i {
+.PickBox .item-icon {
   font-size: 2.5em;
-  margin-right: 13px;
+  margin-right: 11px;
+  cursor: pointer;
+  transition: transform 0.5s;
+  position: relative;
+  /* top: 5px;
+  left: 5px; */
+  
 }
+
+.PickBox .item-icon:hover {
+  transform: scale(1.25);
+}
+
+.PickBox .item-check-box {
+  position: relative;
+  margin-left: -10px;
+  margin-right: 24px;
+  cursor: pointer;
+  /* padding-top: 15px; */
+}
+
+.PickBox .PickBox-finish-button {
+  margin-top: 7px;
+  height: 2.5em;
+  width: 4em;
+  background-color: rgb(11, 118, 206);
+  transition: transform 0.5s;
+}
+
+.PickBox .PickBox-finish-button:hover {
+  transform: scale(1.15);
+}
+
+.PickBox .PickBox-finish-button i {
+  font-size: 2em;
+  color: white;
+} 

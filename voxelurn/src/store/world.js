@@ -82,7 +82,7 @@ export default function reducer(state = initialState, action = {}) {
       // The code here is pretty self explanatory.
       // Remember to read the description of the robot property in the initial state.
       // Chuntong.
-      document.getElementById('blocksCanvas').focus({ preventScroll: true });
+      // document.getElementById('blocksCanvas').focus({ preventScroll: true });
       const robotStartState = state.history[idx].robot;
       return { ...state, robot: robotStartState, isKeyPressEnabled: true };
 
@@ -93,7 +93,7 @@ export default function reducer(state = initialState, action = {}) {
       // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
       // Chuntong.
       console.log(state.keyPressHist)
-      document.activeElement.blur();
+      // document.activeElement.blur();
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
         ...state, 
@@ -122,7 +122,7 @@ export default function reducer(state = initialState, action = {}) {
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item') {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
-          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
         }   
         else newWorldMap.push(currentWorldMap[i]);    
       }
@@ -143,6 +143,26 @@ export default function reducer(state = initialState, action = {}) {
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  
+
+    case Constants.TOGGLE_ITEM_SELECTION:
+      const newItemsAtCurrentLocation = state.itemsAtCurrentLocation.map(item => item);
+      for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
+        console.log(action.color);
+        console.log(action.shape);
+        console.log(newItemsAtCurrentLocation[i][0]);
+        console.log(newItemsAtCurrentLocation[i][1]);
+
+        const givenColor = action.color;
+        const givenShape = action.shape;
+        const currentColor = newItemsAtCurrentLocation[i][0];
+        const currentShape = newItemsAtCurrentLocation[i][1];
+        if (givenColor === currentColor && givenShape === currentShape) {
+          newItemsAtCurrentLocation[i][2] = ! newItemsAtCurrentLocation[i][2];
+        }
+      }
+      return { ...state, 
+               itemsAtCurrentLocation: newItemsAtCurrentLocation
+             };       
 
     // Note: The up, down, right and left cases contain some duplicated code.
     // We can refactor and reduce duplication later.
