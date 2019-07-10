@@ -56,7 +56,9 @@ const initialState = {
   // The user will be asked to provide a definition by moving the robot and / or instructing the robot
   // to pick items, with key presses. When the user finishes defining, turn this back to false.
   // Chuntong. 
-  isKeyPressEnabled: false
+  isKeyPressEnabled: false,
+  isItemSelectionEnabled: false,
+  itemsAtCurrentLocation: [],
 
   // These lines were commented out by previous people.
   // I don't know if they are useful. Just put them here in case we need them later. 
@@ -80,7 +82,7 @@ export default function reducer(state = initialState, action = {}) {
       // The code here is pretty self explanatory.
       // Remember to read the description of the robot property in the initial state.
       // Chuntong.
-      document.getElementById('blocksCanvas').focus();
+      document.getElementById('blocksCanvas').focus({ preventScroll: true });
       const robotStartState = state.history[idx].robot;
       return { ...state, robot: robotStartState, isKeyPressEnabled: true };
 
@@ -114,19 +116,33 @@ export default function reducer(state = initialState, action = {}) {
       let newWorldMap = [];
       let carriedItems = currentRobot.items.map(item => item);
       let currentWorldMap = state.history[idx].worldMap;
+      let itemsAtCurrentLocation = [];
       for (let i = 0; i < currentWorldMap.length; i ++) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
-            currentWorldMap[i].type === 'item') 
-          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+            currentWorldMap[i].type === 'item') {
+          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+        }   
         else newWorldMap.push(currentWorldMap[i]);    
       }
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
       return { ...state, 
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
-               keyPressHist: [ ...currentKeyPressHist, 'pick' ] 
+               keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+               itemsAtCurrentLocation
             }; 
+
+    case Constants.ENABLE_ITEM_SELECTION:
+      return { ...state,
+               isItemSelectionEnabled: true};
+
+    case Constants.DISABLE_ITEM_SELECTION:
+      return { ...state,
+               isItemSelectionEnabled: false,
+               itemsAtCurrentLocation: []
+             };  
 
     // Note: The up, down, right and left cases contain some duplicated code.
     // We can refactor and reduce duplication later.

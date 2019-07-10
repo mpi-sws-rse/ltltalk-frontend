@@ -1,60 +1,45 @@
-import React, { Component } from "react"
-import classnames from "classnames"
-import { connect } from "react-redux"
-import PropTypes from 'prop-types';
-
-
-import "./styles.css"
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import classnames from 'classnames';
+import './styles.css';
+import Actions from 'actions/world';
 
 class PickBox extends Component {
-  static propTypes = {
-    text: PropTypes.string,
-    active: PropTypes.bool,
-    dispatch: PropTypes.func
-  }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "This is a test for pick box section...."
-      
-    };
-  }
+	constructor(props) {
+		super(props);
+    this.renderItems = this.renderItems.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.active === true) {
-      this.setState(state => {
-        state.text = nextProps.text;
-        return state;
-      });
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.text !== nextProps.text ||
-        this.props.active !== nextProps.active;
-  }
-
-  componentWillUpdate(nextProps) {
-  }
-
-  componentDidUpdate(prevProps) {
-  }
-
-  render() {
-
-    return (
-      <div className="PickBox">
-        <div className={classnames("PickBox-box", { "active" : this.props.active })}>
-          {this.state.text}<wbr/>
-        </div>
-      </div>
-    )
-  }
+	renderItems() {
+		return this.props.itemsAtCurrentLocation.map((item) => {
+      console.log(item[0]);
+      console.log(item[1]);
+      if (item[1] === 'triangle') return <i class={`fas fa-exclamation-triangle`} style={{ color: item[0] }} />;
+			else return <i class={`fas fa-${item[1]}`} style={{ color: item[0] }} id={`item[0] item[1]`}/>;
+		});
+	}
+	render() {
+		return (
+			<div className="PickBox" onClick={(e) => this.props.disableItemSelection()}>
+				<div className={classnames('PickBox-box', { active: this.props.isItemSelectionEnabled })}>
+					{this.renderItems()}
+					<wbr />
+				</div>
+			</div>
+		);
+	}
 }
 
 const mapStateToProps = (state) => ({
-  //popup: state.world.popup
-})
+	isItemSelectionEnabled: state.world.isItemSelectionEnabled,
+	itemsAtCurrentLocation: state.world.itemsAtCurrentLocation
+});
 
-export default connect(mapStateToProps)(PickBox)
+const mapDispatchToProps = (dispatch) => {
+	return {
+		disableItemSelection: () => dispatch(Actions.disableItemSelection())
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PickBox);
