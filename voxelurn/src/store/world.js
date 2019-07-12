@@ -69,8 +69,9 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item') { 
+          const isSelected = false;    
           const itemID = i.toString();   
-          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false, itemID]);    
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, isSelected, itemID]);    
         }      
       }
       return { ...state,
@@ -78,8 +79,10 @@ export default function reducer(state = initialState, action = {}) {
                isItemSelectionEnabled: true};
 
     case Constants.FINISH_ITEM_SELECTION:
-      const isSelected = (color, shape, id) => {
-        return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id )[2];
+      const isSelected = ({ color, shape, id }) => {
+        const item = state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id);
+        const isItemSelected = item[2];
+        return isItemSelected; 
       };
       let newWorldMap = [];
       currentWorldMap = state.history[idx].worldMap;
@@ -88,7 +91,11 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item' &&
-            isSelected(currentWorldMap[i].color, currentWorldMap[i].shape, i.toString())) {
+            isSelected({ 
+              color: currentWorldMap[i].color, 
+              shape: currentWorldMap[i].shape, 
+              id: i.toString()})) 
+        {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
         }   
         else newWorldMap.push(currentWorldMap[i]);    
@@ -106,13 +113,13 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.TOGGLE_ITEM_SELECTION:
       const newItemsAtCurrentLocation = state.itemsAtCurrentLocation.map(item => item);
       for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
-        const givenColor = action.color;
-        const givenShape = action.shape;
-        const givenID = action.id;
+        const selectedColor = action.color;
+        const selectedShape = action.shape;
+        const selectedID = action.id;
         const currentColor = newItemsAtCurrentLocation[i][0];
         const currentShape = newItemsAtCurrentLocation[i][1];
         const currentID = newItemsAtCurrentLocation[i][3];
-        if (givenColor === currentColor && givenShape === currentShape && givenID === currentID) {
+        if (selectedColor === currentColor && selectedShape === currentShape && selectedID === currentID) {
           newItemsAtCurrentLocation[i][2] = ! newItemsAtCurrentLocation[i][2];
         }
       }
