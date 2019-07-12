@@ -22,7 +22,9 @@ class PickBox extends Component {
 	}
 
 	renderItems() {
-		return this.props.itemsAtCurrentLocation.map((item) => {
+		if (this.props.isItemSelectionEnabled && this.props.itemsAtCurrentLocation.length === 0) 
+			return (<h3>There is no items to pick!</h3>);
+		else return this.props.itemsAtCurrentLocation.map((item) => {
 			return (
 				<span>
 					<i
@@ -42,6 +44,7 @@ class PickBox extends Component {
 			);
 		});
 	}
+	
 	render() {
 		return (
 			<div className="PickBox" onClick={(e) => {}}>
