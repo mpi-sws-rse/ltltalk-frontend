@@ -18,14 +18,11 @@ class PickBox extends Component {
 
 	handleItemSelection(e) {
 		const IDArray = e.target.id.split(' ');
-		console.log(IDArray);
 		this.props.toggleItemSelection(IDArray[0], IDArray[1], IDArray[2]);
 	}
 
 	renderItems() {
 		return this.props.itemsAtCurrentLocation.map((item) => {
-			const itemID = item[3];
-			console.log(itemID);
 			return (
 				<span>
 					<i

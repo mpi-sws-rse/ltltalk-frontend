@@ -79,9 +79,6 @@ export default function reducer(state = initialState, action = {}) {
 
     case Constants.FINISH_ITEM_SELECTION:
       const isSelected = (color, shape, id) => {
-        if (color === 'blue' && shape === 'circle') {
-          console.log(state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape))
-        }
         return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id )[2];
       };
       let newWorldMap = [];
@@ -109,13 +106,6 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.TOGGLE_ITEM_SELECTION:
       const newItemsAtCurrentLocation = state.itemsAtCurrentLocation.map(item => item);
       for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
-        console.log(action.color);
-        console.log(action.shape);
-        console.log(action.id);
-        console.log(newItemsAtCurrentLocation[i][0]);
-        console.log(newItemsAtCurrentLocation[i][1]);
-        console.log(newItemsAtCurrentLocation[i][3]);
-
         const givenColor = action.color;
         const givenShape = action.shape;
         const givenID = action.id;
