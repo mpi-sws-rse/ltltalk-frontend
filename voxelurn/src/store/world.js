@@ -149,7 +149,8 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item') { 
-          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
+          const itemID = i.toString();   
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false, itemID]);    
         }      
       }
       return { ...state,
@@ -157,9 +158,11 @@ export default function reducer(state = initialState, action = {}) {
                isItemSelectionEnabled: true};
 
     case Constants.FINISH_ITEM_SELECTION:
-      const isSelected = (color, shape) => {
-        return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape).length === 3 && 
-        state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape)[2];
+      const isSelected = (color, shape, id) => {
+        if (color === 'blue' && shape === 'circle') {
+          console.log(state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape))
+        }
+        return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id )[2];
       };
       let newWorldMap = [];
       currentWorldMap = state.history[idx].worldMap;
@@ -168,7 +171,7 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item' &&
-            isSelected(currentWorldMap[i].color, currentWorldMap[i].shape)) {
+            isSelected(currentWorldMap[i].color, currentWorldMap[i].shape, i.toString())) {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
         }   
         else newWorldMap.push(currentWorldMap[i]);    
@@ -188,14 +191,18 @@ export default function reducer(state = initialState, action = {}) {
       for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
         console.log(action.color);
         console.log(action.shape);
+        console.log(action.id);
         console.log(newItemsAtCurrentLocation[i][0]);
         console.log(newItemsAtCurrentLocation[i][1]);
+        console.log(newItemsAtCurrentLocation[i][3]);
 
         const givenColor = action.color;
         const givenShape = action.shape;
+        const givenID = action.id;
         const currentColor = newItemsAtCurrentLocation[i][0];
         const currentShape = newItemsAtCurrentLocation[i][1];
-        if (givenColor === currentColor && givenShape === currentShape) {
+        const currentID = newItemsAtCurrentLocation[i][3];
+        if (givenColor === currentColor && givenShape === currentShape && givenID === currentID) {
           newItemsAtCurrentLocation[i][2] = ! newItemsAtCurrentLocation[i][2];
         }
       }

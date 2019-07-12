@@ -45,12 +45,13 @@ const Actions = {
 		};
   }, 
 
-  toggleItemSelection: (color, shape) => {
+  toggleItemSelection: (color, shape, id) => {
 		return (dispatch) => {
 			dispatch({
         type: Constants.TOGGLE_ITEM_SELECTION,
         color,
-        shape
+        shape,
+        id
 			});
 		};
   },

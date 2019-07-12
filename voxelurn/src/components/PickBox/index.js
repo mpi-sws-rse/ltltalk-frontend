@@ -27,7 +27,8 @@ class PickBox extends Component {
 
 	handleItemSelection(e) {
 		const IDArray = e.target.id.split(' ');
-		this.props.toggleItemSelection(IDArray[0], IDArray[1]);
+		console.log(IDArray);
+		this.props.toggleItemSelection(IDArray[0], IDArray[1], IDArray[2]);
 		// const newItemsAtCurrentLocation = [];
 		// for (let i = 0; i < this.props.itemsAtCurrentLocation.length; i++) {
 		// 	const newItem = [];
@@ -48,6 +49,8 @@ class PickBox extends Component {
 		return this.props.itemsAtCurrentLocation.map((item) => {
 			// if (item[1] === 'triangle') return <i class={`fas fa-exclamation-triangle`} style={{ color: item[0] }} />;
 			// else
+			const itemID = item[3];
+			console.log(itemID);
 			return (
 				<span>
 					<i
@@ -55,12 +58,12 @@ class PickBox extends Component {
 							? 'fas fa-exclamation-triangle'
 							: item[1]} item-icon`}
 						style={{ color: item[0] }}
-						id={`${item[0]} ${item[1]}`}
+						id={`${item[0]} ${item[1]} ${item[3]}`}
 						onClick={(e) => this.handleItemSelection(e)}
 					/>
 					<i
 						className={`far ${item[2] === true ? 'fa-check-square' : 'fa-square'} item-check-box`}
-						id={`${item[0]} ${item[1]} check-box`}
+						id={`${item[0]} ${item[1]} ${item[3]} check-box`}
 						onClick={(e) => this.handleItemSelection(e)}
 					/>
 				</span>
@@ -98,7 +101,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		finishItemSelection: () => dispatch(Actions.finishItemSelection()),
-		toggleItemSelection: (color, shape) => dispatch(Actions.toggleItemSelection(color, shape))
+		toggleItemSelection: (color, shape, id) => dispatch(Actions.toggleItemSelection(color, shape, id))
 	};
 };
 
