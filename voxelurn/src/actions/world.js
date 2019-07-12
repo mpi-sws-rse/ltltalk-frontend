@@ -87,14 +87,6 @@ const Actions = {
 			});
 		};
   },
-
-  // robotPickItem: () => {
-	// 	return (dispatch) => {
-	// 		dispatch({
-	// 			type: Constants.ROBOT_PICK_ITEM
-	// 		});
-	// 	};
-  // },
    
   moveRobotUp: () => {
 		return (dispatch) => {
