@@ -11,61 +11,19 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   pointMarkers: [], 
-
-  // The blue grids are called "waters".
-  // Items (that are not carried by the robot) cannot be on waters.
-  // But the robot can. And the robot can step on a water grid while carrying items.
-  // These 3 points are arbitrarily chosen. 
-  // Chuntong.
   waterMarkers: [ [3, 7], [5, 1], [9, 5] ], 
-
-  // Same format as waterMarkers. An array of coordinates.
-  // Chuntong.
   wallMarkers: worldConfig.walls,
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
   defining: false,
   defineN: null,
-
-  // The dictionary panel has been deleted. 
-  // This dictionary property is useless.
-  // But deleting it will involve refactoring many other places.
-  // So leave it here for now. 
-  // Chuntong.
   dictionary: [],
-  
-  // Manipulate this property only when key press is enabled.
-  // Do NOT do anything with it when key press is disabled.
-  // Upon enabling key press, 
-  // set the robot property here as the current robot state (i.e. the robot state in the latest history entry).
-  // Upon disabling key press, remember to store the robot state in the latest history entry.
-  // Chuntong.
   robot: worldConfig.robot,
-
-  // Keys that the user pressed. 
-  // Remember to empty the array upon disabling key press.
-  // I know this is not the best implementation.
-  // We should probably store the old key press history and make a new key press history,
-  // instead of emptying the old key press history.
-  // But it works for now. We can change it later.
-  // Chuntong.
   keyPressHist: [],
-
-  // Make this true when the user enters a command that the server cannot understand.
-  // The user will be asked to provide a definition by moving the robot and / or instructing the robot
-  // to pick items, with key presses. When the user finishes defining, turn this back to false.
-  // Chuntong. 
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
-
-  // These lines were commented out by previous people.
-  // I don't know if they are useful. Just put them here in case we need them later. 
-  // Chuntong.
-  //robotStep: 0, // How far is the robot along its visual simulation
-  //popup: { active: true, text: "No error yet!" },
-  //exampleQuery: "add red 3 times",
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -80,23 +38,13 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     
     case Constants.START_USER_DEFINITION:
-      // The code here is pretty self explanatory.
-      // Remember to read the description of the robot property in the initial state.
-      // Chuntong.
-      // document.getElementById('blocksCanvas').focus({ preventScroll: true });
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
       return { ...state, robot: robotStartState, isKeyPressEnabled: true };
 
     case Constants.FINISH_USER_DEFINITION: 
-      // Upon disabling key press, make a new history entry
-      // This new history entry contains the same info as the entry before it, EXCEPT that  
-      // the robot has been moved and / or has picked up items.
-      // I do not understand why I need 'type: null', but removing it causes weird bugs. Just keep it.
-      // Chuntong.
       console.log(state.keyPressHist)
       document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
-      // document.activeElement.blur();
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
         ...state, 
@@ -108,34 +56,6 @@ export default function reducer(state = initialState, action = {}) {
         status: STATUS.TRY,
         keyPressHist: [] 
       }; 
-
-    // case Constants.ROBOT_PICK_ITEM:
-    //   // Remember that items that are not carried by the robot are considered 
-    //   // "points" (or "block") in the world map.
-    //   // A point has x and y coordinates and a type (e.g. 'item').
-    //   // When an item gets picked up by the robot, 
-    //   // we need to remove it from the world map, therefore I am creating a new world map.
-    //   // Chuntong.
-    //   let newWorldMap = [];
-    //   let carriedItems = currentRobot.items.map(item => item);
-    //   let currentWorldMap = state.history[idx].worldMap;
-    //   let itemsAtCurrentLocation = [];
-    //   for (let i = 0; i < currentWorldMap.length; i ++) {
-    //     if (currentWorldMap[i].x === currentRobotX && 
-    //         currentWorldMap[i].y === currentRobotY &&  
-    //         currentWorldMap[i].type === 'item') {
-    //       carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]); 
-    //       itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
-    //     }   
-    //     else newWorldMap.push(currentWorldMap[i]);    
-    //   }
-    //   const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
-    //   return { ...state, 
-    //            history: [ ...state.history.splice(0, idx), currentHistory ], 
-    //            robot: { ...state.robot, items: carriedItems},
-    //            keyPressHist: [ ...currentKeyPressHist, 'pick' ],
-    //            itemsAtCurrentLocation
-    //         }; 
 
     case Constants.FORCE_QUIT_ITEM_SELECTION:
       return { ...state,
@@ -149,7 +69,9 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item') { 
-          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, false]);    
+          const isSelected = false;    
+          const itemID = i.toString();   
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, isSelected, itemID]);    
         }      
       }
       return { ...state,
@@ -157,9 +79,10 @@ export default function reducer(state = initialState, action = {}) {
                isItemSelectionEnabled: true};
 
     case Constants.FINISH_ITEM_SELECTION:
-      const isSelected = (color, shape) => {
-        return state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape).length === 3 && 
-        state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape)[2];
+      const isSelected = ({ color, shape, id }) => {
+        const item = state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id);
+        const isItemSelected = item[2];
+        return isItemSelected; 
       };
       let newWorldMap = [];
       currentWorldMap = state.history[idx].worldMap;
@@ -168,7 +91,11 @@ export default function reducer(state = initialState, action = {}) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
             currentWorldMap[i].type === 'item' &&
-            isSelected(currentWorldMap[i].color, currentWorldMap[i].shape)) {
+            isSelected({ 
+              color: currentWorldMap[i].color, 
+              shape: currentWorldMap[i].shape, 
+              id: i.toString()})) 
+        {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
         }   
         else newWorldMap.push(currentWorldMap[i]);    
@@ -186,26 +113,20 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.TOGGLE_ITEM_SELECTION:
       const newItemsAtCurrentLocation = state.itemsAtCurrentLocation.map(item => item);
       for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
-        console.log(action.color);
-        console.log(action.shape);
-        console.log(newItemsAtCurrentLocation[i][0]);
-        console.log(newItemsAtCurrentLocation[i][1]);
-
-        const givenColor = action.color;
-        const givenShape = action.shape;
+        const selectedColor = action.color;
+        const selectedShape = action.shape;
+        const selectedID = action.id;
         const currentColor = newItemsAtCurrentLocation[i][0];
         const currentShape = newItemsAtCurrentLocation[i][1];
-        if (givenColor === currentColor && givenShape === currentShape) {
+        const currentID = newItemsAtCurrentLocation[i][3];
+        if (selectedColor === currentColor && selectedShape === currentShape && selectedID === currentID) {
           newItemsAtCurrentLocation[i][2] = ! newItemsAtCurrentLocation[i][2];
         }
       }
       return { ...state, 
                itemsAtCurrentLocation: newItemsAtCurrentLocation
              };       
-
-    // Note: The up, down, right and left cases contain some duplicated code.
-    // We can refactor and reduce duplication later.
-    // Chuntong.        
+       
     case Constants.MOVE_ROBOT_UP:
       nextRobotPosition = { x: currentRobotX, y: currentRobotY + 1 };
       // If nextRobotPosition is a wall, don't move robot, don't change state.

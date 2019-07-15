@@ -45,12 +45,13 @@ const Actions = {
 		};
   }, 
 
-  toggleItemSelection: (color, shape) => {
+  toggleItemSelection: (color, shape, id) => {
 		return (dispatch) => {
 			dispatch({
         type: Constants.TOGGLE_ITEM_SELECTION,
         color,
-        shape
+        shape,
+        id
 			});
 		};
   },
@@ -86,14 +87,6 @@ const Actions = {
 			});
 		};
   },
-
-  // robotPickItem: () => {
-	// 	return (dispatch) => {
-	// 		dispatch({
-	// 			type: Constants.ROBOT_PICK_ITEM
-	// 		});
-	// 	};
-  // },
    
   moveRobotUp: () => {
 		return (dispatch) => {
