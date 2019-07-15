@@ -1,5 +1,7 @@
 import Constants from "constants/actions"
 import { SEMPREquery, parseSEMPRE/*, worldToJSON*/ } from "helpers/sempre"
+import { EXAMPLEquery } from "helpers/flask"
+
 import Logger from "actions/logger"
 import { updateRobot, removeRobot } from "helpers/blocks"
 import { persistStore } from "redux-persist"
@@ -27,10 +29,17 @@ function sendContext( { history, current_history_idx, sessionId, waterMarkers, k
       keyPressHist,
       rooms: rooms
     }));
+
+   
     contextCommand = `(:context ${totalState})`;
   }
 
   const contextCmds = { q: contextCommand, sessionId: sessionId }
+
+  //TO do add 2nd server and send context plus path detail togather
+
+
+
 
   return SEMPREquery(contextCmds)
 }
@@ -194,13 +203,19 @@ const Actions = {
 
               const formval = parseSEMPRE(response.candidates)
               console.log(formval);
-             
 
+              const exampleQuery = { query: q, context: cmds, path: keyPressHist, sessionId: sessionId }
+
+              
+             
               if (formval === null || formval === undefined) {
+
+                
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
                 dispatch({
                   type: Constants.START_USER_DEFINITION
                 });
+                EXAMPLEquery(exampleQuery)
                 return false
               } else {
                 /* Remove no-ops */

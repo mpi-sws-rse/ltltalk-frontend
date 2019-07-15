@@ -102,10 +102,13 @@ export default function reducer(state = initialState, action = {}) {
       }
 
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+      console.log("%%%carried item %%%%")
+      console.log(carriedItems)
       return { ...state,
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
-               keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+
+               keyPressHist: [ ...currentKeyPressHist, ['pick',carriedItems] ],
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  
@@ -132,22 +135,26 @@ export default function reducer(state = initialState, action = {}) {
       // If nextRobotPosition is a wall, don't move robot, don't change state.
       if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
       // Else move robot up and update key press history
-      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','up' ]] };
+
       
 		case Constants.MOVE_ROBOT_DOWN:
 			nextRobotPosition = { x: currentRobotX, y: currentRobotY - 1 };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','down' ] ] };
+
 
 		case Constants.MOVE_ROBOT_LEFT:
 			nextRobotPosition = { x: currentRobotX - 1, y: currentRobotY };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','left' ] ] };
+
 
 		case Constants.MOVE_ROBOT_RIGHT:
 			nextRobotPosition = { x: currentRobotX + 1, y: currentRobotY };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','right' ] ] };   
+
 
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
