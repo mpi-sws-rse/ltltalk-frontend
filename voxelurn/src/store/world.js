@@ -102,8 +102,8 @@ export default function reducer(state = initialState, action = {}) {
       }
 
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
-      console.log("%%%carried item %%%%")
-      console.log(carriedItems)
+      // console.log("%%%carried item %%%%")
+      // console.log(carriedItems)
       return { ...state,
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
