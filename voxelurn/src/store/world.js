@@ -108,7 +108,7 @@ export default function reducer(state = initialState, action = {}) {
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
 
-               keyPressHist: [ ...currentKeyPressHist, ['pick',carriedItems] ],
+               keyPressHist: [ ...currentKeyPressHist, ['pick',carriedItems,[currentRobotX,currentRobotY]] ],
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  
