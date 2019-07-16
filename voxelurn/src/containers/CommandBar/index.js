@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import classnames from "classnames"
 import Actions from "actions/world"
 import { worldConfig } from "constants/defaultMap"
-import { STATUS, COMMAND_BAR_DEFINE_PLACEHOLDER, COMMAND_BAR_PLACEHOLDER } from "constants/strings"
+import { USER_INPUT_FIELD, STATUS, COMMAND_BAR_DEFINE_PLACEHOLDER, COMMAND_BAR_PLACEHOLDER } from "constants/strings"
 
 import "./styles.css"
 
@@ -141,6 +141,7 @@ class CommandBar extends Component {
     return (
       <div className="CommandBar">
         <input
+          id={USER_INPUT_FIELD}
           type="text"
           value={query}
           onChange={(e) => this.handleChange(e)}

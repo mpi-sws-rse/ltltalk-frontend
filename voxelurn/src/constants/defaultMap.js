@@ -71,6 +71,7 @@ function adjustPoints(p) {
 }
 
 function getDefaultMap(/*config = defaultConfig*/) {
+  let walls = [];
   let config = defaultConfig;
   //let xMax = config.world.reduce((acc, x) => Math.max(acc, x.length));
   let world = config.world;
@@ -90,6 +91,7 @@ function getDefaultMap(/*config = defaultConfig*/) {
         color: null,
         shape: null
       });
+      walls.push({x: i - rowIndex, y: rowCount });
     } else if (c === '@') {
       robot = {
         x: (i - rowIndex),
@@ -125,7 +127,9 @@ function getDefaultMap(/*config = defaultConfig*/) {
   let roomPoints = processCorners();
   robot.x += config.xMin;
   robot.y = config.yMax - robot.y;
+  walls.map(adjustPoints);
   return {
+    walls: walls,
     optimizeBorder: true,
     worldMap: array.map(adjustPoints),//.concat(roomPoints),
     roomPoints: roomPoints,

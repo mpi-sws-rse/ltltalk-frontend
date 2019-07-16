@@ -7,7 +7,7 @@ import { getStore } from "../"
 import { STATUS } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
-function sendContext(history, current_history_idx, sessionId) {
+function sendContext( { history, current_history_idx, sessionId, waterMarkers, keyPressHist } ) {
   let contextCommand = "(:context)"
 
   if (history.length > 0) {
@@ -23,6 +23,8 @@ function sendContext(history, current_history_idx, sessionId) {
     const totalState = JSON.stringify(JSON.stringify({
       robot: robotContext,
       world: currentState,
+      waterMarkers,
+      keyPressHist,
       rooms: rooms
     }));
     contextCommand = `(:context ${totalState})`;
@@ -34,6 +36,90 @@ function sendContext(history, current_history_idx, sessionId) {
 }
 
 const Actions = {
+
+  forceQuitItemSelection: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.FORCE_QUIT_ITEM_SELECTION
+			});
+		};
+  }, 
+
+  toggleItemSelection: (color, shape, id) => {
+		return (dispatch) => {
+			dispatch({
+        type: Constants.TOGGLE_ITEM_SELECTION,
+        color,
+        shape,
+        id
+			});
+		};
+  },
+
+  startUserDefinition: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.START_USER_DEFINITION
+			});
+		};
+  },
+  
+  finishUserDefinition: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.FINISH_USER_DEFINITION
+			});
+		};
+  },
+
+  startItemSelection: () =>{
+    return (dispatch) => {
+			dispatch({
+				type: Constants.START_ITEM_SELECTION
+			});
+		};
+  },
+
+  finishItemSelection: () =>{
+    return (dispatch) => {
+			dispatch({
+				type: Constants.FINISH_ITEM_SELECTION
+			});
+		};
+  },
+   
+  moveRobotUp: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_UP
+			});
+		};
+	},
+
+	moveRobotDown: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_DOWN
+			});
+		};
+	},
+
+	moveRobotLeft: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_LEFT
+			});
+		};
+	},
+
+	moveRobotRight: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.MOVE_ROBOT_RIGHT
+			});
+		};
+	},
+
   setQuery: (query) => {
     return (dispatch) => {
       dispatch({
@@ -81,14 +167,14 @@ const Actions = {
   tryQuery: (q) => {
     return (dispatch, getState) => {
       const { sessionId } = getState().user
-      const { history, current_history_idx } = getState().world
+      const { history, current_history_idx, waterMarkers, keyPressHist } = getState().world
 
       dispatch({
         type: Constants.SET_STATUS,
         status: STATUS.LOADING
       })
 
-      return sendContext(history, current_history_idx, sessionId)
+      return sendContext( { history, current_history_idx, sessionId, waterMarkers, keyPressHist })
         .then((eh) => {
           //q = processMacros(q);
           const query = `(:q ${JSON.stringify(q)})`
@@ -112,6 +198,9 @@ const Actions = {
 
               if (formval === null || formval === undefined) {
                 dispatch(Logger.log({ type: "tryFail", msg: { query: q } }))
+                dispatch({
+                  type: Constants.START_USER_DEFINITION
+                });
                 return false
               } else {
                 /* Remove no-ops */
@@ -125,7 +214,7 @@ const Actions = {
                   type: Constants.TRY_QUERY,
                   responses: responses
                 })
-
+                console.log(responses);
                 return true
               }
             })
