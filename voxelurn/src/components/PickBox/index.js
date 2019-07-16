@@ -60,7 +60,7 @@ class PickBox extends Component {
 					{this.renderItems()}
 					<div>
 						<button className="PickBox-finish-button" onClick={(e) => this.handleFinishSelection(e)}>
-							<i class="fas fa-check" />
+							<i className="fas fa-check" />
 						</button>
 					</div>
 					<wbr />
