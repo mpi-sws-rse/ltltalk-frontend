@@ -44,6 +44,21 @@ function sendContext( { history, current_history_idx, sessionId, waterMarkers, k
   return SEMPREquery(contextCmds)
 }
 
+const sendUserDefinition = ( { waterMarkers, robot, history, current_history_idx, query, path, sessionId } ) => {
+  // alert('Im sending user definition');
+  let infoToBeSent = { query, path, sessionId};
+  if (history.length > 0) {
+    const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
+    const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color, c.shape]));
+    waterMarkers.forEach(waterMarker => currentState.push([ waterMarker[0], waterMarker[1], 'water', null, null] ));
+    const context = { robot, width: 10, height: 10, world: currentState};
+    infoToBeSent.context = context;
+  }
+  console.log('info to be sent');
+  console.log(infoToBeSent);
+  return SEMPREquery(infoToBeSent);
+}
+
 const Actions = {
 
   forceQuitItemSelection: () => {
@@ -74,12 +89,39 @@ const Actions = {
   },
   
   finishUserDefinition: () => {
-		return (dispatch) => {
-			dispatch({
-				type: Constants.FINISH_USER_DEFINITION
-			});
-		};
+    return (dispatch, getState) => {
+      const { sessionId } = getState().user;
+      const { waterMarkers, robot, history, current_history_idx, currentQuery, keyPressHist } = getState().world;
+      dispatch({
+        type: Constants.FINISH_USER_DEFINITION
+      });  
+      return sendUserDefinition( 
+        { 
+          waterMarkers, 
+          robot,
+          history, 
+          current_history_idx, 
+          query: currentQuery, 
+          path: keyPressHist, 
+          sessionId 
+        } ).then(
+        (eh) => {
+          dispatch({
+            type: Constants.FINISH_USER_DEFINITION
+          });           
+        }
+      ).catch(
+        (error) => alert(error)
+      )  
+    }
   },
+  // finishUserDefinition: () => {
+	// 	return (dispatch) => {
+	// 		dispatch({
+	// 			type: Constants.FINISH_USER_DEFINITION
+	// 		});
+	// 	};
+  // },
 
   startItemSelection: () =>{
     return (dispatch) => {

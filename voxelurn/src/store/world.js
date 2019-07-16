@@ -16,6 +16,7 @@ const initialState = {
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
+  currentQuery: "", // Remember user query when user is defining
   defining: false,
   defineN: null,
   dictionary: [],
@@ -40,7 +41,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.START_USER_DEFINITION:
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
-      return { ...state, robot: robotStartState, isKeyPressEnabled: true };
+      return { ...state, robot: robotStartState, isKeyPressEnabled: true, currentQuery: state.query };
 
     case Constants.FINISH_USER_DEFINITION: 
       console.log(state.keyPressHist)
@@ -54,7 +55,8 @@ export default function reducer(state = initialState, action = {}) {
         defineN: null, 
         query: "",
         status: STATUS.TRY,
-        keyPressHist: [] 
+        keyPressHist: [],
+        currentQuery: "" 
       }; 
 
     case Constants.FORCE_QUIT_ITEM_SELECTION:
@@ -87,6 +89,7 @@ export default function reducer(state = initialState, action = {}) {
       let newWorldMap = [];
       currentWorldMap = state.history[idx].worldMap;
       let carriedItems = currentRobot.items.map(item => item);
+      let newItems = [];
       for (let i = 0; i < currentWorldMap.length; i ++) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
@@ -97,6 +100,7 @@ export default function reducer(state = initialState, action = {}) {
               id: i.toString()})) 
         {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+          newItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);
         }   
         else newWorldMap.push(currentWorldMap[i]);    
       }
@@ -108,7 +112,7 @@ export default function reducer(state = initialState, action = {}) {
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
 
-               keyPressHist: [ ...currentKeyPressHist, ['pick',carriedItems,[currentRobotX,currentRobotY]] ],
+               keyPressHist: [ ...currentKeyPressHist, ['pick', newItems] ],
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  
