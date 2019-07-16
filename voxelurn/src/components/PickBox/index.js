@@ -71,7 +71,6 @@ class PickBox extends Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log('map');
 	return {
 		isItemSelectionEnabled: state.world.isItemSelectionEnabled,
 		itemsAtCurrentLocation: state.world.itemsAtCurrentLocation.map((item) => {

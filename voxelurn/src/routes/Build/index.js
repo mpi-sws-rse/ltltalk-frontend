@@ -263,7 +263,6 @@ class Build extends Component {
     let currentState = history[idx].worldMap;
     // TODO This might be unnecessary
     // let robot = history[idx].robot;
-    console.log(this.props.isKeyPressEnabled);
     let robot;
     if (this.props.isKeyPressEnabled) robot = this.props.robot;
     else robot = history[idx].robot;
