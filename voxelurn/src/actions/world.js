@@ -56,6 +56,10 @@ const sendUserDefinition = ( { waterMarkers, robot, history, current_history_idx
   }
   console.log('info to be sent');
   console.log(infoToBeSent);
+
+  //send request to exampleServer
+  EXAMPLEquery(infoToBeSent)
+
   return SEMPREquery(infoToBeSent);
 }
 
@@ -245,10 +249,6 @@ const Actions = {
 
               const formval = parseSEMPRE(response.candidates)
               console.log(formval);
-
-              const exampleQuery = { query: q, context: cmds, path: keyPressHist, sessionId: sessionId }
-
-              
              
               if (formval === null || formval === undefined) {
 
@@ -257,7 +257,6 @@ const Actions = {
                 dispatch({
                   type: Constants.START_USER_DEFINITION
                 });
-                EXAMPLEquery(exampleQuery)
                 return false
               } else {
                 /* Remove no-ops */
