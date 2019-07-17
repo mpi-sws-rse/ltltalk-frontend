@@ -51,14 +51,16 @@ const sendUserDefinition = ( { waterMarkers, robot, history, current_history_idx
     const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
     const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color, c.shape]));
     waterMarkers.forEach(waterMarker => currentState.push([ waterMarker[0], waterMarker[1], 'water', null, null] ));
-    const context = { robot, width: 10, height: 10, world: currentState};
+    const context = { robot: [robot.x , robot.y, robot.items], width: 10, height: 10, world: currentState};
     infoToBeSent.context = context;
   }
   console.log('info to be sent');
   console.log(infoToBeSent);
 
   //send request to exampleServer
-  EXAMPLEquery(infoToBeSent)
+  console.log(EXAMPLEquery(infoToBeSent))
+
+
 
   return SEMPREquery(infoToBeSent);
 }
