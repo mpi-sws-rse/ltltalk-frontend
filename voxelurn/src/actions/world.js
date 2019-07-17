@@ -60,6 +60,35 @@ const sendUserDefinition = ( { waterMarkers, robot, history, current_history_idx
 }
 
 const Actions = {
+  // repeatAnimation: (rememberedAnimation) => {
+  //   return (dispatch) => {
+  //     dispatch( { type: Constants.STOP_SHOWING_ANIMATIONS });
+  //     dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: rememberedAnimation });
+  //   }
+  // },
+
+  stopShowingAnimations: () => {
+		return (dispatch) => {
+			dispatch({
+				type: Constants.STOP_SHOWING_ANIMATIONS
+			});
+		};    
+  },
+
+  getWorldsFromServer: (isRepeat, rememberedAnimation) => {
+    if (isRepeat) {
+      return (dispatch) => {
+        dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: rememberedAnimation });
+      }
+    }
+    else {
+      return (dispatch) => {
+        return EXAMPLEquery()
+        .then(response => dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: response } ))
+        .catch(error => {alert(error)});
+      }
+    }
+  },
 
   forceQuitItemSelection: () => {
 		return (dispatch) => {
@@ -257,7 +286,7 @@ const Actions = {
                 dispatch({
                   type: Constants.START_USER_DEFINITION
                 });
-                EXAMPLEquery(exampleQuery)
+                // EXAMPLEquery(exampleQuery)
                 return false
               } else {
                 /* Remove no-ops */
@@ -271,6 +300,7 @@ const Actions = {
                   type: Constants.TRY_QUERY,
                   responses: responses
                 })
+                console.log('RESPONSES');
                 console.log(responses);
                 return true
               }

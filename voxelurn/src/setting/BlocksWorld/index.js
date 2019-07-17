@@ -197,7 +197,7 @@ class Blocks extends React.Component {
       return;
     }
     // Robot speed factor
-    const factor = 5;
+    const factor = 15;
 
     // console.log("blocks areL")
     // console.log(argBlocks)

@@ -20,7 +20,7 @@ class SharePanel extends Component {
 
   render() {
     return (
-      <div className="SidePanel">
+      <div className="SidePanel" style={{ visibility: `${this.props.isExampleAnimationEnabled ? 'hidden' : 'visible'}` }}>
         <div className="SidePanel-content">
             <div className="SharePanel-buttons">
                 <div className="yourstructs">
@@ -45,7 +45,8 @@ const mapStateToProps = (state) => ({
   user_structs: state.logger.user_structs,
   sessionId: state.user.sessionId,
   sid: state.logger.sid,
-  signedIn: state.user.signedIn
+  signedIn: state.user.signedIn,
+  isExampleAnimationEnabled: state.world.isExampleAnimationEnabled
 })
 
 export default connect(mapStateToProps)(SharePanel)

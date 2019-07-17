@@ -25,6 +25,10 @@ const initialState = {
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
+  isExampleAnimationEnabled: false, // Show server-generated examples to user
+  examplePath: [],
+  rememberedState: { worldMap: null, robot: null , waterMarkers: null },
+  rememberedAnimation: null
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -37,7 +41,86 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
-    
+    // case Constants.REPEAT_ANIMATION:
+    //   alert('I will repeat animation');
+    //   const temporaryHistory = 
+    //   { 
+    //     ...state.history[state.history.length - 1],  
+    //     worldMap: state.rememberedAnimation.world.world,
+    //     robot: state.rememberedState.robot 
+    //   };
+    //   return {
+    //     ...state,
+    //     history: [ ...state.history.splice(0, idx), temporaryHistory ],
+    //     examplePath: state.rememberedAnimation.path
+    //   };
+
+    case Constants.STOP_SHOWING_ANIMATIONS:
+      const restoredWorldMap = state.rememberedState.worldMap;
+      const restoredRobot = state.rememberedState.robot;
+      const restoredWaterMarkers = state.rememberedState.waterMarkers;
+      const restoredHistory = { 
+        ...state.history[state.history.length - 1], 
+        worldMap: restoredWorldMap, 
+        robot: restoredRobot 
+      };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), restoredHistory ],
+        examplePath: [],
+        waterMarkers: restoredWaterMarkers,
+        isExampleAnimationEnabled: false,
+        rememberedState: { worldMap: null, robot: null , waterMarkers: null }
+        // rememberedAnimation: null
+      };
+
+    case Constants.GET_WORLDS_FROM_SERVER:
+      console.log('I am in store/world.js and I will print out the response!');
+      console.log(action.response);
+      const response = action.response;
+      const exampleRobot = response.world.robot;
+      const exampleRobotX = exampleRobot[0];
+      console.log(exampleRobotX);
+      const exampleRobotY = exampleRobot[1];
+      console.log(exampleRobotY);
+      const exampleRobotItems = exampleRobot[2];
+      console.log(exampleRobotItems);
+      const exampleWorldMap = response.world.world;
+      console.log(exampleWorldMap);
+
+
+      // Format robot
+      const formattedRobot = { items: exampleRobotItems, type: 'robot', x: exampleRobotX, y: exampleRobotY };
+
+      // Format world and watermarkers
+      const formattedWorldMap = exampleWorldMap.filter(position => position[2] !== 'water');
+      console.log(formattedWorldMap);
+      let formmattedWaterMarkers = exampleWorldMap.filter(position => position[2] === 'water');
+      formmattedWaterMarkers = formmattedWaterMarkers.map(waterMarker => [waterMarker[0], waterMarker[1]]);
+      console.log(formmattedWaterMarkers);
+
+      // Format path
+      console.log(response.path);
+      for (let i = 0; i < response.path.length; i ++) {
+        
+      }
+      const rememberedState = {
+        worldMap: state.history[state.history.length - 1].worldMap,
+        robot: state.history[state.history.length - 1].robot,
+        waterMarkers: state.waterMarkers
+      };
+
+      const tempHistory = { ...state.history[state.history.length - 1], worldMap: formattedWorldMap, robot: formattedRobot };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), tempHistory ],
+        examplePath: response.path,
+        waterMarkers: formmattedWaterMarkers,
+        isExampleAnimationEnabled: true,
+        rememberedState: rememberedState,
+        rememberedAnimation: action.response
+      };
+
     case Constants.START_USER_DEFINITION:
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
@@ -173,6 +256,8 @@ export default function reducer(state = initialState, action = {}) {
       if (state.current_history_idx >= 0) {
         history = history.slice(0, state.current_history_idx + 1)
       }
+      console.log('action.responses')
+      console.log(action.responses)
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]

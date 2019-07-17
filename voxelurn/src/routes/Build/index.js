@@ -9,6 +9,7 @@ import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
 import ActionPopup from "components/ActionPopup"
 import PickBox from "components/PickBox"
+import DecisionBox from "components/DecisionBox"
 
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
@@ -112,7 +113,10 @@ class Build extends Component {
 		switch (event.keyCode) {
       case KEY_ENTER:
         if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
-        else this.props.dispatch(Actions.finishUserDefinition());
+        else {
+          this.props.dispatch(Actions.finishUserDefinition());
+          this.props.dispatch(Actions.getWorldsFromServer(false, null));
+        }
         break;
         
       case KEY_PICK:
@@ -254,7 +258,7 @@ class Build extends Component {
 
   render() {
     const { status, responses, pointMarkers, waterMarkers, history,
-        current_history_idx, task, isKeyPressEnabled } = this.props
+        current_history_idx, task, isKeyPressEnabled, isExampleAnimationEnabled, examplePath } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -284,7 +288,8 @@ class Build extends Component {
         popup.text = response.status;
         popup.active = true;
       }
-    }
+    } 
+    else if (isExampleAnimationEnabled) currentPath = examplePath;
     
     return (
       <div className="Build">
@@ -332,6 +337,7 @@ class Build extends Component {
                   Press enter to finish definition."
                   
           /> 
+          <DecisionBox active={true}/>
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
             handleShiftClick={() => this.handleShiftClick()}
@@ -372,7 +378,9 @@ const mapStateToProps = (state) => ({
   current_history_idx: state.world.current_history_idx,
   robot: state.world.robot,
   isKeyPressEnabled: state.world.isKeyPressEnabled,
-  isItemSelectionEnabled: state.world.isItemSelectionEnabled
+  isItemSelectionEnabled: state.world.isItemSelectionEnabled,
+  isExampleAnimationEnabled: state.world.isExampleAnimationEnabled,
+  examplePath: state.world.examplePath
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

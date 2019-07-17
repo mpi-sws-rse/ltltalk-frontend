@@ -139,7 +139,7 @@ class CommandBar extends Component {
     const placeholder = status !== STATUS.DEFINE ? COMMAND_BAR_PLACEHOLDER : COMMAND_BAR_DEFINE_PLACEHOLDER
 
     return (
-      <div className="CommandBar">
+      <div className="CommandBar" style={{ visibility: `${this.props.isExampleAnimationEnabled ? 'hidden' :'visible'}` }}>
         <input
           id={USER_INPUT_FIELD}
           type="text"
@@ -158,7 +158,8 @@ class CommandBar extends Component {
 
 const mapStateToProps = (state) => ({
   query: state.world.query,
-  status: state.world.status
+  status: state.world.status,
+  isExampleAnimationEnabled: state.world.isExampleAnimationEnabled
 })
 
 export default connect(mapStateToProps)(CommandBar)
