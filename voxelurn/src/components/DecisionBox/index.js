@@ -35,14 +35,15 @@ class DecisionBox extends Component {
 		return (
 			<div className="DecisionBox">
 				<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
+					<h2 className="DecisionBox-title">Is this what you meant?</h2>
 					<div>
-						<button className="DecisionBox-button" onClick={(e) => this.handleAccept(e)}>
+						<button className="DecisionBox-button DecisionBox-button-yes" onClick={(e) => this.handleAccept(e)}>
 							<i className="fas fa-check" />
 						</button>
-						<button className="DecisionBox-button" onClick={(e) => this.handleDecline(e)}>
+						<button className="DecisionBox-button DecisionBox-button-no" onClick={(e) => this.handleDecline(e)}>
 							<i class="fas fa-times" />
 						</button>
-						<button className="DecisionBox-button" onClick={(e) => this.handleRepeat(e)}>
+						<button className="DecisionBox-button DecisionBox-button-repeat" onClick={(e) => this.handleRepeat(e)}>
 							<i className="fas fa-redo" />
 						</button>
 					</div>
