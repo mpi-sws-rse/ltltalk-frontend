@@ -2,7 +2,7 @@ import { EXAMPLE_SERVER_URL } from "constants/strings"
 
 
 export async function EXAMPLEquery(cmds, callback) {
-  return fetch('https://8142f831-e581-4c4a-98ac-d4f52dd6fc32.mock.pstmn.io') 
+  return fetch('https://d2a4b60b-0322-4156-bd45-70d04dc80be2.mock.pstmn.io') 
   .then((response) => {
     const responseJSON = response.json();
     //console.log(responseJSON)

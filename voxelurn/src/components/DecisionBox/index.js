@@ -24,9 +24,11 @@ class DecisionBox extends Component {
 
 	handleRepeat(e) {
 		e.preventDefault();
-		console.log(this.props.rememberedAnimation);
-		this.props.stopShowingAnimations();
-		this.props.getWorldsFromServer(true, this.props.rememberedAnimation);
+		// console.log(this.props.rememberedAnimation);
+		// this.props.stopShowingAnimations();
+		this.props.repeatAnimation();
+		//setTimeout(this.props.getWorldsFromServer(true, this.props.rememberedAnimation), 1000);
+		//this.props.getWorldsFromServer(true, this.props.rememberedAnimation);
 	}
 
 	render() {

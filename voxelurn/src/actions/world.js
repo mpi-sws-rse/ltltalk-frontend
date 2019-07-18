@@ -60,12 +60,11 @@ const sendUserDefinition = ( { waterMarkers, robot, history, current_history_idx
 }
 
 const Actions = {
-  // repeatAnimation: (rememberedAnimation) => {
-  //   return (dispatch) => {
-  //     dispatch( { type: Constants.STOP_SHOWING_ANIMATIONS });
-  //     dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: rememberedAnimation });
-  //   }
-  // },
+  repeatAnimation: () => {
+    return (dispatch) => {
+      dispatch( { type: Constants.REPEAT_ANIMATION });
+    }
+  },
 
   stopShowingAnimations: () => {
 		return (dispatch) => {

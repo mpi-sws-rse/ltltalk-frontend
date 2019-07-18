@@ -41,19 +41,23 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
-    // case Constants.REPEAT_ANIMATION:
-    //   alert('I will repeat animation');
-    //   const temporaryHistory = 
-    //   { 
-    //     ...state.history[state.history.length - 1],  
-    //     worldMap: state.rememberedAnimation.world.world,
-    //     robot: state.rememberedState.robot 
-    //   };
-    //   return {
-    //     ...state,
-    //     history: [ ...state.history.splice(0, idx), temporaryHistory ],
-    //     examplePath: state.rememberedAnimation.path
-    //   };
+    case Constants.REPEAT_ANIMATION:
+      alert('I will repeat animation');
+      const temporaryHistory = 
+      { 
+        ...state.history[state.history.length - 1],  
+        worldMap: state.rememberedAnimation.world.world,
+        robot: { 
+          items: state.rememberedAnimation.world.robot[2], 
+          type: 'robot', 
+          x: state.rememberedAnimation.world.robot[0], 
+          y: state.rememberedAnimation.world.robot[1] } 
+      };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), temporaryHistory ],
+        examplePath: state.rememberedAnimation.path.map(action => (action.completed ? {...action, completed: false} : action))
+      };
 
     case Constants.STOP_SHOWING_ANIMATIONS:
       const restoredWorldMap = state.rememberedState.worldMap;
@@ -93,10 +97,10 @@ export default function reducer(state = initialState, action = {}) {
       const formattedRobot = { items: exampleRobotItems, type: 'robot', x: exampleRobotX, y: exampleRobotY };
 
       // Format world and watermarkers
-      const formattedWorldMap = exampleWorldMap.filter(position => position[2] !== 'water');
+      const formattedWorldMap = exampleWorldMap.filter(position => position.type !== 'water');
       console.log(formattedWorldMap);
-      let formmattedWaterMarkers = exampleWorldMap.filter(position => position[2] === 'water');
-      formmattedWaterMarkers = formmattedWaterMarkers.map(waterMarker => [waterMarker[0], waterMarker[1]]);
+      let formmattedWaterMarkers = exampleWorldMap.filter(position => position.type === 'water');
+      formmattedWaterMarkers = formmattedWaterMarkers.map(waterMarker => [waterMarker.x, waterMarker.y]);
       console.log(formmattedWaterMarkers);
 
       // Format path
@@ -109,16 +113,17 @@ export default function reducer(state = initialState, action = {}) {
         robot: state.history[state.history.length - 1].robot,
         waterMarkers: state.waterMarkers
       };
+      const rememberedAnimation = { ...action.response };
 
       const tempHistory = { ...state.history[state.history.length - 1], worldMap: formattedWorldMap, robot: formattedRobot };
       return {
         ...state,
         history: [ ...state.history.splice(0, idx), tempHistory ],
-        examplePath: response.path,
+        examplePath: response.path.map(action => (action.completed ? {...action, completed: false} : action)),
         waterMarkers: formmattedWaterMarkers,
         isExampleAnimationEnabled: true,
         rememberedState: rememberedState,
-        rememberedAnimation: action.response
+        rememberedAnimation: rememberedAnimation
       };
 
     case Constants.START_USER_DEFINITION:
