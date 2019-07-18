@@ -14,27 +14,27 @@ class DecisionBox extends Component {
 
 	handleAccept(e) {
 		e.preventDefault();
-		this.props.stopShowingAnimations();
+		this.props.endAnimation();
 	}
 
 	handleDecline(e) {
 		e.preventDefault();
-		this.props.stopShowingAnimations();
+		this.props.endAnimation();
 	}
 
 	handleRepeat(e) {
 		e.preventDefault();
-		// console.log(this.props.rememberedAnimation);
-		// this.props.stopShowingAnimations();
+		// console.log(this.props.currentAnimation);
+		// this.props.endAnimation();
 		this.props.repeatAnimation();
-		//setTimeout(this.props.getWorldsFromServer(true, this.props.rememberedAnimation), 1000);
-		//this.props.getWorldsFromServer(true, this.props.rememberedAnimation);
+		//setTimeout(this.props.fetchAnimation(true, this.props.currentAnimation), 1000);
+		//this.props.fetchAnimation(true, this.props.currentAnimation);
 	}
 
 	render() {
 		return (
 			<div className="DecisionBox">
-				<div className={classnames('DecisionBox-box', { active: this.props.isExampleAnimationEnabled })}>
+				<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
 					<div>
 						<button className="DecisionBox-button" onClick={(e) => this.handleAccept(e)}>
 							<i className="fas fa-check" />
@@ -43,7 +43,7 @@ class DecisionBox extends Component {
 							<i class="fas fa-times" />
 						</button>
 						<button className="DecisionBox-button" onClick={(e) => this.handleRepeat(e)}>
-							<i class="fas fa-redo" />
+							<i className="fas fa-redo" />
 						</button>
 					</div>
 					<wbr />
@@ -54,14 +54,14 @@ class DecisionBox extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	isExampleAnimationEnabled: state.world.isExampleAnimationEnabled,
-	rememberedAnimation: state.world.rememberedAnimation
+	isAnimationEnabled: state.world.isAnimationEnabled,
+	currentAnimation: state.world.currentAnimation
 });
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		stopShowingAnimations: () => dispatch(Actions.stopShowingAnimations()),
-		getWorldsFromServer: (isRepeat, rememberedAnimation) => dispatch(Actions.getWorldsFromServer(isRepeat, rememberedAnimation)),
+		endAnimation: () => dispatch(Actions.endAnimation()),
+		fetchAnimation: (isRepeat, currentAnimation) => dispatch(Actions.fetchAnimation(isRepeat, currentAnimation)),
 		repeatAnimation: () => dispatch(Actions.repeatAnimation()),
 	};
 };

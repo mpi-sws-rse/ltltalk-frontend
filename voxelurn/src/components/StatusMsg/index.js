@@ -6,14 +6,14 @@ import './styles.css';
 
 class StatusMsg extends Component {
 	render() {
-		const { status, text, isExampleAnimationEnabled } = this.props;
+		const { status, text, isAnimationEnabled } = this.props;
 		let msg = TRY_MSG;
 		if (status === STATUS.ACCEPT) msg = text;
 		else if (status === STATUS.DEFINE) msg = DEFINE_MSG;
 		return (
 			<div
 				className="StatusMsg"
-				style={{ visibility: `${this.props.isExampleAnimationEnabled ? 'hidden' : 'visible'}` }}
+				style={{ visibility: `${this.props.isAnimationEnabled ? 'hidden' : 'visible'}` }}
 			>
 				{msg}
 			</div>
@@ -22,7 +22,7 @@ class StatusMsg extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	isExampleAnimationEnabled: state.world.isExampleAnimationEnabled
+	isAnimationEnabled: state.world.isAnimationEnabled
 });
 
 export default connect(mapStateToProps)(StatusMsg);

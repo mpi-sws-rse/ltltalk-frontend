@@ -25,10 +25,10 @@ const initialState = {
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
-  isExampleAnimationEnabled: false, // Show server-generated examples to user
-  examplePath: [],
-  rememberedState: { worldMap: null, robot: null , waterMarkers: null },
-  rememberedAnimation: null
+  isAnimationEnabled: false, // Show server-generated examples to user
+  animationPath: [],
+  stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null },
+  currentAnimation: null
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -42,27 +42,26 @@ export default function reducer(state = initialState, action = {}) {
 
   switch (action.type) {
     case Constants.REPEAT_ANIMATION:
-      alert('I will repeat animation');
       const temporaryHistory = 
       { 
         ...state.history[state.history.length - 1],  
-        worldMap: state.rememberedAnimation.world.world,
+        worldMap: state.currentAnimation.world.world,
         robot: { 
-          items: state.rememberedAnimation.world.robot[2], 
+          items: state.currentAnimation.world.robot[2], 
           type: 'robot', 
-          x: state.rememberedAnimation.world.robot[0], 
-          y: state.rememberedAnimation.world.robot[1] } 
+          x: state.currentAnimation.world.robot[0], 
+          y: state.currentAnimation.world.robot[1] } 
       };
       return {
         ...state,
         history: [ ...state.history.splice(0, idx), temporaryHistory ],
-        examplePath: state.rememberedAnimation.path.map(action => (action.completed ? {...action, completed: false} : action))
+        animationPath: state.currentAnimation.path.map(action => (action.completed ? {...action, completed: false} : action))
       };
 
-    case Constants.STOP_SHOWING_ANIMATIONS:
-      const restoredWorldMap = state.rememberedState.worldMap;
-      const restoredRobot = state.rememberedState.robot;
-      const restoredWaterMarkers = state.rememberedState.waterMarkers;
+    case Constants.END_ANIMATION:
+      const restoredWorldMap = state.stateBeforeAnimation.worldMap;
+      const restoredRobot = state.stateBeforeAnimation.robot;
+      const restoredWaterMarkers = state.stateBeforeAnimation.waterMarkers;
       const restoredHistory = { 
         ...state.history[state.history.length - 1], 
         worldMap: restoredWorldMap, 
@@ -71,59 +70,45 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         history: [ ...state.history.splice(0, idx), restoredHistory ],
-        examplePath: [],
+        animationPath: [],
         waterMarkers: restoredWaterMarkers,
-        isExampleAnimationEnabled: false,
-        rememberedState: { worldMap: null, robot: null , waterMarkers: null }
-        // rememberedAnimation: null
+        isAnimationEnabled: false,
+        stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null }
+        // currentAnimation: null
       };
 
-    case Constants.GET_WORLDS_FROM_SERVER:
-      console.log('I am in store/world.js and I will print out the response!');
-      console.log(action.response);
+    case Constants.FETCH_ANIMATION:
       const response = action.response;
       const exampleRobot = response.world.robot;
       const exampleRobotX = exampleRobot[0];
-      console.log(exampleRobotX);
       const exampleRobotY = exampleRobot[1];
-      console.log(exampleRobotY);
       const exampleRobotItems = exampleRobot[2];
-      console.log(exampleRobotItems);
       const exampleWorldMap = response.world.world;
-      console.log(exampleWorldMap);
-
 
       // Format robot
       const formattedRobot = { items: exampleRobotItems, type: 'robot', x: exampleRobotX, y: exampleRobotY };
 
       // Format world and watermarkers
       const formattedWorldMap = exampleWorldMap.filter(position => position.type !== 'water');
-      console.log(formattedWorldMap);
       let formmattedWaterMarkers = exampleWorldMap.filter(position => position.type === 'water');
       formmattedWaterMarkers = formmattedWaterMarkers.map(waterMarker => [waterMarker.x, waterMarker.y]);
-      console.log(formmattedWaterMarkers);
 
-      // Format path
-      console.log(response.path);
-      for (let i = 0; i < response.path.length; i ++) {
-        
-      }
-      const rememberedState = {
+      const stateBeforeAnimation = {
         worldMap: state.history[state.history.length - 1].worldMap,
         robot: state.history[state.history.length - 1].robot,
         waterMarkers: state.waterMarkers
       };
-      const rememberedAnimation = { ...action.response };
+      const currentAnimation = { ...action.response };
 
       const tempHistory = { ...state.history[state.history.length - 1], worldMap: formattedWorldMap, robot: formattedRobot };
       return {
         ...state,
         history: [ ...state.history.splice(0, idx), tempHistory ],
-        examplePath: response.path.map(action => (action.completed ? {...action, completed: false} : action)),
+        animationPath: response.path.map(action => (action.completed ? {...action, completed: false} : action)),
         waterMarkers: formmattedWaterMarkers,
-        isExampleAnimationEnabled: true,
-        rememberedState: rememberedState,
-        rememberedAnimation: rememberedAnimation
+        isAnimationEnabled: true,
+        stateBeforeAnimation: stateBeforeAnimation,
+        currentAnimation: currentAnimation
       };
 
     case Constants.START_USER_DEFINITION:

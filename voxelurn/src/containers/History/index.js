@@ -133,7 +133,7 @@ class History extends Component {
   handleFinishDefinition() {
     this.props.dispatch(Actions.forceQuitItemSelection());
     this.props.dispatch(Actions.finishUserDefinition());
-    this.props.dispatch(Actions.getWorldsFromServer(false, null));
+    this.props.dispatch(Actions.fetchAnimation(false, null));
   }
 
   handleStartDefinition() {
@@ -195,7 +195,7 @@ class History extends Component {
     const lastPinIdx = history.length - 1 - history.slice().reverse().findIndex(h => h.type === "pin")
 
     return (
-      <div className={classnames("History", { "defineMode": defining })} ref="list" style={{ visibility: `${this.props.isExampleAnimationEnabled ? 'hidden' :'visible'}` }}>
+      <div className={classnames("History", { "defineMode": defining })} ref="list" style={{ visibility: `${this.props.isAnimationEnabled ? 'hidden' :'visible'}` }}>
         {history.map((h, idx) => {
           const stepN = idx + 1
 
@@ -256,7 +256,7 @@ const mapStateToProps = (state) => ({
   defining: state.world.defining,
   status: state.world.status,
   query: state.world.query,
-  isExampleAnimationEnabled: state.world.isExampleAnimationEnabled
+  isAnimationEnabled: state.world.isAnimationEnabled
 })
 
 export default connect(mapStateToProps)(History)

@@ -115,7 +115,7 @@ class Build extends Component {
         if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
         else {
           this.props.dispatch(Actions.finishUserDefinition());
-          this.props.dispatch(Actions.getWorldsFromServer(false, null));
+          this.props.dispatch(Actions.fetchAnimation(false, null));
         }
         break;
         
@@ -258,7 +258,7 @@ class Build extends Component {
 
   render() {
     const { status, responses, pointMarkers, waterMarkers, history,
-        current_history_idx, task, isKeyPressEnabled, isExampleAnimationEnabled, examplePath } = this.props
+        current_history_idx, task, isKeyPressEnabled, isAnimationEnabled, animationPath } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -289,7 +289,7 @@ class Build extends Component {
         popup.active = true;
       }
     } 
-    else if (isExampleAnimationEnabled) currentPath = examplePath;
+    else if (isAnimationEnabled) currentPath = animationPath;
     
     return (
       <div className="Build">
@@ -379,8 +379,8 @@ const mapStateToProps = (state) => ({
   robot: state.world.robot,
   isKeyPressEnabled: state.world.isKeyPressEnabled,
   isItemSelectionEnabled: state.world.isItemSelectionEnabled,
-  isExampleAnimationEnabled: state.world.isExampleAnimationEnabled,
-  examplePath: state.world.examplePath
+  isAnimationEnabled: state.world.isAnimationEnabled,
+  animationPath: state.world.animationPath
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

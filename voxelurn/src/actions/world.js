@@ -66,24 +66,24 @@ const Actions = {
     }
   },
 
-  stopShowingAnimations: () => {
+  endAnimation: () => {
 		return (dispatch) => {
 			dispatch({
-				type: Constants.STOP_SHOWING_ANIMATIONS
+				type: Constants.END_ANIMATION
 			});
 		};    
   },
 
-  getWorldsFromServer: (isRepeat, rememberedAnimation) => {
+  fetchAnimation: (isRepeat, currentAnimation) => {
     if (isRepeat) {
       return (dispatch) => {
-        dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: rememberedAnimation });
+        dispatch( { type: Constants.FETCH_ANIMATION, response: currentAnimation });
       }
     }
     else {
       return (dispatch) => {
         return EXAMPLEquery()
-        .then(response => dispatch( { type: Constants.GET_WORLDS_FROM_SERVER, response: response } ))
+        .then(response => dispatch( { type: Constants.FETCH_ANIMATION, response: response } ))
         .catch(error => {alert(error)});
       }
     }
