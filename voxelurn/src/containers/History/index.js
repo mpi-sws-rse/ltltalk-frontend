@@ -133,7 +133,7 @@ class History extends Component {
   handleFinishDefinition() {
     this.props.dispatch(Actions.forceQuitItemSelection());
     this.props.dispatch(Actions.finishUserDefinition());
-    this.props.dispatch(Actions.fetchAnimation(false, null));
+    this.props.dispatch(Actions.fetchAnimation());
   }
 
   handleStartDefinition() {

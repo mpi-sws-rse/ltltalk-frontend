@@ -115,7 +115,7 @@ class Build extends Component {
         if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
         else {
           this.props.dispatch(Actions.finishUserDefinition());
-          this.props.dispatch(Actions.fetchAnimation(false, null));
+          this.props.dispatch(Actions.fetchAnimation());
         }
         break;
         
