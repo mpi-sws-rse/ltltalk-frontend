@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export async function EXAMPLEquery(url) {
 	return fetch(url)
 		.then((response) => {
