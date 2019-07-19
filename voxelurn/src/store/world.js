@@ -79,6 +79,8 @@ export default function reducer(state = initialState, action = {}) {
 
     case Constants.FETCH_ANIMATION:
       const response = action.response;
+      console.log(response);
+      if (response.status !== 'indoubt') return { ...state};
       const exampleRobot = response.world.robot;
       const exampleRobotX = exampleRobot[0];
       const exampleRobotY = exampleRobot[1];
