@@ -1,0 +1,71 @@
+.PickBox {
+  position: absolute;
+  bottom:52vh;
+  text-align: center;
+  width: 100%;
+  margin-top: -100px;
+  visibility: hidden
+}
+
+.PickBox-box {
+  padding: 15px;
+  color: rgb(100,100,100);
+  display: inline-block;
+  text-align: center;
+  background-color: rgb(200, 238, 255);
+  box-shadow: 0 6px 24px rgba(60, 60, 60, 0.18);
+  width: 40%;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    visibility 0s 0.5s,
+    opacity 0.5s linear;
+}
+
+.PickBox > .active {
+  opacity: 0.8;
+  transition:
+    visibility 0.5s 0s,
+    opacity 0.5s linear;
+  visibility: visible;
+}
+
+.PickBox .item-icon {
+  font-size: 2.5em;
+  margin-right: 11px;
+  cursor: pointer;
+  transition: transform 0.5s;
+  position: relative;
+  /* top: 5px;
+  left: 5px; */
+  
+}
+
+.PickBox .item-icon:hover {
+  transform: scale(1.25);
+}
+
+.PickBox .item-check-box {
+  position: relative;
+  margin-left: -10px;
+  margin-right: 24px;
+  cursor: pointer;
+  /* padding-top: 15px; */
+}
+
+.PickBox .PickBox-finish-button {
+  margin-top: 7px;
+  height: 2.5em;
+  width: 4em;
+  background-color: rgb(11, 118, 206);
+  transition: transform 0.5s;
+}
+
+.PickBox .PickBox-finish-button:hover {
+  transform: scale(1.15);
+}
+
+.PickBox .PickBox-finish-button i {
+  font-size: 2em;
+  color: white;
+} 

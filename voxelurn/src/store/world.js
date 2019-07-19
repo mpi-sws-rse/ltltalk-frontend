@@ -1,5 +1,5 @@
 import Constants from "constants/actions"
-import { STATUS } from "constants/strings"
+import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
 const initialState = {
@@ -11,20 +11,144 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   pointMarkers: [], 
-  roomMarkers: [], 
-  //robotStep: 0, // How far is the robot along its visual simulation
+  waterMarkers: [ [3, 7], [5, 1], [9, 5] ], 
+  wallMarkers: worldConfig.walls,
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
-  //popup: { active: true, text: "No error yet!" },
   defining: false,
-  //exampleQuery: "add red 3 times",
   defineN: null,
   dictionary: [],
+  robot: worldConfig.robot,
+  keyPressHist: [],
+  isKeyPressEnabled: false,
+  isItemSelectionEnabled: false,
+  itemsAtCurrentLocation: [],
 }
 
 export default function reducer(state = initialState, action = {}) {
+  let nextRobotPosition;
+  let currentWorldMap;
+  const currentRobot = state.robot;
+  const currentKeyPressHist = state.keyPressHist;
+  const currentRobotX = currentRobot.x;
+  const currentRobotY = currentRobot.y;
+  const idx = state.history.length - 1;
+
   switch (action.type) {
+    
+    case Constants.START_USER_DEFINITION:
+      document.activeElement.blur();
+      const robotStartState = state.history[idx].robot;
+      return { ...state, robot: robotStartState, isKeyPressEnabled: true };
+
+    case Constants.FINISH_USER_DEFINITION: 
+      console.log(state.keyPressHist)
+      document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
+      const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
+      return { 
+        ...state, 
+        history: [ ...state.history.splice(0, idx), newHistoryEntry ],
+        isKeyPressEnabled: false,
+        defining: false, 
+        defineN: null, 
+        query: "",
+        status: STATUS.TRY,
+        keyPressHist: [] 
+      }; 
+
+    case Constants.FORCE_QUIT_ITEM_SELECTION:
+      return { ...state,
+               isItemSelectionEnabled: false 
+             };
+
+    case Constants.START_ITEM_SELECTION:
+      currentWorldMap = state.history[idx].worldMap;
+      let itemsAtCurrentLocation = [];
+      for (let i = 0; i < currentWorldMap.length; i ++) {
+        if (currentWorldMap[i].x === currentRobotX && 
+            currentWorldMap[i].y === currentRobotY &&  
+            currentWorldMap[i].type === 'item') { 
+          const isSelected = false;    
+          const itemID = i.toString();   
+          itemsAtCurrentLocation.push([currentWorldMap[i].color, currentWorldMap[i].shape, isSelected, itemID]);    
+        }      
+      }
+      return { ...state,
+               itemsAtCurrentLocation,
+               isItemSelectionEnabled: true};
+
+    case Constants.FINISH_ITEM_SELECTION:
+      const isSelected = ({ color, shape, id }) => {
+        const item = state.itemsAtCurrentLocation.find(item => item[0] === color && item[1] === shape && item[3] ===id);
+        const isItemSelected = item[2];
+        return isItemSelected; 
+      };
+      let newWorldMap = [];
+      currentWorldMap = state.history[idx].worldMap;
+      let carriedItems = currentRobot.items.map(item => item);
+      for (let i = 0; i < currentWorldMap.length; i ++) {
+        if (currentWorldMap[i].x === currentRobotX && 
+            currentWorldMap[i].y === currentRobotY &&  
+            currentWorldMap[i].type === 'item' &&
+            isSelected({ 
+              color: currentWorldMap[i].color, 
+              shape: currentWorldMap[i].shape, 
+              id: i.toString()})) 
+        {
+          carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+        }   
+        else newWorldMap.push(currentWorldMap[i]);    
+      }
+
+      const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+      return { ...state,
+               history: [ ...state.history.splice(0, idx), currentHistory ], 
+               robot: { ...state.robot, items: carriedItems},
+               keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+               isItemSelectionEnabled: false,
+               itemsAtCurrentLocation: []
+             };  
+
+    case Constants.TOGGLE_ITEM_SELECTION:
+      const newItemsAtCurrentLocation = state.itemsAtCurrentLocation.map(item => item);
+      for (let i=0; i<newItemsAtCurrentLocation.length; i++) {
+        const selectedColor = action.color;
+        const selectedShape = action.shape;
+        const selectedID = action.id;
+        const currentColor = newItemsAtCurrentLocation[i][0];
+        const currentShape = newItemsAtCurrentLocation[i][1];
+        const currentID = newItemsAtCurrentLocation[i][3];
+        if (selectedColor === currentColor && selectedShape === currentShape && selectedID === currentID) {
+          newItemsAtCurrentLocation[i][2] = ! newItemsAtCurrentLocation[i][2];
+        }
+      }
+      return { ...state, 
+               itemsAtCurrentLocation: newItemsAtCurrentLocation
+             };       
+       
+    case Constants.MOVE_ROBOT_UP:
+      nextRobotPosition = { x: currentRobotX, y: currentRobotY + 1 };
+      // If nextRobotPosition is a wall, don't move robot, don't change state.
+      if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+      // Else move robot up and update key press history
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
+      
+		case Constants.MOVE_ROBOT_DOWN:
+			nextRobotPosition = { x: currentRobotX, y: currentRobotY - 1 };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
+
+		case Constants.MOVE_ROBOT_LEFT:
+			nextRobotPosition = { x: currentRobotX - 1, y: currentRobotY };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+			else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
+
+		case Constants.MOVE_ROBOT_RIGHT:
+			nextRobotPosition = { x: currentRobotX + 1, y: currentRobotY };
+			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
+
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
     case Constants.REVERT:
@@ -60,8 +184,6 @@ export default function reducer(state = initialState, action = {}) {
     ///////
     case Constants.UPDATE_POINT_MARKERS:
       return { ...state, pointMarkers: action.pointMarkers }
-    case Constants.UPDATE_ROOM_MARKERS:
-      return { ...state, roomMarkers: action.roomMarkers }
     ///////
     case Constants.RESET_RESPONSES:
       return { ...state, status: STATUS.TRY, query: "", responses: [] }
@@ -86,7 +208,12 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.REMOVE_PIN:
       let newHistoryWithoutPin = state.history.slice()
       newHistoryWithoutPin.splice(action.idx, 1)
-      return { ...state, history: newHistoryWithoutPin, current_history_idx: initialState.current_history_idx }
+      return { ...state, 
+               history: newHistoryWithoutPin, 
+               current_history_idx: initialState.current_history_idx,
+               isKeyPressEnabled: false,
+               robot: newHistoryWithoutPin[newHistoryWithoutPin.length - 1].robot 
+             }
     case Constants.MARK_PIN:
       const markedHistory = state.history.slice()
       const index = action.idx ? action.idx : markedHistory.length - 1

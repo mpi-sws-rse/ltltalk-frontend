@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import Actions from "actions/world"
 import classnames from "classnames"
-import { STATUS, DEFINE_THIS, FINISH_DEFINITION } from "constants/strings"
+import { STATUS, REDEFINE, FINISH_DEFINITION } from "constants/strings"
 import PropTypes from 'prop-types';
 
 
@@ -40,8 +40,10 @@ class HistoryItem extends Component {
             <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
           }
           <div className="HistoryItem-text-text">{text}</div>
-          {(last || tentative) && !defining &&
-            <button onClick={(e) => { e.stopPropagation(); setPin() }}>{DEFINE_THIS}</button>
+          {(tentative) && !defining &&
+            <button onClick={(e) => { e.stopPropagation(); setPin(); this.props.handleStartDefinition(); }}>
+              {REDEFINE}
+            </button>
           }
         </div>
       </div>
@@ -49,30 +51,46 @@ class HistoryItem extends Component {
   }
 }
 
-const HistoryPin = ({ text, head, define, defining, remove, query }) => {
-  return (
-    <div className={classnames("HistoryPin", { "head": head })}>
-      {!defining ?
-        text
-        :
-        query !== "" ? query : <span>&nbsp;</span>
-      }
-      <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
-      {head &&
-        <button onClick={(e) => { e.stopPropagation(); define() }}>{FINISH_DEFINITION}</button>
-      }
-    </div>
-  )
-}
+class HistoryPin extends Component {
 
-HistoryPin.propTypes = {
-  text: PropTypes.string,
-  head: PropTypes.bool,
-  openDefine: PropTypes.func,
-  defining: PropTypes.bool
+  static propTypes = {
+    text: PropTypes.string,
+    head: PropTypes.bool,
+    openDefine: PropTypes.func,
+    defining: PropTypes.bool,
+  }
+
+  render() {
+    const { text, head, define, defining, remove, query } = this.props;
+      return (
+        <div className={classnames("HistoryPin", { "head": head })}>
+          {!defining ?
+            text
+            :
+            query !== "" ? query : <span>&nbsp;</span>
+          }
+          <div className="HistoryPin-remove" onClick={(e) => { e.stopPropagation(); remove() }}>&times;</div>
+          {head &&
+            <button onClick={(e) => { 
+                e.stopPropagation(); 
+                // define(); 
+                this.props.handleFinishDefinition();
+            }}>
+              {FINISH_DEFINITION}
+            </button>
+          }
+        </div>
+      );    
+  }
 }
 
 class History extends Component {
+  constructor(props) {
+    super(props);
+    this.handleFinishDefinition = this.handleFinishDefinition.bind(this);
+    this.handleStartDefinition = this.handleStartDefinition.bind(this);
+  }
+  
   static propTypes = {
     history: PropTypes.array,
     current_history_idx: PropTypes.number,
@@ -110,6 +128,15 @@ class History extends Component {
 
     /* otherwise, don't update */
     return false
+  }
+
+  handleFinishDefinition() {
+    this.props.dispatch(Actions.forceQuitItemSelection());
+    this.props.dispatch(Actions.finishUserDefinition());
+  }
+
+  handleStartDefinition() {
+    this.props.dispatch(Actions.startUserDefinition());
   }
 
   scrollToBottom() {
@@ -173,6 +200,7 @@ class History extends Component {
 
           if (h.type === "pin") return (
             <HistoryPin
+              handleFinishDefinition={this.handleFinishDefinition}
               key={idx}
               text={h.text}
               head={idx === lastPinIdx}
@@ -203,6 +231,7 @@ class History extends Component {
         })}
         {status === STATUS.ACCEPT &&
           <HistoryItem
+            handleStartDefinition={this.handleStartDefinition}
             key="new"
             text={query}
             stepN={history.length + 1}

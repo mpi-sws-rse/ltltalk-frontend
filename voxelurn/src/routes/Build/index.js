@@ -8,7 +8,8 @@ import History from "containers/History"
 import Setting, { equalityCheck } from "setting"
 import CommandBar from "containers/CommandBar"
 import ActionPopup from "components/ActionPopup"
-import RoomTable from "components/RoomTable"
+import PickBox from "components/PickBox"
+
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
@@ -30,7 +31,7 @@ class Build extends Component {
     responses: PropTypes.array,
     dispatch: PropTypes.func,
     task: PropTypes.string,
-    roomMarkers: PropTypes.array,
+    waterMarkers: PropTypes.array,
     pointMarkers: PropTypes.array
   }
 
@@ -44,9 +45,12 @@ class Build extends Component {
       possSteps: 33,
       win: false
     }
+
+    this.handleRobotKeyPress = this.handleRobotKeyPress.bind(this);
   }
 
   componentDidMount() {
+    document.querySelector('body').addEventListener('keydown', this.handleRobotKeyPress);
     /* Bind Ctrl+Z and Crtl+Shift+Z to Undo and Redo actions respectively */
     Mousetrap.prototype.stopCallback = () => false;
     //Mousetrap.bind("command+z", (e) => { e.preventDefault(); this.props.dispatch(Actions.undo()) })
@@ -83,6 +87,7 @@ class Build extends Component {
   }
 
   componentWillUnmount() {
+    document.querySelector('body').removeEventListener('keydown', this.handleRobotKeyPress);
     /* Clean up the key undo+redo bindings */
     Mousetrap.unbind("command+z")
     Mousetrap.unbind("command+shift+z")
@@ -95,6 +100,63 @@ class Build extends Component {
     this.props.dispatch(LoggerActions.log({ type: "start", msg: { targetIdx: randomTarget[0], target: randomTarget[2] } }))
   }
 
+  handleRobotKeyPress(event) {
+    if (!this.props.isKeyPressEnabled) return;
+		const KEY_LEFT = 37;
+		const KEY_UP = 38;
+		const KEY_RIGHT = 39;
+    const KEY_DOWN = 40;
+    const KEY_PICK = 80;
+    const KEY_ENTER = 13;
+
+		switch (event.keyCode) {
+      case KEY_ENTER:
+        if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
+        else this.props.dispatch(Actions.finishUserDefinition());
+        break;
+        
+      case KEY_PICK:
+        // this.props.dispatch(Actions.robotPickItem());
+        this.props.dispatch(Actions.startItemSelection());
+        break;
+        
+			case KEY_UP:
+        this.props.dispatch(Actions.forceQuitItemSelection());
+        this.props.dispatch(Actions.moveRobotUp());
+				break;
+
+			case KEY_DOWN:
+        this.props.dispatch(Actions.forceQuitItemSelection());
+        this.props.dispatch(Actions.moveRobotDown());
+				break;
+
+			case KEY_LEFT:
+        this.props.dispatch(Actions.forceQuitItemSelection());
+        this.props.dispatch(Actions.moveRobotLeft());
+				break;
+
+			case KEY_RIGHT:
+        this.props.dispatch(Actions.forceQuitItemSelection());
+        this.props.dispatch(Actions.moveRobotRight());
+				break;
+
+			default:
+				break;
+		}
+  }
+
+
+  handlePickItemClick(event){
+
+
+    const selectedPicKItem = this.state.selectedPickItem;
+
+    if(selectedPicKItem >0){
+      this.props.dispatch(Actions.enablePickItem());
+
+    }
+
+  }
   handleQuery(query) {
     switch (this.props.status) {
       case STATUS.TRY:
@@ -191,8 +253,8 @@ class Build extends Component {
   }
 
   render() {
-    const { status, responses, pointMarkers, roomMarkers, history,
-        current_history_idx, task } = this.props
+    const { status, responses, pointMarkers, waterMarkers, history,
+        current_history_idx, task, isKeyPressEnabled } = this.props
 
     /* The current state should be the history element at the last position, or
      * the one selected by the current_history_idx */
@@ -200,7 +262,11 @@ class Build extends Component {
     if (idx > history.length - 1) idx = history.length - 1
     let currentState = history[idx].worldMap;
     // TODO This might be unnecessary
-    let robot = history[idx].robot;
+    // let robot = history[idx].robot;
+    console.log(this.props.isKeyPressEnabled);
+    let robot;
+    if (this.props.isKeyPressEnabled) robot = this.props.robot;
+    else robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;
 
     let interpretation = "";
@@ -230,18 +296,18 @@ class Build extends Component {
            isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} 
            width={600}
            height={200}/> */}
-          <RoomTable
-          />
+        
           
 
         </div>
         <div className="Build-world">
           <Setting
+            // handleRobotKeyPress={this.handleRobotKeyPress}
             blocks={currentState}
             path={currentPath}
             robot={robot}
             pointMarkers={pointMarkers}
-            roomMarkers={roomMarkers}
+            waterMarkers={waterMarkers}
             width={1650}
             height={1200}
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
@@ -250,7 +316,23 @@ class Build extends Component {
           <History />
           <ActionPopup
             active={popup.active}
-            text={popup.text} />
+            text={popup.text} />  
+          <ActionPopup 
+            active={this.props.isKeyPressEnabled}
+            text="Please provide a definition. 
+                  Press arrow keys to move. 
+                  Press P to pick all items at current location. 
+                  Press enter to finish definition."
+          />  
+
+          <PickBox 
+            active={true}
+            text="Please provide a definition. 
+                  Press arrow keys to move. 
+                  Press P to pick all items at current location. 
+                  Press enter to finish definition."
+                  
+          /> 
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
             handleShiftClick={() => this.handleShiftClick()}
@@ -271,7 +353,7 @@ class Build extends Component {
             </div>
           </div>
         </div>
-       <DictionaryPanel />
+       {/* <DictionaryPanel /> */}
        <ResetPanel />
       </div>
     );
@@ -284,11 +366,14 @@ const mapStateToProps = (state) => ({
   history: state.world.history,
   task: state.user.task,
   responses: state.world.responses,
-  roomMarkers: state.world.roomMarkers,
+  waterMarkers: state.world.waterMarkers,
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   //popup: state.world.popup,
-  current_history_idx: state.world.current_history_idx
+  current_history_idx: state.world.current_history_idx,
+  robot: state.world.robot,
+  isKeyPressEnabled: state.world.isKeyPressEnabled,
+  isItemSelectionEnabled: state.world.isItemSelectionEnabled
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

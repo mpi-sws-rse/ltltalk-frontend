@@ -12,8 +12,7 @@ import {
   rotateBlock,
   removeRobot,
   resolveZ,
-  updateRobot,
-  moveRobotByKeys
+  updateRobot
 } from "helpers/blocks"
 import deepEqual from "deep-equal"
 import cssColors from "color-name"
@@ -77,11 +76,12 @@ class Blocks extends React.Component {
     blocks: PropTypes.array,
     path: PropTypes.array,
     pointMarkers: PropTypes.array,
-    roomMarkers: PropTypes.array,
+    waterMarkers: PropTypes.array,
     robot: PropTypes.object,
     isoConfig: PropTypes.object,
     width: PropTypes.number,
-    height: PropTypes.number
+    height: PropTypes.number,
+    handleRobotKeyPress: PropTypes.func
   }
 
   static defaultProps = {
@@ -144,9 +144,6 @@ class Blocks extends React.Component {
     );
 
     this.setState({ iso: iso })
-
-        moveRobotByKeys(0,this.refs.blocksCanvas)
-
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -220,7 +217,7 @@ class Blocks extends React.Component {
     
     // TODO Move this to its own function
     let pm = this.props.pointMarkers;
-    let rm = this.props.roomMarkers;
+    let rm = this.props.waterMarkers;
     if (!rm) rm = [];
     if (!pm) pm = [];
     for (let i = 0; i < updatedBlocks.length; ++i) {
@@ -494,7 +491,15 @@ class Blocks extends React.Component {
   render() {
     return (
       <div>
-      <canvas id="blocksCanvas" className="Blocks" ref="blocksCanvas" width={this.props.width} height={this.props.height} />
+      <canvas 
+      id="blocksCanvas" 
+      className="Blocks" 
+      ref="blocksCanvas" 
+      width={this.props.width} 
+      height={this.props.height} 
+      style={{marginTop: '22vh'}}
+      tabIndex="1"
+      onKeyDown={(event) => this.props.handleRobotKeyPress(event)}/>
       </div>
     )
   }
