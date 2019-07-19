@@ -119,7 +119,6 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, robot: robotStartState, isKeyPressEnabled: true, currentQuery: state.query };
 
     case Constants.FINISH_USER_DEFINITION: 
-      console.log(state.keyPressHist)
       document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 

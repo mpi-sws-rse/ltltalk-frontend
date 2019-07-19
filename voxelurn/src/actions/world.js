@@ -38,46 +38,8 @@ function sendContext({ history, current_history_idx, sessionId, waterMarkers, ke
 
 	const contextCmds = { q: contextCommand, sessionId: sessionId };
 
-	//TO do add 2nd server and send context plus path detail togather
-
 	return SEMPREquery(contextCmds);
 }
-
-const sendUserDefinition = ({ waterMarkers, robot, history, current_history_idx, query, path, sessionId }) => {
-	// alert('Im sending user definition');
-	let infoToBeSent = { query, path, sessionId };
-	if (history.length > 0) {
-		const idx =
-			current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1;
-		// const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color, c.shape]));
-		const currentState = history[idx].worldMap.map((c) => {
-			return {
-				x: c.x,
-				y: c.y,
-				type: c.type,
-				color: c.color === null ? 'null' : c.color,
-				shape: c.shape === null ? 'null' : c.shape
-			};
-		});
-		waterMarkers.forEach((waterMarker) =>
-			currentState.push({
-				x: waterMarker[0],
-				y: waterMarker[1],
-				type: 'water',
-				color: 'null',
-				shape: 'null'
-			})
-		);
-		const context = { height: 10, robot: [ robot.x, robot.y, robot.items ], width: 10, world: currentState };
-		infoToBeSent.context = context;
-	}
-	console.log('info to be sent');
-	console.log(infoToBeSent);
-	let url = `http://127.0.0.1:5000/get-candidate-spec?query=${infoToBeSent.query}&path=${JSON.stringify(
-		infoToBeSent.path
-	)}&context=${JSON.stringify(infoToBeSent.context)}&sessionId=tempSessionId`;
-	return EXAMPLEquery(url);
-};
 
 const Actions = {
 	repeatAnimation: () => {
@@ -98,17 +60,20 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { waterMarkers, robot, history, current_history_idx, currentQuery, keyPressHist } = getState().world;
-			const query = currentQuery;
-			const path = keyPressHist;
-
-			let infoToBeSent = { query, path, sessionId };
+      let currentState = [];
+      let context = {
+        height: 10,
+        robot: [ robot.x, robot.y, robot.items ],
+        width: 10,
+        world: []
+      };
 			if (history.length > 0) {
 				const idx =
 					current_history_idx >= 0 && current_history_idx < history.length
 						? current_history_idx
 						: history.length - 1;
-				// const currentState = history[idx].worldMap.map(c => ([c.x, c.y, c.type, c.color, c.shape]));
-				const currentState = history[idx].worldMap.map((c) => {
+				
+				 currentState = history[idx].worldMap.map((c) => {
 					return {
 						x: c.x,
 						y: c.y,
@@ -116,7 +81,8 @@ const Actions = {
 						color: c.color === null ? 'null' : c.color,
 						shape: c.shape === null ? 'null' : c.shape
 					};
-				});
+        });
+        
 				waterMarkers.forEach((waterMarker) =>
 					currentState.push({
 						x: waterMarker[0],
@@ -125,24 +91,19 @@ const Actions = {
 						color: 'null',
 						shape: 'null'
 					})
-				);
-				const context = {
-					height: 10,
-					robot: [ robot.x, robot.y, robot.items ],
-					width: 10,
-					world: currentState
-				};
-				infoToBeSent.context = context;
+        );
+        
+				context.world = currentState;
+			
 			}
-			console.log('info to be sent');
-			console.log(infoToBeSent);
-			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${infoToBeSent.query}&path=${JSON.stringify(
-				infoToBeSent.path
-			)}&context=${JSON.stringify(infoToBeSent.context)}&sessionId=tempSessionId`;
+			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQuery}&path=${JSON.stringify(
+				keyPressHist
+      )}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
+      
 			return EXAMPLEquery(url)
 				.then((response) => dispatch({ type: Constants.FETCH_ANIMATION, response: response }))
 				.catch((error) => {
-					alert(error);
+					alert(`Error in fetchAnimation action: ${error}`);
 				});
 		};
 	},
@@ -307,8 +268,7 @@ const Actions = {
 						}
 
 						const formval = parseSEMPRE(response.candidates);
-						console.log(formval);
-
+						
 						const exampleQuery = { query: q, context: cmds, path: keyPressHist, sessionId: sessionId };
 
 						if (formval === null || formval === undefined) {

@@ -24,11 +24,7 @@ class DecisionBox extends Component {
 
 	handleRepeat(e) {
 		e.preventDefault();
-		// console.log(this.props.currentAnimation);
-		// this.props.endAnimation();
 		this.props.repeatAnimation();
-		//setTimeout(this.props.fetchAnimation(true, this.props.currentAnimation), 1000);
-		//this.props.fetchAnimation(true, this.props.currentAnimation);
 	}
 
 	render() {
@@ -41,7 +37,7 @@ class DecisionBox extends Component {
 							<i className="fas fa-check" />
 						</button>
 						<button className="DecisionBox-button DecisionBox-button-no" onClick={(e) => this.handleDecline(e)}>
-							<i class="fas fa-times" />
+							<i className="fas fa-times" />
 						</button>
 						<button className="DecisionBox-button DecisionBox-button-repeat" onClick={(e) => this.handleRepeat(e)}>
 							<i className="fas fa-redo" />
