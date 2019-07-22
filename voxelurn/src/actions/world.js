@@ -56,6 +56,23 @@ const Actions = {
 		};
 	},
 
+	// decision is 0 or 1
+	decisionUpdate: (decision) => {
+		return (dispatch, getState) => {
+			const { sessionId } = getState().user;
+			const { candidates, path, world } = getState().world.currentResponse;
+			let url = `http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}?decision=${decision}&sessionId=${sessionId}&candidates=${JSON.stringify(
+				candidates
+			)}&path=${JSON.stringify(path)}&context=${JSON.stringify(world)}`;
+
+			return EXAMPLEquery(url)
+				.then((response) => dispatch({ type: Constants.FETCH_ANIMATION, response: response }))
+				.catch((error) => {
+					alert(`Error in fetchAnimation action: ${error}`);
+				});
+		};
+	},
+
 	fetchAnimation: () => {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;

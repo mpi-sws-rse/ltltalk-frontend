@@ -28,7 +28,8 @@ const initialState = {
   isAnimationEnabled: false, // Show server-generated examples to user
   animationPath: [],
   stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null },
-  currentAnimation: null
+  currentAnimation: null,
+  currentResponse: null
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -55,7 +56,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         history: [ ...state.history.splice(0, idx), temporaryHistory ],
-        animationPath: state.currentAnimation.path.map(action => (action.completed ? {...action, completed: false} : action))
+        animationPath: state.currentAnimation.path.map(action => (action.completed ? {...action, completed: false} : {...action, forceUpdate: Math.random() }))
       };
 
     case Constants.END_ANIMATION:
@@ -110,7 +111,8 @@ export default function reducer(state = initialState, action = {}) {
         waterMarkers: formmattedWaterMarkers,
         isAnimationEnabled: true,
         stateBeforeAnimation: stateBeforeAnimation,
-        currentAnimation: currentAnimation
+        currentAnimation: currentAnimation,
+        currentResponse: response
       };
 
     case Constants.START_USER_DEFINITION:

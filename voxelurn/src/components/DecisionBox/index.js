@@ -15,11 +15,13 @@ class DecisionBox extends Component {
 	handleAccept(e) {
 		e.preventDefault();
 		this.props.endAnimation();
+		this.props.decisionUpdate(1);
 	}
 
 	handleDecline(e) {
 		e.preventDefault();
 		this.props.endAnimation();
+		this.props.decisionUpdate(0);
 	}
 
 	handleRepeat(e) {
@@ -60,6 +62,7 @@ const mapDispatchToProps = (dispatch) => {
 		endAnimation: () => dispatch(Actions.endAnimation()),
 		fetchAnimation: (isRepeat, currentAnimation) => dispatch(Actions.fetchAnimation(isRepeat, currentAnimation)),
 		repeatAnimation: () => dispatch(Actions.repeatAnimation()),
+		decisionUpdate: (decision) => dispatch(Actions.decisionUpdate(decision))
 	};
 };
 
