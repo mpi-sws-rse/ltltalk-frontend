@@ -15,12 +15,14 @@ class DecisionBox extends Component {
 	handleAccept(e) {
 		e.preventDefault();
 		this.props.endAnimation();
+		this.props.toggleLoading(true);
 		this.props.decisionUpdate(1);
 	}
 
 	handleDecline(e) {
 		e.preventDefault();
 		this.props.endAnimation();
+		this.props.toggleLoading(true);
 		this.props.decisionUpdate(0);
 	}
 
@@ -35,7 +37,10 @@ class DecisionBox extends Component {
 			return (
 				<div className="DecisionBox">
 					<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
-						<h2 className="DecisionBox-title">Is this what you meant?</h2>
+						<h2 className="DecisionBox-title">
+							{`Your command was "${this.props.query}".`} <br />
+							Does the animation match your command?
+						</h2>
 						<div>
 							<button
 								className="DecisionBox-button DecisionBox-button-yes"
@@ -66,7 +71,8 @@ class DecisionBox extends Component {
 
 const mapStateToProps = (state) => ({
 	isAnimationEnabled: state.world.isAnimationEnabled,
-	currentAnimation: state.world.currentAnimation
+	currentAnimation: state.world.currentAnimation,
+	query: state.world.history[state.world.history.length - 1].text
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -74,7 +80,8 @@ const mapDispatchToProps = (dispatch) => {
 		endAnimation: () => dispatch(Actions.endAnimation()),
 		fetchAnimation: (isRepeat, currentAnimation) => dispatch(Actions.fetchAnimation(isRepeat, currentAnimation)),
 		repeatAnimation: () => dispatch(Actions.repeatAnimation()),
-		decisionUpdate: (decision) => dispatch(Actions.decisionUpdate(decision))
+		decisionUpdate: (decision) => dispatch(Actions.decisionUpdate(decision)),
+		toggleLoading: (isLoading) => dispatch(Actions.toggleLoading(isLoading))
 	};
 };
 

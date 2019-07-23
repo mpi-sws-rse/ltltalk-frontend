@@ -30,7 +30,9 @@ const initialState = {
   stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null },
   currentAnimation: null,
   currentResponse: null,
-  isLoading: true 
+  isLoading: false,
+  isReading: false,
+  areInstructionsHidden: false
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -43,8 +45,14 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
+    case Constants.TOGGLE_READING:
+      return { ...state, isReading: action.isReading };
+
     case Constants.TOGGLE_LOADING:
-      return { ...state, isLoading: !state.isLoading };
+      return { ...state, isLoading: action.isLoading };
+
+    case Constants.HIDE_INSTRUCTIONS:
+      return { ...state, areInstructionsHidden: true };  
 
     case Constants.REPEAT_ANIMATION:
       const temporaryHistory = 

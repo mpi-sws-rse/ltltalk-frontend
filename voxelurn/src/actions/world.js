@@ -42,9 +42,22 @@ function sendContext({ history, current_history_idx, sessionId, waterMarkers, ke
 }
 
 const Actions = {
-	toggleLoading: () => {
+	hideInstructions: () => {
 		return (dispatch) => {
-			dispatch({ type: Constants.TOGGLE_LOADING });
+			dispatch({ type: Constants.HIDE_INSTRUCTIONS });
+		}
+	},
+
+	toggleReading: (isReading) => {
+		return (dispatch) => {
+			dispatch({ type: Constants.TOGGLE_READING, isReading: isReading });
+		}
+	},
+
+	toggleLoading: (isLoading) => {
+		return (dispatch) => {
+			dispatch({ type: Constants.TOGGLE_LOADING, isLoading: isLoading });
+			// setTimeout(()=>dispatch({ type: Constants.TOGGLE_LOADING, isLoading: !isLoading }), 5000);
 		}
 	},
 	
@@ -72,7 +85,10 @@ const Actions = {
 			)}&path=${JSON.stringify(path)}&context=${JSON.stringify(world)}`;
 
 			return EXAMPLEquery(url)
-				.then((response) => dispatch({ type: Constants.FETCH_ANIMATION, response: response }))
+				.then((response) => {
+					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
+					dispatch({ type: Constants.FETCH_ANIMATION, response: response });
+				})
 				.catch((error) => {
 					alert(`Error in fetchAnimation action: ${error}`);
 				});
@@ -123,7 +139,10 @@ const Actions = {
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
 
 			return EXAMPLEquery(url)
-				.then((response) => dispatch({ type: Constants.FETCH_ANIMATION, response: response }))
+				.then((response) => {
+					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
+					dispatch({ type: Constants.FETCH_ANIMATION, response: response });
+				})
 				.catch((error) => {
 					alert(`Error in fetchAnimation action: ${error}`);
 				});

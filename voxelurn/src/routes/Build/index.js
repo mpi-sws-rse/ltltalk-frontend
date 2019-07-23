@@ -116,6 +116,7 @@ class Build extends Component {
         if(this.props.isItemSelectionEnabled) this.props.dispatch(Actions.finishItemSelection());
         else {
           this.props.dispatch(Actions.finishUserDefinition());
+          this.props.dispatch(Actions.toggleLoading(true));
           this.props.dispatch(Actions.fetchAnimation());
         }
         break;
@@ -292,7 +293,7 @@ class Build extends Component {
     } 
     else if (isAnimationEnabled) currentPath = animationPath;
     
-    if (this.props.isLoading) return <LoadingPage/>;
+    if (this.props.isLoading || this.props.isReading) return <LoadingPage/>;
     return (
       <div className="Build">
         <div className="Build-info" >
@@ -383,7 +384,8 @@ const mapStateToProps = (state) => ({
   isItemSelectionEnabled: state.world.isItemSelectionEnabled,
   isAnimationEnabled: state.world.isAnimationEnabled,
   animationPath: state.world.animationPath,
-  isLoading: state.world.isLoading
+  isLoading: state.world.isLoading,
+  isReading: state.world.isReading
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))
