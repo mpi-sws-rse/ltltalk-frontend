@@ -42,6 +42,12 @@ function sendContext({ history, current_history_idx, sessionId, waterMarkers, ke
 }
 
 const Actions = {
+	toggleLoading: () => {
+		return (dispatch) => {
+			dispatch({ type: Constants.TOGGLE_LOADING });
+		}
+	},
+	
 	repeatAnimation: () => {
 		return (dispatch) => {
 			dispatch({ type: Constants.REPEAT_ANIMATION });

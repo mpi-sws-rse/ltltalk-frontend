@@ -29,7 +29,8 @@ const initialState = {
   animationPath: [],
   stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null },
   currentAnimation: null,
-  currentResponse: null
+  currentResponse: null,
+  isLoading: true 
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -42,6 +43,9 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
+    case Constants.TOGGLE_LOADING:
+      return { ...state, isLoading: !state.isLoading };
+
     case Constants.REPEAT_ANIMATION:
       const temporaryHistory = 
       { 

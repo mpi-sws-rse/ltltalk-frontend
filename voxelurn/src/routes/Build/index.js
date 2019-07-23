@@ -10,6 +10,7 @@ import CommandBar from "containers/CommandBar"
 import ActionPopup from "components/ActionPopup"
 import PickBox from "components/PickBox"
 import DecisionBox from "components/DecisionBox"
+import LoadingPage from "components/LoadingPage"
 
 //import ControlButtons from "components/ControlButtons"
 import { STATUS } from "constants/strings"
@@ -291,6 +292,7 @@ class Build extends Component {
     } 
     else if (isAnimationEnabled) currentPath = animationPath;
     
+    if (this.props.isLoading) return <LoadingPage/>;
     return (
       <div className="Build">
         <div className="Build-info" >
@@ -380,7 +382,8 @@ const mapStateToProps = (state) => ({
   isKeyPressEnabled: state.world.isKeyPressEnabled,
   isItemSelectionEnabled: state.world.isItemSelectionEnabled,
   isAnimationEnabled: state.world.isAnimationEnabled,
-  animationPath: state.world.animationPath
+  animationPath: state.world.animationPath,
+  isLoading: state.world.isLoading
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))
