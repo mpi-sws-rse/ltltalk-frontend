@@ -37,9 +37,9 @@ export default (initialState = {}) => {
   /* Persist the world reducer so that a user's progress can be saved despite
    * reloads (stores this information to localStorage on each update) */
   //persistStore(store, { whitelist: ['world', 'user'] }, () => {
-  persistStore(store, { whitelist: ['world'] }, () => {
-    console.log("User ID: " + sessionId);
-  });
+  // persistStore(store, { whitelist: ['world'] }, () => {
+  //   console.log("User ID: " + sessionId);
+  // });
 
   /* return our created store for future use */
   return store
