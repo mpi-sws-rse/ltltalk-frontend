@@ -30,25 +30,37 @@ class DecisionBox extends Component {
 	}
 
 	render() {
-		return (
-			<div className="DecisionBox">
-				<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
-					<h2 className="DecisionBox-title">Is this what you meant?</h2>
-					<div>
-						<button className="DecisionBox-button DecisionBox-button-yes" onClick={(e) => this.handleAccept(e)}>
-							<i className="fas fa-check" />
-						</button>
-						<button className="DecisionBox-button DecisionBox-button-no" onClick={(e) => this.handleDecline(e)}>
-							<i className="fas fa-times" />
-						</button>
-						<button className="DecisionBox-button DecisionBox-button-repeat" onClick={(e) => this.handleRepeat(e)}>
-							<i className="fas fa-redo" />
-						</button>
+		if (!this.props.isAnimationEnabled) return <span />;
+		else {
+			return (
+				<div className="DecisionBox">
+					<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
+						<h2 className="DecisionBox-title">Is this what you meant?</h2>
+						<div>
+							<button
+								className="DecisionBox-button DecisionBox-button-yes"
+								onClick={(e) => this.handleAccept(e)}
+							>
+								<i className="fas fa-check" />
+							</button>
+							<button
+								className="DecisionBox-button DecisionBox-button-no"
+								onClick={(e) => this.handleDecline(e)}
+							>
+								<i className="fas fa-times" />
+							</button>
+							<button
+								className="DecisionBox-button DecisionBox-button-repeat"
+								onClick={(e) => this.handleRepeat(e)}
+							>
+								<i className="fas fa-redo" />
+							</button>
+						</div>
+						<wbr />
 					</div>
-					<wbr />
 				</div>
-			</div>
-		);
+			);
+		}
 	}
 }
 
