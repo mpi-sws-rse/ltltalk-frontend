@@ -37,10 +37,11 @@ class DecisionBox extends Component {
 			return (
 				<div className="DecisionBox">
 					<div className={classnames('DecisionBox-box', { active: this.props.isAnimationEnabled })}>
-						<h2 className="DecisionBox-title">
-							{`Your command was "${this.props.query}".`} <br />
+						<h3 className="DecisionBox-title">
+							Your command was: <br />
+							{this.props.query} <br />
 							Does the animation match your command?
-						</h2>
+						</h3>
 						<div>
 							<button
 								className="DecisionBox-button DecisionBox-button-yes"

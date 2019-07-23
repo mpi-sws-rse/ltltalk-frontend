@@ -35,8 +35,7 @@ class LoadingPage extends Component {
 					<div className="loading-page__container" style={{ top: '40%' }}>
 						<div className="loading-page__instructions__container">
 							<h3 className="loading-page__instructions__text">
-								Here goes the instructions. Tell the user to do something. Never underestimate yourself.
-								Never overestimate your user. Ivan told me so.
+								We will send you several animations. You just need to say if our animation matches your command.
 							</h3>
 
 							<div className="loading-page_-button__container" style={{ marginBottom: '1em' }}>
