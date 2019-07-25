@@ -17,6 +17,7 @@ import { STATUS } from "constants/strings"
 import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
 import ResetPanel from "components/ResetPanel"
+import PositionBox from "components/PositionBox"
 import DictionaryPanel from "components/Dictionary"
 // import DashboardBox from "components/DashboardBox"
 import PropTypes from 'prop-types';
@@ -361,7 +362,7 @@ class Build extends Component {
             </div>
           </div>
         </div>
-       {/* <DictionaryPanel /> */}
+       <PositionBox />       
        <ResetPanel />
       </div>
     );

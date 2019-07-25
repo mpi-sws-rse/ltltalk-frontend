@@ -15,6 +15,7 @@
 	position: relative;
 	background-color: rgb(79, 148, 205);
 	color: white;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.24);
 }
 
 .side-panel__btn:hover {
