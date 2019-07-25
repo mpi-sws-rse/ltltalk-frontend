@@ -1,10 +1,11 @@
 .ActionPopup {
   position: absolute;
-  bottom:70vh;
+  bottom:67vh;
   text-align: center;
   width: 100%;
   margin-top: -100px;
-  visibility: hidden
+  visibility: hidden;
+  line-height: 1.33;
 }
 
 .ActionPopup-box {
@@ -12,9 +13,9 @@
   color: rgb(100,100,100);
   display: inline-block;
   text-align: center;
-  background-color: rgb(255, 200, 200);
+  background-color: rgb(200, 238, 255);
   box-shadow: 0 6px 24px rgba(60, 60, 60, 0.18);
-  width: 40%;
+  width: 70%;
   visibility: hidden;
   opacity: 0;
   transition:
@@ -28,4 +29,17 @@
     visibility 0.5s 0s,
     opacity 0.5s linear;
   visibility: visible;
+}
+
+.ActionPopup .key-symbol {
+  /* display: inline-block; */
+  /* width: 1.2em;
+  height: 1em;
+  padding-bottom: 0.2em;
+  border: 1px solid #4F94CD; */
+  text-transform: uppercase;
+  color: #4F94CD;
+  margin: 0 0.5em;
+  font-size: 1.3em;
+  font-weight: 900;
 }

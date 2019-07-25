@@ -1,58 +1,64 @@
-import React, { Component } from "react"
-import classnames from "classnames"
-import { connect } from "react-redux"
-import PropTypes from 'prop-types';
-
-import "./styles.css"
+import React, { Component } from 'react';
+import classnames from 'classnames';
+import { connect } from 'react-redux';
+import './styles.css';
+import Actions from 'actions/world';
 
 class ActionPopup extends Component {
-  static propTypes = {
-    text: PropTypes.string,
-    active: PropTypes.bool,
-    dispatch: PropTypes.func
-  }
+	constructor(props) {
+		super(props);
+	}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "..."
-    };
-  }
+	componentDidMount() {
+		if (this.props.autoClose) setTimeout(() => this.props.toggleThankYouMessage(false), 3000);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.active === true) {
-      this.setState(state => {
-        state.text = nextProps.text;
-        return state;
-      });
-    }
-  }
+	render() {
+		if (this.props.type === 'defInstructions') {
+			return (
+				<div className="ActionPopup">
+					<div className={classnames('ActionPopup-box', { active: this.props.active })}>
+						<span>
+							Press
+							<span className="key-symbol">▲</span>
+							<span className="key-symbol">▼</span>
+							<span className="key-symbol">◀</span>
+							<span className="key-symbol">▶</span>
+							to move.
+						</span>
+						<br />
+						<span>
+							Press <span className="key-symbol">P</span> to select items at current location for picking.
+						</span>
+						<br />
+						<span>
+							Press <span className="key-symbol">⏎</span> to finish definition.
+						</span>
+						<br />
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.text !== nextProps.text ||
-        this.props.active !== nextProps.active;
-  }
-
-  componentWillUpdate(nextProps) {
-  }
-
-  componentDidUpdate(prevProps) {
-  }
-
-  render() {
-
-    return (
-      <div className="ActionPopup">
-        <div className={classnames("ActionPopup-box", { "active" : this.props.active })}>
-          {this.state.text}<wbr/>
-        </div>
-      </div>
-    )
-  }
+						<wbr />
+					</div>
+				</div>
+			);
+		}
+		return (
+			<div className="ActionPopup">
+				<div className={classnames('ActionPopup-box', { active: this.props.active })}>
+					{this.props.text}
+					<wbr />
+				</div>
+			</div>
+		);
+	}
 }
 
-const mapStateToProps = (state) => ({
-  //popup: state.world.popup
-})
+const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps)(ActionPopup)
+const mapDispatchToProps = (dispatch) => {
+	return {
+		toggleThankYouMessage: (isThankYouMessageDisplayed) =>
+			dispatch(Actions.toggleThankYouMessage(isThankYouMessageDisplayed))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActionPopup);

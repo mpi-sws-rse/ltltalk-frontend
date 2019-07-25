@@ -42,6 +42,13 @@ function sendContext({ history, current_history_idx, sessionId, waterMarkers, ke
 }
 
 const Actions = {
+	
+	toggleThankYouMessage: (isThankYouMessageDisplayed) => {
+		return (dispatch) => {
+			dispatch({ type: Constants.TOGGLE_THANK_YOU_MESSAGE, isThankYouMessageDisplayed: isThankYouMessageDisplayed });
+		}
+	},
+
 	hideInstructions: () => {
 		return (dispatch) => {
 			dispatch({ type: Constants.HIDE_INSTRUCTIONS });

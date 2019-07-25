@@ -323,23 +323,23 @@ class Build extends Component {
           <History />
           <ActionPopup
             active={popup.active}
-            text={popup.text} />  
+            text={[popup.text]} />  
           <ActionPopup 
+            type="defInstructions"
             active={this.props.isKeyPressEnabled}
-            text="Please provide a definition. 
-                  Press arrow keys to move. 
-                  Press P to pick all items at current location. 
-                  Press enter to finish definition."
+            text={[
+              'Please provide a definition.', 
+              'Press arrow keys to move.',
+               'Press P to pick all items at current location.', 
+               'Press enter to finish definition.']}
           />  
-
-          <PickBox 
+          {this.props.isThankYouMessageDisplayed &&
+          <ActionPopup 
             active={true}
-            text="Please provide a definition. 
-                  Press arrow keys to move. 
-                  Press P to pick all items at current location. 
-                  Press enter to finish definition."
-                  
-          /> 
+            text={["Thank you for your response!"]}
+            autoClose={true}
+          />}  
+          <PickBox active={true}/> 
           <DecisionBox active={true}/>
           <CommandBar
             onClick={(query) => this.handleQuery(query)}
@@ -385,7 +385,8 @@ const mapStateToProps = (state) => ({
   isAnimationEnabled: state.world.isAnimationEnabled,
   animationPath: state.world.animationPath,
   isLoading: state.world.isLoading,
-  isReading: state.world.isReading
+  isReading: state.world.isReading,
+  isThankYouMessageDisplayed: state.world.isThankYouMessageDisplayed
 })
 
 export default  withRouter(connect(mapStateToProps)(Build))

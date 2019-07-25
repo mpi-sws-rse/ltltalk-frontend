@@ -32,7 +32,8 @@ const initialState = {
   currentResponse: null,
   isLoading: false,
   isReading: false,
-  areInstructionsHidden: false
+  areInstructionsHidden: false,
+  isThankYouMessageDisplayed: false
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -45,6 +46,9 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
+    case Constants.TOGGLE_THANK_YOU_MESSAGE: 
+      return { ...state, isThankYouMessageDisplayed: action.isThankYouMessageDisplayed };
+
     case Constants.TOGGLE_READING:
       return { ...state, isReading: action.isReading };
 
@@ -93,7 +97,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.FETCH_ANIMATION:
       const response = action.response;
       console.log(response);
-      if (response.status !== 'indoubt') return { ...state};
+      if (response.status !== 'indoubt') return { ...state, isThankYouMessageDisplayed: true };
       const exampleRobot = response.world.robot;
       const exampleRobotX = exampleRobot[0];
       const exampleRobotY = exampleRobot[1];
