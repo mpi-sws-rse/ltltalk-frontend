@@ -7,13 +7,14 @@ class PositionBox extends Component {
 	}
 
 	render() {
+		const { x, y } = this.props;
 		return (
 			<div className="position-box">
 				<div className="position-box__text-container">
 					Robot position: <br />
 					<span className="position-box__coordinates">
-                    &#x5b; 3, 3 &#x5d;{' '}
-                        </span>
+						&#x5b; {x}, {y} &#x5d;
+					</span>
 				</div>
 			</div>
 		);

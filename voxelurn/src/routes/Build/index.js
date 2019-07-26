@@ -362,7 +362,7 @@ class Build extends Component {
             </div>
           </div>
         </div>
-       <PositionBox />       
+       <PositionBox x={robot.x} y={robot.y} />       
        <ResetPanel />
       </div>
     );
