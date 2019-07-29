@@ -18,6 +18,7 @@ import { genTarget } from "helpers/util"
 import StatusMsg from "components/StatusMsg"
 import ResetPanel from "components/ResetPanel"
 import PositionBox from "components/PositionBox"
+import AnimationPositionBox from "components/AnimationPositionBox"
 import DictionaryPanel from "components/Dictionary"
 // import DashboardBox from "components/DashboardBox"
 import PropTypes from 'prop-types';
@@ -50,6 +51,7 @@ class Build extends Component {
     }
 
     this.handleRobotKeyPress = this.handleRobotKeyPress.bind(this);
+    this.renderPositionBox = this.renderPositionBox.bind(this);
   }
 
   componentDidMount() {
@@ -259,6 +261,39 @@ class Build extends Component {
     // }
   }
 
+  renderPositionBox() {
+
+    const { status, history, responses, current_history_idx, isKeyPressEnabled, isAnimationEnabled, animationPath } = this.props;
+
+    let idx = current_history_idx >= 0 ? current_history_idx : history.length - 1;
+    if (idx > history.length - 1) idx = history.length - 1;
+
+    let robot;
+    if (isKeyPressEnabled) robot = this.props.robot;
+    else robot = history[idx].robot;
+
+  
+    if (isAnimationEnabled) { 
+      const picks = animationPath
+      .filter(e => e.action === 'pickitem')
+      .map(e => { return { color: e.color, shape: e.shape, x: e.x, y: e.y } });
+      const startX = animationPath[0].x ;
+      const startY = animationPath[0].y;
+      const endX = animationPath[animationPath.length - 1].x;
+      const endY = animationPath[animationPath.length - 1].y;
+      return <AnimationPositionBox startX={startX} startY={startY} endX={endX} endY={endY} picks={picks} />;
+    }
+    else if (status === 'ACCEPT') { 
+      let { x, y } = responses[0].path.find(move => move.action === 'destination'); 
+      return <PositionBox x={x} y={y} />; 
+    }
+    else { 
+      let { x, y } = robot;
+      return <PositionBox x={x} y={y} />; 
+    }   
+  }
+  
+
   render() {
     const { status, responses, pointMarkers, waterMarkers, history,
         current_history_idx, task, isKeyPressEnabled, isAnimationEnabled, animationPath } = this.props
@@ -362,7 +397,8 @@ class Build extends Component {
             </div>
           </div>
         </div>
-       <PositionBox x={robot.x} y={robot.y} />       
+       {/* <PositionBox x={robot.x} y={robot.y} />        */}
+       {this.renderPositionBox()}
        <ResetPanel />
       </div>
     );

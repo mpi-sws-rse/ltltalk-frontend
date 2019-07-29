@@ -14,7 +14,7 @@
 	text-align: center;
 	background-color: rgb(200, 238, 255);
 	box-shadow: 0 6px 24px rgba(60, 60, 60, 0.18);
-	width: 80%;
+	width: 55%;
 	visibility: hidden;
 	opacity: 0;
 	transition: visibility 0s 0.5s, opacity 0.5s linear;
