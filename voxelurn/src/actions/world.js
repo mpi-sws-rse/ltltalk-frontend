@@ -9,6 +9,9 @@ import { getStore } from '../';
 import { STATUS } from 'constants/strings';
 import { worldConfig } from 'constants/defaultMap';
 
+import { taskConfig } from 'constants/taskWorldMap';
+
+
 function sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist }) {
 	let contextCommand = '(:context)';
 
@@ -82,6 +85,17 @@ const Actions = {
 		};
 	},
 
+
+	// getTask: () => {
+
+	// 	return (dispatch) => {
+	// 		dispatch({
+	// 			type: Constants.GET_TASK
+	// 		});
+	// 	};
+
+	// },
+
 	// decision is 0 or 1
 	decisionUpdate: (decision) => {
 		return (dispatch, getState) => {
@@ -144,6 +158,13 @@ const Actions = {
 			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQuery}&path=${JSON.stringify(
 				keyPressHist
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
+			console.log("current querss.......")
+			console.log(currentQuery)
+			console.log("path is.......")
+			console.log(JSON.stringify(keyPressHist))
+			//console.log("url is....")
+
+			//console.log(url)
 
 			return EXAMPLEquery(url)
 				.then((response) => {

@@ -2,6 +2,9 @@ import Constants from "constants/actions"
 import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
+import { taskConfig } from "constants/taskWorldMap"
+
+
 const initialState = {
   history: [{
     text: "initial",
@@ -93,6 +96,10 @@ export default function reducer(state = initialState, action = {}) {
         stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null }
         // currentAnimation: null
       };
+
+
+    // case Constants.GET_TASK:
+    //   const taskId = action.taskId
 
     case Constants.FETCH_ANIMATION:
       const response = action.response;
