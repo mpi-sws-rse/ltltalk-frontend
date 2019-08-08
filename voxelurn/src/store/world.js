@@ -16,12 +16,14 @@ const initialState = {
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
-  currentQuery: "", // Remember user query when user is defining
+  currentQuery: "", // Remember user query when user is defining,
+  currentQueryRemembered: "", // for request url
   defining: false,
   defineN: null,
   dictionary: [],
   robot: worldConfig.robot,
   keyPressHist: [],
+  keyPressHistRemembered: [], // for request url
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
@@ -148,7 +150,9 @@ export default function reducer(state = initialState, action = {}) {
         query: "",
         status: STATUS.TRY,
         keyPressHist: [],
-        currentQuery: "" 
+        keyPressHistRemembered: state.keyPressHist,
+        currentQuery: "",
+        currentQueryRemembered: state.currentQuery 
       }; 
 
     case Constants.FORCE_QUIT_ITEM_SELECTION:

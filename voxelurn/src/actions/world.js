@@ -105,7 +105,7 @@ const Actions = {
 	fetchAnimation: () => {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
-			const { waterMarkers, robot, history, current_history_idx, currentQuery, keyPressHist } = getState().world;
+			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
 			let currentState = [];
 			let context = {
 				height: 10,
@@ -141,9 +141,10 @@ const Actions = {
 
 				context.world = currentState;
 			}
-			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQuery}&path=${JSON.stringify(
-				keyPressHist
+			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
+				keyPressHistRemembered
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
+			console.log(url);
 
 			return EXAMPLEquery(url)
 				.then((response) => {
