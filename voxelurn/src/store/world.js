@@ -16,14 +16,26 @@ const initialState = {
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
+  currentQuery: "", // Remember user query when user is defining,
+  currentQueryRemembered: "", // for request url
   defining: false,
   defineN: null,
   dictionary: [],
   robot: worldConfig.robot,
   keyPressHist: [],
+  keyPressHistRemembered: [], // for request url
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
+  isAnimationEnabled: false, // Show server-generated examples to user
+  animationPath: [],
+  stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null },
+  currentAnimation: null,
+  currentResponse: null,
+  isLoading: false,
+  isReading: false,
+  areInstructionsHidden: false,
+  isThankYouMessageDisplayed: false
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -36,14 +48,97 @@ export default function reducer(state = initialState, action = {}) {
   const idx = state.history.length - 1;
 
   switch (action.type) {
-    
+    case Constants.TOGGLE_THANK_YOU_MESSAGE: 
+      return { ...state, isThankYouMessageDisplayed: action.isThankYouMessageDisplayed };
+
+    case Constants.TOGGLE_READING:
+      return { ...state, isReading: action.isReading };
+
+    case Constants.TOGGLE_LOADING:
+      return { ...state, isLoading: action.isLoading };
+
+    case Constants.HIDE_INSTRUCTIONS:
+      return { ...state, areInstructionsHidden: true };  
+
+    case Constants.REPEAT_ANIMATION:
+      const temporaryHistory = 
+      { 
+        ...state.history[state.history.length - 1],  
+        worldMap: state.currentAnimation.world.world,
+        robot: { 
+          items: state.currentAnimation.world.robot[2], 
+          type: 'robot', 
+          x: state.currentAnimation.world.robot[0], 
+          y: state.currentAnimation.world.robot[1] } 
+      };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), temporaryHistory ],
+        animationPath: state.currentAnimation.path.map(action => (action.completed ? {...action, completed: false} : {...action, forceUpdate: Math.random() }))
+      };
+
+    case Constants.END_ANIMATION:
+      const restoredWorldMap = state.stateBeforeAnimation.worldMap;
+      const restoredRobot = state.stateBeforeAnimation.robot;
+      const restoredWaterMarkers = state.stateBeforeAnimation.waterMarkers;
+      const restoredHistory = { 
+        ...state.history[state.history.length - 1], 
+        worldMap: restoredWorldMap, 
+        robot: restoredRobot 
+      };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), restoredHistory ],
+        animationPath: [],
+        waterMarkers: restoredWaterMarkers,
+        isAnimationEnabled: false,
+        stateBeforeAnimation: { worldMap: null, robot: null , waterMarkers: null }
+        // currentAnimation: null
+      };
+
+    case Constants.FETCH_ANIMATION:
+      const response = action.response;
+      console.log(response);
+      if (response.status !== 'indoubt') return { ...state, isThankYouMessageDisplayed: true };
+      const exampleRobot = response.world.robot;
+      const exampleRobotX = exampleRobot[0];
+      const exampleRobotY = exampleRobot[1];
+      const exampleRobotItems = exampleRobot[2];
+      const exampleWorldMap = response.world.world;
+
+      // Format robot
+      const formattedRobot = { items: exampleRobotItems, type: 'robot', x: exampleRobotX, y: exampleRobotY };
+
+      // Format world and watermarkers
+      const formattedWorldMap = exampleWorldMap.filter(position => position.type !== 'water');
+      let formmattedWaterMarkers = exampleWorldMap.filter(position => position.type === 'water');
+      formmattedWaterMarkers = formmattedWaterMarkers.map(waterMarker => [waterMarker.x, waterMarker.y]);
+
+      const stateBeforeAnimation = {
+        worldMap: state.history[state.history.length - 1].worldMap,
+        robot: state.history[state.history.length - 1].robot,
+        waterMarkers: state.waterMarkers
+      };
+      const currentAnimation = { ...action.response };
+
+      const tempHistory = { ...state.history[state.history.length - 1], worldMap: formattedWorldMap, robot: formattedRobot };
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), tempHistory ],
+        animationPath: response.path.map(action => (action.completed ? {...action, completed: false} : action)),
+        waterMarkers: formmattedWaterMarkers,
+        isAnimationEnabled: true,
+        stateBeforeAnimation: stateBeforeAnimation,
+        currentAnimation: currentAnimation,
+        currentResponse: response
+      };
+
     case Constants.START_USER_DEFINITION:
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
-      return { ...state, robot: robotStartState, isKeyPressEnabled: true };
+      return { ...state, robot: robotStartState, isKeyPressEnabled: true, currentQuery: state.query };
 
     case Constants.FINISH_USER_DEFINITION: 
-      console.log(state.keyPressHist)
       document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
       const newHistoryEntry = { ...state.history[idx], type: null, robot: currentRobot };
       return { 
@@ -54,7 +149,10 @@ export default function reducer(state = initialState, action = {}) {
         defineN: null, 
         query: "",
         status: STATUS.TRY,
-        keyPressHist: [] 
+        keyPressHist: [],
+        keyPressHistRemembered: state.keyPressHist,
+        currentQuery: "",
+        currentQueryRemembered: state.currentQuery 
       }; 
 
     case Constants.FORCE_QUIT_ITEM_SELECTION:
@@ -87,6 +185,7 @@ export default function reducer(state = initialState, action = {}) {
       let newWorldMap = [];
       currentWorldMap = state.history[idx].worldMap;
       let carriedItems = currentRobot.items.map(item => item);
+      let newItems = [];
       for (let i = 0; i < currentWorldMap.length; i ++) {
         if (currentWorldMap[i].x === currentRobotX && 
             currentWorldMap[i].y === currentRobotY &&  
@@ -97,15 +196,19 @@ export default function reducer(state = initialState, action = {}) {
               id: i.toString()})) 
         {
           carriedItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);    
+          newItems.push([currentWorldMap[i].color, currentWorldMap[i].shape]);
         }   
         else newWorldMap.push(currentWorldMap[i]);    
       }
 
       const currentHistory = { ...state.history[idx], worldMap: newWorldMap };
+      // console.log("%%%carried item %%%%")
+      // console.log(carriedItems)
       return { ...state,
                history: [ ...state.history.splice(0, idx), currentHistory ], 
                robot: { ...state.robot, items: carriedItems},
-               keyPressHist: [ ...currentKeyPressHist, 'pick' ],
+
+               keyPressHist: [ ...currentKeyPressHist, ['pick', newItems] ],
                isItemSelectionEnabled: false,
                itemsAtCurrentLocation: []
              };  
@@ -132,22 +235,26 @@ export default function reducer(state = initialState, action = {}) {
       // If nextRobotPosition is a wall, don't move robot, don't change state.
       if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
       // Else move robot up and update key press history
-      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, 'up' ] };
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY + 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','up' ]] };
+
       
 		case Constants.MOVE_ROBOT_DOWN:
 			nextRobotPosition = { x: currentRobotX, y: currentRobotY - 1 };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, 'down' ] };
+      else return { ...state, robot: { ...currentRobot, y: currentRobotY - 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','down' ] ] };
+
 
 		case Constants.MOVE_ROBOT_LEFT:
 			nextRobotPosition = { x: currentRobotX - 1, y: currentRobotY };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-			else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, 'left' ] };
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX - 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','left' ] ] };
+
 
 		case Constants.MOVE_ROBOT_RIGHT:
 			nextRobotPosition = { x: currentRobotX + 1, y: currentRobotY };
 			if (state.wallMarkers.find((pos) => pos.x === nextRobotPosition.x && pos.y === nextRobotPosition.y)) return state;
-      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, 'right' ] };   
+      else return { ...state, robot: { ...currentRobot, x: currentRobotX + 1 }, keyPressHist: [ ...currentKeyPressHist, ['move','right' ] ] };   
+
 
     case Constants.SET_QUERY:
       return { ...state, query: action.query }
@@ -162,6 +269,8 @@ export default function reducer(state = initialState, action = {}) {
       if (state.current_history_idx >= 0) {
         history = history.slice(0, state.current_history_idx + 1)
       }
+      console.log('action.responses')
+      console.log(action.responses)
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]

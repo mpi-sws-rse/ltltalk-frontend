@@ -1,0 +1,76 @@
+.DecisionBox {
+	position: absolute;
+	bottom: 54vh;
+	text-align: center;
+	width: 100%;
+	margin-top: -100px;
+	visibility: hidden;
+}
+
+.DecisionBox-box {
+	padding: 10px 15px 40px 15px;
+	color: rgb(100, 100, 100);
+	display: inline-block;
+	text-align: center;
+	background-color: rgb(200, 238, 255);
+	box-shadow: 0 6px 24px rgba(60, 60, 60, 0.18);
+	width: 55%;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+.DecisionBox > .active {
+	opacity: 0.8;
+	transition: visibility 0.5s 0s, opacity 0.5s linear;
+	visibility: visible;
+}
+
+.DecisionBox .DecisionBox-button {
+    margin-top: 7px;
+	height: 2.5em;
+	width: 4em;
+	background-color: rgb(11, 118, 206);
+	transition: all 0.5s;
+}
+
+.DecisionBox-button:hover::after {
+	opacity: 1;
+}
+
+.DecisionBox-button::after {
+	margin-top: 8px;
+	display: inline-block;
+	opacity: 0;
+}
+
+.DecisionBox-button-yes::after {
+	content: "Yes!";	
+}
+
+.DecisionBox-button-no::after {
+	content: "No!";
+	transform: translate(2%, 0)
+}
+
+.DecisionBox-button-repeat::after {
+	content: "Repeat";
+	transform: translate(-9%, 0)
+}
+
+.DecisionBox .DecisionBox-button:not(:last-child) {
+    margin-right: 20px;
+}
+
+.DecisionBox .DecisionBox-button:hover {
+	transform: scale(1.15);
+}
+
+.DecisionBox .DecisionBox-button i {
+	font-size: 2em;
+	color: white;
+}
+
+.DecisionBox-title {
+
+}
