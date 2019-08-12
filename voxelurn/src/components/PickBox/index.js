@@ -60,7 +60,7 @@ class PickBox extends Component {
 					{this.renderItems()}
 					<div>
 						<button className="PickBox-finish-button" onClick={(e) => this.handleFinishSelection(e)}>
-							<i class="fas fa-check" />
+							<i className="fas fa-check" />
 						</button>
 					</div>
 					<wbr />
@@ -71,7 +71,6 @@ class PickBox extends Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log('map');
 	return {
 		isItemSelectionEnabled: state.world.isItemSelectionEnabled,
 		itemsAtCurrentLocation: state.world.itemsAtCurrentLocation.map((item) => {

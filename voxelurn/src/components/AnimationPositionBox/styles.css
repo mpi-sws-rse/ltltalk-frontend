@@ -1,0 +1,57 @@
+.animation-position-box {
+	z-index: 200000;
+	right: 5% !important;
+	top: 3% !important;
+	width: 20% !important;
+	height: 90%;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	font-size: 1.4rem;
+	color: #fff;
+	background-color: rgb(79, 148, 205);
+	border-radius: 5px;
+	box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.24);
+}
+
+.animation-position-box__text-container {
+	font-weight: 900;
+	position: absolute;
+	width: 100%;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+.animation-position-box__text-container > :not(:last-child) {
+	border-bottom: 3px white solid;
+}
+
+.animation-position-box__text-container--from,
+.animation-position-box__text-container--to,
+.animation-position-box__text-container--picks {
+	height: auto;
+	padding: 10% 10%;
+}
+
+.animation-position-box__coordinates {
+	font-size: 4em;
+}
+
+.animation-position-box__text-container--picks ul {
+	list-style: none;
+	text-align: left;
+	display: inline-block;
+	padding-inline-start: 0;
+}
+
+.animation-position-box__shape {
+	font-size: 3.6em;
+
+	margin-right: 1em;
+	vertical-align: center;
+}
+
+.animation-position-box__coordinates--small {
+	font-size: 1.8em;
+}
