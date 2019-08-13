@@ -13,7 +13,9 @@ class TaskList extends Component {
 		
 		
 		this.showTask = this.showTask.bind(this);
-    this.closeTask = this.closeTask.bind(this);
+		this.closeTask = this.closeTask.bind(this);
+		this.handleTask = this.handleTask.bind(this);
+
 	
 	}
 		showTask(event) {
@@ -32,24 +34,39 @@ class TaskList extends Component {
 				});  
 		}
 
-	  render() {
-			return (			
 
-			<div  className="task-panel-dropdown" style = {{background:"#4F94CD",width:"200px"}} >
+
+	handleTask(e,index) {
+		console.log("key id issss")
+		console.log(index)
+		e.preventDefault();
+		this.props.getTask(index);
+	}
+
+
+	  render() {
+
+		if (this.props.isAnimationEnabled == true || this.props.isKeyPressEnabled== true) {
+
+			return <span />;
+		} 
+		else {
+			var names = ["Task 1","Task 2","Task 3","Task 4","Task 5", "Task 6", "Task 6", "Task 7", "Task 8", "Task 9", "Task 10"]
+			const that = this;
+
+			return (	
+				
+
+
+		 <div  className="task-panel-dropdown" style = {{background:"#4F94CD",width:"200px"}} >
          <div className="task-panel-dropdown-button" onClick={this.showTask}> Tasks </div>
 
           { this.state.displayTask ? (
           <ul>
-         <li><a className="active" href="#Create Page">Task 1</a></li>
-         <li><a href="">Task 2</a></li>
-         <li><a href="">Task 3</a></li>
-				 <li><a href="#Create Page">Task 4</a></li>
-         <li><a href="">Task 5</a></li>
-         <li><a href="">Task 6</a></li>
-				 <li><a href="#Create Page">Task 7</a></li>
-         <li><a href="">Task 8</a></li>
-         <li><a href="">Task 9</a></li>
-				 <li><a href="#Create Page">Task 10</a></li>
+
+				{names.map(function(name, index){
+                    return <li key={ index }><a className="active" href='javascript:void(0)' onClick={(e) => that.handleTask(e,index)} >{name}</a></li>;
+                  })}
       
           </ul>
         ):
@@ -58,14 +75,23 @@ class TaskList extends Component {
         )
         }
 
-       </div>
-
-
-
-			);
+	   </div>
+	   );
 	  }
+	} 
 
 }
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+	isAnimationEnabled: state.world.isAnimationEnabled,
+	isKeyPressEnabled: state.world.isKeyPressEnabled
+});
 
-export default connect(mapStateToProps)(TaskList);
+
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		getTask: (taskId) => dispatch(Actions.getTask(taskId))
+	};
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(TaskList);

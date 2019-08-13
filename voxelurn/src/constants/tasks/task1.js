@@ -1,4 +1,5 @@
- {
+ 
+const task1 = {
 "height": 10,
 "robot": [
 2,
@@ -577,3 +578,4 @@
 ]
 }
 
+export default task1;

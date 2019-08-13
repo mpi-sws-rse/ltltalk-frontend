@@ -9,7 +9,7 @@ import { getStore } from '../';
 import { STATUS } from 'constants/strings';
 import { worldConfig } from 'constants/defaultMap';
 
-import { taskConfig } from 'constants/taskWorldMap';
+import { taskWorldConfig } from 'constants/taskWorldMap';
 
 
 function sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist }) {
@@ -86,15 +86,16 @@ const Actions = {
 	},
 
 
-	// getTask: () => {
+	getTask: (taskId) => {
 
-	// 	return (dispatch) => {
-	// 		dispatch({
-	// 			type: Constants.GET_TASK
-	// 		});
-	// 	};
+		return (dispatch) => {
+			dispatch({
+				type: Constants.GET_TASK,
+				taskId
+			});
+		};
 
-	// },
+	},
 
 	// decision is 0 or 1
 	decisionUpdate: (decision) => {
@@ -104,6 +105,8 @@ const Actions = {
 			let url = `http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}?decision=${decision}&sessionId=${sessionId}&candidates=${JSON.stringify(
 				candidates
 			)}&path=${JSON.stringify(path)}&context=${JSON.stringify(world)}`;
+
+			
 
 			return EXAMPLEquery(url)
 				.then((response) => {
@@ -119,7 +122,7 @@ const Actions = {
 	fetchAnimation: () => {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
-			const { waterMarkers, robot, history, current_history_idx, currentQuery, keyPressHist } = getState().world;
+			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
 			let currentState = [];
 			let context = {
 				height: 10,
@@ -155,17 +158,11 @@ const Actions = {
 
 				context.world = currentState;
 			}
-			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQuery}&path=${JSON.stringify(
-				keyPressHist
+			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
+				keyPressHistRemembered
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
-			console.log("current querss.......")
-			console.log(currentQuery)
-			console.log("path is.......")
-			console.log(JSON.stringify(keyPressHist))
-			//console.log("url is....")
 
-			//console.log(url)
-
+			console.log(url)
 			return EXAMPLEquery(url)
 				.then((response) => {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });

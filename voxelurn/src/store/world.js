@@ -2,7 +2,10 @@ import Constants from "constants/actions"
 import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
 
-import { taskConfig } from "constants/taskWorldMap"
+import { taskWorldConfig } from "constants/taskWorldMap"
+
+import { selectTask } from 'helpers/task'
+
 
 
 const initialState = {
@@ -19,12 +22,14 @@ const initialState = {
   current_history_idx: -1,
   status: STATUS.TRY,
   query: "",
-  currentQuery: "", // Remember user query when user is defining
+  currentQuery: "", // Remember user query when user is defining,
+  currentQueryRemembered: "", // for request url
   defining: false,
   defineN: null,
   dictionary: [],
   robot: worldConfig.robot,
   keyPressHist: [],
+  keyPressHistRemembered: [], // for request url
   isKeyPressEnabled: false,
   isItemSelectionEnabled: false,
   itemsAtCurrentLocation: [],
@@ -98,8 +103,33 @@ export default function reducer(state = initialState, action = {}) {
       };
 
 
-    // case Constants.GET_TASK:
-    //   const taskId = action.taskId
+    case Constants.GET_TASK:
+      const taskId = action.taskId
+
+      console.log("task id in store is...")
+      console.log(taskId)
+      // console.log("before task...");
+      // console.log(state.history[state.history.length - 1]);
+      const s = selectTask(taskId,taskWorldConfig)
+
+      console.log("get world robot is")
+      console.log(s)
+
+      const tHistory = 
+      { 
+        ...state.history[state.history.length - 1],  
+       
+            
+        worldMap: taskWorldConfig.world,
+        robot: {x:taskWorldConfig.robot[0], y:taskWorldConfig.robot[1], type:"robot", items: taskWorldConfig.robot[2]}
+      };
+
+      console.log("task world")
+      console.log(tHistory)
+      return {
+        ...state,
+        history: [ ...state.history.splice(0, idx), tHistory ]      
+      };
 
     case Constants.FETCH_ANIMATION:
       const response = action.response;
@@ -155,7 +185,9 @@ export default function reducer(state = initialState, action = {}) {
         query: "",
         status: STATUS.TRY,
         keyPressHist: [],
-        currentQuery: "" 
+        keyPressHistRemembered: state.keyPressHist,
+        currentQuery: "",
+        currentQueryRemembered: state.currentQuery 
       }; 
 
     case Constants.FORCE_QUIT_ITEM_SELECTION:

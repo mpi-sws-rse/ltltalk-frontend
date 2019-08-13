@@ -1,21 +1,35 @@
-import task from './tasks/task1.json'
+import task1 from './tasks/task1.js';
+import task2 from './tasks/task2.js';
+import task3 from './tasks/task3.js';
+import task4 from './tasks/task4.js';
+import task5 from './tasks/task5.js';
+import task6 from './tasks/task6.js';
+import task7 from './tasks/task7.js';
+import task8 from './tasks/task8.js';
+import task9 from './tasks/task9.js';
+import task10 from './tasks/task10.js';
 
 
-const defaultConfig = {
-  world: task,
-  xMin: -1,
-  yMax: 9
+
+
+// export const taskWorldConfig = {
+//   world: task1.world,
+//   robot: task1.robot,
+//   xMin: -1,
+//   yMax: 9
+// }
+
+
+export const taskWorldConfig = {
+  task1,
+  task2,
+  task3,
+  task4,
+  task5,
+  task6,
+  task7,
+  task8,
+  task9,
+  task10
+
 }
-
-
-function getDefaultMap(/*config = defaultConfig*/) {
-  let walls = [];
-  let config = defaultConfig;
-  //let xMax = config.world.reduce((acc, x) => Math.max(acc, x.length));
-  let world = config.world;
-  console.log("task world is....")
-  console.log(world)
-
-}
-
-export const taskConfig = getDefaultMap();
