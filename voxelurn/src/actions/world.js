@@ -87,10 +87,13 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { candidates, path, world } = getState().world.currentResponse;
-			let url = `http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}?decision=${decision}&sessionId=${sessionId}&candidates=${JSON.stringify(
+			let url = encodeURI(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
 				candidates
-			)}&path=${JSON.stringify(path)}&context=${JSON.stringify(world)}`;
-
+			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
+			console.log(url);
+			console.log(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
+				candidates
+			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
 			return EXAMPLEquery(url)
 				.then((response) => {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
@@ -109,10 +112,10 @@ const Actions = {
 			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {
-				height: 10,
+				height: 11,
 				// robot: [ robot.x, robot.y, robot.items ],
 				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
-				width: 10,
+				width: 14,
 				world: []
 			};
 			// if (history.length > 0) {
