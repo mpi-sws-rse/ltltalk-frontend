@@ -106,41 +106,65 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
+			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {
 				height: 10,
-				robot: [ robot.x, robot.y, robot.items ],
+				// robot: [ robot.x, robot.y, robot.items ],
+				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
 				width: 10,
 				world: []
 			};
-			if (history.length > 0) {
-				const idx =
-					current_history_idx >= 0 && current_history_idx < history.length
-						? current_history_idx
-						: history.length - 1;
+			// if (history.length > 0) {
+			// 	const idx =
+			// 		current_history_idx >= 0 && current_history_idx < history.length
+			// 			? current_history_idx
+			// 			: history.length - 1;
 
-				currentState = history[idx].worldMap.map((c) => {
-					return {
-						x: c.x,
-						y: c.y,
-						type: c.type,
-						color: c.color === null ? 'null' : c.color,
-						shape: c.shape === null ? 'null' : c.shape
-					};
-				});
+			// 	currentState = history[idx].worldMap.map((c) => {
+			// 		return {
+			// 			x: c.x,
+			// 			y: c.y,
+			// 			type: c.type,
+			// 			color: c.color === null ? 'null' : c.color,
+			// 			shape: c.shape === null ? 'null' : c.shape
+			// 		};
+			// 	});
 
-				waterMarkers.forEach((waterMarker) =>
-					currentState.push({
-						x: waterMarker[0],
-						y: waterMarker[1],
-						type: 'water',
-						color: 'null',
-						shape: 'null'
-					})
-				);
+			// 	waterMarkers.forEach((waterMarker) =>
+			// 		currentState.push({
+			// 			x: waterMarker[0],
+			// 			y: waterMarker[1],
+			// 			type: 'water',
+			// 			color: 'null',
+			// 			shape: 'null'
+			// 		})
+			// 	);
 
-				context.world = currentState;
-			}
+			// 	context.world = currentState;
+			// }
+
+			currentState = worldBeforeUserDefinition.worldMap.map((c) => {
+				return {
+					x: c.x,
+					y: c.y,
+					type: c.type,
+					color: c.color === null ? 'null' : c.color,
+					shape: c.shape === null ? 'null' : c.shape
+				};
+			});
+
+			waterMarkers.forEach((waterMarker) =>
+				currentState.push({
+					x: waterMarker[0],
+					y: waterMarker[1],
+					type: 'water',
+					color: 'null',
+					shape: 'null'
+				})
+			);
+
+			context.world = currentState;
 			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
 				keyPressHistRemembered
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
