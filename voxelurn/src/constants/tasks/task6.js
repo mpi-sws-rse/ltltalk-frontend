@@ -1,8 +1,8 @@
 const task6 ={
 "height": 10,
 "robot": [
-0,
-3,
+2,
+4,
 []
 ],
 "width": 10,
@@ -135,14 +135,14 @@ const task6 ={
 },
 {
 "x": 3,
-"y": 7,
+"y": 2,
 "type": "item",
 "color": "yellow",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 7,
+"y": 2,
 "type": "item",
 "color": "blue",
 "shape": "square"
@@ -158,14 +158,14 @@ const task6 ={
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "red",
+"color": "green",
 "shape": "triangle"
 },
 {
@@ -284,7 +284,7 @@ const task6 ={
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "red",
+"color": "green",
 "shape": "circle"
 },
 {
@@ -298,8 +298,8 @@ const task6 ={
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "blue",
-"shape": "circle"
+"color": "green",
+"shape": "square"
 },
 {
 "x": 7,
@@ -438,7 +438,7 @@ const task6 ={
 "x": 11,
 "y": 1,
 "type": "item",
-"color": "blue",
+"color": "green",
 "shape": "square"
 },
 {
@@ -456,17 +456,17 @@ const task6 ={
 "shape": "null"
 },
 {
-"x": 4,
-"y": 0,
+"x": 1,
+"y": 2,
 "type": "item",
-"color": "yellow",
+"color": "red",
 "shape": "triangle"
 },
 {
-"x": 4,
-"y": 0,
+"x": 1,
+"y": 2,
 "type": "item",
-"color": "red",
+"color": "yellow",
 "shape": "triangle"
 },
 {
@@ -576,3 +576,4 @@ const task6 ={
 }
 ]
 }
+export default task6;

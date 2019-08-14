@@ -135,16 +135,72 @@ const task2 ={
 },
 {
 "x": 3,
-"y": 8,
+"y": 7,
 "type": "item",
-"color": "yellow",
+"color": "green",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 8,
+"y": 7,
 "type": "item",
-"color": "blue",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "circle"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "circle"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "circle"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
+"shape": "circle"
+},
+{
+"x": 3,
+"y": 7,
+"type": "item",
+"color": "green",
 "shape": "square"
 },
 {
@@ -156,9 +212,16 @@ const task2 ={
 },
 {
 "x": 10,
-"y": 8,
+"y": 7,
 "type": "item",
-"color": "red",
+"color": "green",
+"shape": "triangle"
+},
+{
+"x": 10,
+"y": 7,
+"type": "item",
+"color": "green",
 "shape": "triangle"
 },
 {
@@ -284,15 +347,15 @@ const task2 ={
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "blue",
+"color": "green",
 "shape": "circle"
 },
 {
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "red",
-"shape": "circle"
+"color": "green",
+"shape": "square"
 },
 {
 "x": 7,
@@ -449,32 +512,17 @@ const task2 ={
 "shape": "null"
 },
 {
-    "x": 4,
-    "y": 0,
-    "type": "item",
-    "color": "green",
-    "shape": "circle"
-    },
-
-{
-        "x": 4,
-        "y": 0,
-        "type": "item",
-        "color": "yellow",
-        "shape": "square"
-        },
-{
 "x": 4,
 "y": 0,
 "type": "item",
-"color": "yellow",
+"color": "green",
 "shape": "triangle"
 },
 {
 "x": 4,
 "y": 0,
 "type": "item",
-"color": "red",
+"color": "green",
 "shape": "triangle"
 },
 {
@@ -584,3 +632,4 @@ const task2 ={
 }
 ]
 }
+export default task2;

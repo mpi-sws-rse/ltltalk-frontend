@@ -1,8 +1,8 @@
 const task4 ={
 "height": 10,
 "robot": [
-1,
-0,
+2,
+4,
 []
 ],
 "width": 10,
@@ -135,16 +135,16 @@ const task4 ={
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
-"color": "red",
+"color": "blue",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
-"color": "blue",
+"color": "green",
 "shape": "triangle"
 },
 {
@@ -155,25 +155,18 @@ const task4 ={
 "shape": "null"
 },
 {
-    "x": 10,
-    "y": 8,
-    "type": "item",
-    "color": "red",
-    "shape": "triangle"
-    },
-{
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "blue",
-"shape": "circle"
+"color": "green",
+"shape": "triangle"
 },
 {
 "x": 12,
@@ -291,28 +284,28 @@ const task4 ={
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "green",
-"shape": "circle"
-},
-{
-"x": 7,
-"y": 4,
-"type": "item",
-"color": "green",
-"shape": "circle"
-},
-{
-"x": 7,
-"y": 4,
-"type": "item",
 "color": "red",
+"shape": "circle"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "blue",
+"shape": "circle"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "green",
 "shape": "square"
 },
 {
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "green",
+"color": "yellow",
 "shape": "circle"
 },
 {
@@ -442,12 +435,26 @@ const task4 ={
 "shape": "null"
 },
 {
-"x": 11,
-"y": 4,
+"x": 1,
+"y": 2,
 "type": "item",
-"color": "blue",
-"shape": "square"
+"color": "green",
+"shape": "circle"
 },
+{
+    "x": 1,
+    "y": 2,
+    "type": "item",
+    "color": "green",
+    "shape": "circle"
+    },
+    {
+        "x": 1,
+        "y": 2,
+        "type": "item",
+        "color": "yellow",
+        "shape": "triangle"
+        },
 {
 "x": 12,
 "y": 1,
@@ -464,17 +471,17 @@ const task4 ={
 },
 {
 "x": 4,
-"y": 1,
+"y": 0,
 "type": "item",
 "color": "green",
-"shape": "circle"
+"shape": "square"
 },
 {
 "x": 4,
-"y": 1,
+"y": 0,
 "type": "item",
 "color": "yellow",
-"shape": "circle"
+"shape": "square"
 },
 {
 "x": 12,
@@ -583,3 +590,4 @@ const task4 ={
 }
 ]
 }
+export default task4;

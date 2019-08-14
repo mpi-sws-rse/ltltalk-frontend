@@ -110,18 +110,18 @@ export default function reducer(state = initialState, action = {}) {
       console.log(taskId)
       // console.log("before task...");
       // console.log(state.history[state.history.length - 1]);
-      const s = selectTask(taskId,taskWorldConfig)
+      const task = selectTask(taskId,taskWorldConfig)
 
       console.log("get world robot is")
-      console.log(s)
-
+      console.log(task.world)
+      console.log(task.robot)
       const tHistory = 
       { 
         ...state.history[state.history.length - 1],  
        
             
-        worldMap: taskWorldConfig.world,
-        robot: {x:taskWorldConfig.robot[0], y:taskWorldConfig.robot[1], type:"robot", items: taskWorldConfig.robot[2]}
+        worldMap: task.world,
+        robot: {x:task.robot[0], y:task.robot[1], type:"robot", items: task.robot[2]}
       };
 
       console.log("task world")

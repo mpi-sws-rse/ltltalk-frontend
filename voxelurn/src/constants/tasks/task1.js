@@ -1,5 +1,6 @@
- 
-const task1 = {
+
+const task1 = 
+{
 "height": 10,
 "robot": [
 2,
@@ -138,14 +139,14 @@ const task1 = {
 "x": 3,
 "y": 8,
 "type": "item",
-"color": "green",
+"color": "yellow",
 "shape": "circle"
 },
 {
 "x": 3,
 "y": 8,
 "type": "item",
-"color": "green",
+"color": "blue",
 "shape": "square"
 },
 {
@@ -160,13 +161,6 @@ const task1 = {
 "y": 8,
 "type": "item",
 "color": "red",
-"shape": "triangle"
-},
-{
-"x": 10,
-"y": 8,
-"type": "item",
-"color": "green",
 "shape": "triangle"
 },
 {
@@ -285,8 +279,8 @@ const task1 = {
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "red",
-"shape": "square"
+"color": "green",
+"shape": "circle"
 },
 {
 "x": 7,
@@ -299,8 +293,8 @@ const task1 = {
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "green",
-"shape": "square"
+"color": "red",
+"shape": "circle"
 },
 {
 "x": 7,
@@ -439,7 +433,7 @@ const task1 = {
 "x": 11,
 "y": 1,
 "type": "item",
-"color": "blue",
+"color": "green",
 "shape": "square"
 },
 {
@@ -456,6 +450,21 @@ const task1 = {
 "color": "null",
 "shape": "null"
 },
+{
+    "x": 4,
+    "y": 0,
+    "type": "item",
+    "color": "green",
+    "shape": "circle"
+    },
+
+{
+        "x": 4,
+        "y": 0,
+        "type": "item",
+        "color": "yellow",
+        "shape": "square"
+        },
 {
 "x": 4,
 "y": 0,
