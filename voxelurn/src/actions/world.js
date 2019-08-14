@@ -112,10 +112,10 @@ const Actions = {
 			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {
-				height: 11,
+				height: 9,
 				// robot: [ robot.x, robot.y, robot.items ],
 				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
-				width: 14,
+				width: 12,
 				world: []
 			};
 			// if (history.length > 0) {
