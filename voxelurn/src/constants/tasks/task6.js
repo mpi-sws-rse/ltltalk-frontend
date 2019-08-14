@@ -1,4 +1,6 @@
 const task6 ={
+"description": "Move 3 steps right then 4 steps forward and pick a yellow item from that space and in the end step in water",
+
 "height": 10,
 "robot": [
 2,

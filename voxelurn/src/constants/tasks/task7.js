@@ -1,4 +1,6 @@
 const task7 ={
+"description": "Get all green item at [0,8] then move forward 4 steps to pick one red circle and then move to water tile.",
+
 "height": 10,
 "robot": [
 1,

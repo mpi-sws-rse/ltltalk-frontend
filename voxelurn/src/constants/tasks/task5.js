@@ -1,4 +1,6 @@
 const task5 ={
+"description": "Go to the location [1,2] and pick one green circle, one yellow triangle then take them at location [3,3].",
+
 "height": 10,
 "robot": [
 0,

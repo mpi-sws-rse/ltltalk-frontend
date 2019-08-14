@@ -1,4 +1,8 @@
 const task4 ={
+"description": "Get one blue square from location [11,1] and move forward to four steps then pick one green item.",
+
+
+
 "height": 10,
 "robot": [
 2,

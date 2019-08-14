@@ -1,6 +1,7 @@
 
 const task1 = 
 {
+"description": "Get one green circle, one red triangle and one yellow square from location [4,0] then step in water.",
 "height": 10,
 "robot": [
 2,

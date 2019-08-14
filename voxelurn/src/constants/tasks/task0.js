@@ -1,5 +1,6 @@
  
 const task0 = {
+"description": "Get one green triangle from location [10,8] then move 6 steps left direction and pick one square.",
 "height": 10,
 "robot": [
 2,

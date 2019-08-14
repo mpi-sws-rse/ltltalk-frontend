@@ -1,4 +1,5 @@
 const task3 ={
+"description": "Get one red triangle at location [10,8] while staying dry",
 "height": 10,
 "robot": [
 1,

@@ -1,4 +1,6 @@
 const task8 ={
+"description": "Visit at [3,4] and pick one red circle , one green square and one yellow triangle then move 3 step forward pick two red items while staying dry.",
+
 "height": 10,
 "robot": [
 0,

@@ -1,6 +1,8 @@
 import Constants from "constants/actions"
 import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
+import { TRY_MSG} from 'constants/strings';
+
 
 import { taskWorldConfig } from "constants/taskWorldMap"
 
@@ -41,7 +43,8 @@ const initialState = {
   isLoading: false,
   isReading: false,
   areInstructionsHidden: false,
-  isThankYouMessageDisplayed: false
+  isThankYouMessageDisplayed: false,
+  taskDescription:""
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -114,20 +117,21 @@ export default function reducer(state = initialState, action = {}) {
 
       console.log("get world robot is")
       console.log(task.world)
-      console.log(task.robot)
+      console.log(task.description)
+      
       const tHistory = 
       { 
         ...state.history[state.history.length - 1],  
        
             
         worldMap: task.world,
-        robot: {x:task.robot[0], y:task.robot[1], type:"robot", items: task.robot[2]}
-      };
+        robot: {x:task.robot[0], y:task.robot[1], type:"robot", items: task.robot[2]}      };
 
       console.log("task world")
       console.log(tHistory)
       return {
         ...state,
+        taskDescription : task.description,
         history: [ ...state.history.splice(0, idx), tHistory ]      
       };
 

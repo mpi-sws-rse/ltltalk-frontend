@@ -23,7 +23,7 @@ const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
       <NavLink to={{ pathname: "/syntaxsemantics", query: query }} activeClassName="active"><div>Syntax and Semantics</div></NavLink>
       {/* <div className="task-menu__panel"> */}
 
-      <NavLink id="tasks-nav" to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></NavLink> 
+      {/* <NavLink id="tasks-nav" to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></NavLink>  */}
       {/* </div> */}
       {/* <DropdownMenu>
       <DropdownItem tag="a" href="/yourpage">TaskOne</DropdownItem>></DropdownMenu> */}
