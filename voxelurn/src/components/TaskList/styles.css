@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 .task-panel-dropdown li {
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
   border-bottom: 1px solid #e5e5e5;
 }
 .task-panel-dropdown li:last-child {
@@ -63,10 +63,3 @@
   right:6px;
   top:18px;
 } 
-
-
-
-
-
-
-
