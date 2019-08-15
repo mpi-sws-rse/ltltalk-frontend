@@ -44,7 +44,9 @@ const initialState = {
   isReading: false,
   areInstructionsHidden: false,
   isThankYouMessageDisplayed: false,
-  taskDescription:""
+  taskDescription:"",
+  robotBeforeUserDefinition : null,
+  worldBeforeUserDefinition: null
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -176,7 +178,14 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.START_USER_DEFINITION:
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
-      return { ...state, robot: robotStartState, isKeyPressEnabled: true, currentQuery: state.query };
+      const robotBeforeUserDefinition = {x:robotStartState.x,y:robotStartState.y,items: robotStartState.items};
+      const worldBeforeUserDefinition = state.history[idx];
+      return { ...state, robot: robotStartState, 
+        isKeyPressEnabled: true, 
+        currentQuery: state.query,
+        robotBeforeUserDefinition,
+        worldBeforeUserDefinition 
+      };
 
     case Constants.FINISH_USER_DEFINITION: 
       document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });
