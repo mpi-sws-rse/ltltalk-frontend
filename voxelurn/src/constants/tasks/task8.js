@@ -1,13 +1,11 @@
 const task8 ={
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 "description": "Visit at [3,4] and pick one red circle , one green square and one yellow triangle then move 3 step forward pick two red items while staying dry.",
-
-"height": 10,
 "robot": [
 0,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

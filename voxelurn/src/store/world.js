@@ -132,6 +132,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         taskDescription : task.description,
+        waterMarkers : task.water,
         history: [ ...state.history.splice(0, idx), tHistory ]      
       };
 

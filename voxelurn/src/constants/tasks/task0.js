@@ -1,13 +1,12 @@
  
 const task0 = {
+"water": [ [3, 7], [5, 1], [4, 3] ], 
 "description": "Get one green triangle from location [10,8] then move 6 steps left direction and pick one square.",
-"height": 10,
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

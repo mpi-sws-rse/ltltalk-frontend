@@ -124,6 +124,10 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
+
+			console.log("world states....")
+			console.log(getState().world)
+
 			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {

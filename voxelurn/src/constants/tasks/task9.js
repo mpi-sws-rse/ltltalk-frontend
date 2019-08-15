@@ -1,12 +1,12 @@
 const task9 ={
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
+
 "description": "Get two red items with circle or square shaped from location [9,4] then move 3 steps downward and step in water tile",
-"height": 10,
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

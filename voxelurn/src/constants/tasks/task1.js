@@ -1,14 +1,13 @@
 
 const task1 = 
 {
+"water": [ [0,3],[3, 7], [4, 3], [9, 0],[5,5] ], 
 "description": "Get one green circle, one red triangle and one yellow square from location [4,0] then step in water.",
-"height": 10,
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

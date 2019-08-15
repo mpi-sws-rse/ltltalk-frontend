@@ -5,8 +5,13 @@ import { connect } from 'react-redux';
 import './styles.css';
 
 class StatusMsg extends Component {
-	render() {
+	render()
+	 
+	{
+
 		const { status, text, isAnimationEnabled } = this.props;
+
+		if (isAnimationEnabled) return <span></span>
 		// let msg = TRY_MSG;
 		let msg = this.props.taskDescription;
 

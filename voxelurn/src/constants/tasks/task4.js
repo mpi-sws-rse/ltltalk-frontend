@@ -1,15 +1,11 @@
 const task4 ={
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 "description": "Get one blue square from location [11,1] and move forward to four steps then pick one green item.",
-
-
-
-"height": 10,
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

@@ -1,13 +1,11 @@
 const task6 ={
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 "description": "Move 3 steps right then 4 steps forward and pick a yellow item from that space and in the end step in water",
-
-"height": 10,
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,

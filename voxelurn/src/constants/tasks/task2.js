@@ -1,13 +1,13 @@
 const task2 ={
-"description": "Get one red triangle at location [10,8] while staying dry.",
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 
-"height": 10,
+"description": "Get one red triangle at location [10,7] while staying dry.",
+
 "robot": [
 2,
 4,
 []
 ],
-"width": 10,
 "world": [
 {
 "x": -1,
