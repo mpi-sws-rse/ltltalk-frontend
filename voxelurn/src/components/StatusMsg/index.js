@@ -5,9 +5,16 @@ import { connect } from 'react-redux';
 import './styles.css';
 
 class StatusMsg extends Component {
-	render() {
+	render()
+	 
+	{
+
 		const { status, text, isAnimationEnabled } = this.props;
-		let msg = TRY_MSG;
+
+		if (isAnimationEnabled) return <span></span>
+		// let msg = TRY_MSG;
+		let msg = this.props.taskDescription;
+
 		if (status === STATUS.ACCEPT) msg = text;
 		else if (status === STATUS.DEFINE) msg = DEFINE_MSG;
 		return (
@@ -22,7 +29,8 @@ class StatusMsg extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	isAnimationEnabled: state.world.isAnimationEnabled
+	isAnimationEnabled: state.world.isAnimationEnabled,
+	taskDescription: state.world.taskDescription
 });
 
 export default connect(mapStateToProps)(StatusMsg);

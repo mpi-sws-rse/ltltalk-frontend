@@ -20,7 +20,7 @@ const Routes = () => (
           <Route  path="/tutorial" component={Tutorial} />
           <Route   path="/reference" component={Reference} />   
           <Route path="/syntaxsemantics" component={SyntaxSemantics} />" 
-          <Route path="/tasks" component={Tasks} />
+          {/* <Route path="/tasks" component={Tasks} /> */}
 
           <Redirect exact={true} from="/" to="/about" />
         </Layout>

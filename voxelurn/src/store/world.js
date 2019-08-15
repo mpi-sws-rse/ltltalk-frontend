@@ -1,6 +1,14 @@
 import Constants from "constants/actions"
 import { STATUS, USER_INPUT_FIELD } from "constants/strings"
 import { worldConfig } from "constants/defaultMap"
+import { TRY_MSG} from 'constants/strings';
+
+
+import { taskWorldConfig } from "constants/taskWorldMap"
+
+import { selectTask } from 'helpers/task'
+
+
 
 const initialState = {
   history: [{
@@ -36,8 +44,7 @@ const initialState = {
   isReading: false,
   areInstructionsHidden: false,
   isThankYouMessageDisplayed: false,
-  robotBeforeUserDefinition: null,
-  worldBeforeUserDefinition: null
+  taskDescription:""
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -98,6 +105,37 @@ export default function reducer(state = initialState, action = {}) {
         // currentAnimation: null
       };
 
+
+    case Constants.GET_TASK:
+      const taskId = action.taskId
+
+      console.log("task id in store is...")
+      console.log(taskId)
+      // console.log("before task...");
+      // console.log(state.history[state.history.length - 1]);
+      const task = selectTask(taskId,taskWorldConfig)
+
+      console.log("get world robot is")
+      console.log(task.world)
+      console.log(task.description)
+      
+      const tHistory = 
+      { 
+        ...state.history[state.history.length - 1],  
+       
+            
+        worldMap: task.world,
+        robot: {x:task.robot[0], y:task.robot[1], type:"robot", items: task.robot[2]}      };
+
+      console.log("task world")
+      console.log(tHistory)
+      return {
+        ...state,
+        taskDescription : task.description,
+        waterMarkers : task.water,
+        history: [ ...state.history.splice(0, idx), tHistory ]      
+      };
+
     case Constants.FETCH_ANIMATION:
       const response = action.response;
       console.log(response);
@@ -138,16 +176,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.START_USER_DEFINITION:
       document.activeElement.blur();
       const robotStartState = state.history[idx].robot;
-      const robotBeforeUserDefinition = { x: robotStartState.x, y: robotStartState.y, items: robotStartState.items };
-      const worldBeforeUserDefinition = state.history[idx];
-      return { 
-        ...state, 
-        robot: robotStartState, 
-        isKeyPressEnabled: true, 
-        currentQuery: state.query, 
-        robotBeforeUserDefinition, 
-        worldBeforeUserDefinition 
-      };
+      return { ...state, robot: robotStartState, isKeyPressEnabled: true, currentQuery: state.query };
 
     case Constants.FINISH_USER_DEFINITION: 
       document.getElementById(USER_INPUT_FIELD).focus({ preventScroll: true });

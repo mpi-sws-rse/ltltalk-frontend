@@ -20,7 +20,7 @@ class SharePanel extends Component {
 				className="side-panel"
 				style={{ visibility: `${this.props.isAnimationEnabled ? 'hidden' : 'visible'}` }}
 			>
-				<button className="side-panel__btn" id="controlPanel-clear" onClick={() => this.clear()}>
+				<button className="__btn" id="controlPanel-clear" onClick={() => this.clear()}>
 					Reset
 				</button>
 			</div>

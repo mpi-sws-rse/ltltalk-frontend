@@ -9,6 +9,9 @@ import { getStore } from '../';
 import { STATUS } from 'constants/strings';
 import { worldConfig } from 'constants/defaultMap';
 
+import { taskWorldConfig } from 'constants/taskWorldMap';
+
+
 function sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist }) {
 	let contextCommand = '(:context)';
 
@@ -82,6 +85,18 @@ const Actions = {
 		};
 	},
 
+
+	getTask: (taskId) => {
+
+		return (dispatch) => {
+			dispatch({
+				type: Constants.GET_TASK,
+				taskId
+			});
+		};
+
+	},
+
 	// decision is 0 or 1
 	decisionUpdate: (decision) => {
 		return (dispatch, getState) => {
@@ -109,6 +124,10 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
+
+			console.log("world states....")
+			console.log(getState().world)
+
 			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {
@@ -171,8 +190,8 @@ const Actions = {
 			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
 				keyPressHistRemembered
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
-			console.log(url);
 
+			console.log(url)
 			return EXAMPLEquery(url)
 				.then((response) => {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });

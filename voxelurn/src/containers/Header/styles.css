@@ -99,3 +99,23 @@
 .Header-login img {
   height: 30px;
 }
+
+.task-menu__panel:hover {
+  background-color: rgba(244, 244, 244, 0.5);
+  /* cursor: pointer; */
+}
+.task-menu__panel:hover::after {
+	content: 'Reset world to initial state. Learned commands are remembered.';
+	/* position: absolute;
+	text-align: left;
+	top: -170%;
+	right: 0%; */
+	background-color: #dcdcdc;
+	/* color: #000;
+	padding: 0.25em 0.4em;
+	display: inline-block;
+	text-transform: none;
+	font-weight: 400;
+  border-radius: 4px; */
+  cursor: pointer;
+}
