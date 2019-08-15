@@ -20,6 +20,8 @@ import ResetPanel from "components/ResetPanel"
 import PositionBox from "components/PositionBox"
 import AnimationPositionBox from "components/AnimationPositionBox"
 import DictionaryPanel from "components/Dictionary"
+import TaskList from "components/TaskList"
+
 // import DashboardBox from "components/DashboardBox"
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -152,6 +154,11 @@ class Build extends Component {
 			default:
 				break;
 		}
+  }
+
+
+  handleTaskGetWorld() {
+    // this.props.dispatch(Actions.getTask());
   }
 
 
@@ -355,6 +362,10 @@ class Build extends Component {
             height={1200}
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
         </div>
+
+        {/* <button onClick={() => this.handleTaskGetWorld()} style={{cursor: 'pointer', marginRight: '10px', marginTop: '17px'}}>Click!</button>  
+            <p>Click here to get world state from server</p> */}
+
         <div className="Build-command">
           <History />
           <ActionPopup
@@ -399,7 +410,13 @@ class Build extends Component {
         </div>
        {/* <PositionBox x={robot.x} y={robot.y} />        */}
        {this.renderPositionBox()}
+       
+
        <ResetPanel />
+
+       <TaskList/>
+
+
       </div>
     );
   }

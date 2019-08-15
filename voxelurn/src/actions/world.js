@@ -9,6 +9,9 @@ import { getStore } from '../';
 import { STATUS } from 'constants/strings';
 import { worldConfig } from 'constants/defaultMap';
 
+import { taskWorldConfig } from 'constants/taskWorldMap';
+
+
 function sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist }) {
 	let contextCommand = '(:context)';
 
@@ -82,15 +85,30 @@ const Actions = {
 		};
 	},
 
+
+	getTask: (taskId) => {
+
+		return (dispatch) => {
+			dispatch({
+				type: Constants.GET_TASK,
+				taskId
+			});
+		};
+
+	},
+
 	// decision is 0 or 1
 	decisionUpdate: (decision) => {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { candidates, path, world } = getState().world.currentResponse;
-			let url = `http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}?decision=${decision}&sessionId=${sessionId}&candidates=${JSON.stringify(
+			let url = encodeURI(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
 				candidates
-			)}&path=${JSON.stringify(path)}&context=${JSON.stringify(world)}`;
-
+			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
+			console.log(url);
+			console.log(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
+				candidates
+			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
 			return EXAMPLEquery(url)
 				.then((response) => {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
@@ -106,46 +124,74 @@ const Actions = {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
 			const { waterMarkers, robot, history, current_history_idx, currentQueryRemembered, keyPressHistRemembered } = getState().world;
+
+			console.log("world states....")
+			console.log(getState().world)
+
+			const { robotBeforeUserDefinition, worldBeforeUserDefinition } = getState().world;
 			let currentState = [];
 			let context = {
-				height: 10,
-				robot: [ robot.x, robot.y, robot.items ],
-				width: 10,
+				height: 9,
+				// robot: [ robot.x, robot.y, robot.items ],
+				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
+				width: 12,
 				world: []
 			};
-			if (history.length > 0) {
-				const idx =
-					current_history_idx >= 0 && current_history_idx < history.length
-						? current_history_idx
-						: history.length - 1;
+			// if (history.length > 0) {
+			// 	const idx =
+			// 		current_history_idx >= 0 && current_history_idx < history.length
+			// 			? current_history_idx
+			// 			: history.length - 1;
 
-				currentState = history[idx].worldMap.map((c) => {
-					return {
-						x: c.x,
-						y: c.y,
-						type: c.type,
-						color: c.color === null ? 'null' : c.color,
-						shape: c.shape === null ? 'null' : c.shape
-					};
-				});
+			// 	currentState = history[idx].worldMap.map((c) => {
+			// 		return {
+			// 			x: c.x,
+			// 			y: c.y,
+			// 			type: c.type,
+			// 			color: c.color === null ? 'null' : c.color,
+			// 			shape: c.shape === null ? 'null' : c.shape
+			// 		};
+			// 	});
 
-				waterMarkers.forEach((waterMarker) =>
-					currentState.push({
-						x: waterMarker[0],
-						y: waterMarker[1],
-						type: 'water',
-						color: 'null',
-						shape: 'null'
-					})
-				);
+			// 	waterMarkers.forEach((waterMarker) =>
+			// 		currentState.push({
+			// 			x: waterMarker[0],
+			// 			y: waterMarker[1],
+			// 			type: 'water',
+			// 			color: 'null',
+			// 			shape: 'null'
+			// 		})
+			// 	);
 
-				context.world = currentState;
-			}
+			// 	context.world = currentState;
+			// }
+
+			currentState = worldBeforeUserDefinition.worldMap.map((c) => {
+				return {
+					x: c.x,
+					y: c.y,
+					type: c.type,
+					color: c.color === null ? 'null' : c.color,
+					shape: c.shape === null ? 'null' : c.shape
+				};
+			});
+
+			waterMarkers.forEach((waterMarker) =>
+				currentState.push({
+					x: waterMarker[0],
+					y: waterMarker[1],
+					type: 'water',
+					color: 'null',
+					shape: 'null'
+				})
+			);
+
+			context.world = currentState;
 			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
 				keyPressHistRemembered
 			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
-			console.log(url);
 
+			console.log(url)
 			return EXAMPLEquery(url)
 				.then((response) => {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
