@@ -74,8 +74,8 @@ class LoadingPage extends Component {
 							<div />
 						</div>
 						<h1 className="loading-page__loader-text">
-							Our server is fast <br />
-							But sorry your internet is slow...
+							Server is doing work <br />
+							Please wait...
 						</h1>
 					</div>
 				</div>
