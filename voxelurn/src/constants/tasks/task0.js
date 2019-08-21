@@ -1,7 +1,7 @@
  
 const task0 = {
 "water": [ [3, 7], [5, 1], [4, 3] ], 
-"description": "Get one green triangle from location [10,8] then move 6 steps left direction and pick one square.",
+"description": "Get one green triangle from location [10,8] then move 3 steps left direction and pick one square.",
 "robot": [
 2,
 4,
@@ -176,6 +176,28 @@ const task0 = {
 "color": "null",
 "shape": "null"
 },
+
+{
+    "x": 7,
+    "y": 8,
+    "type": "item",
+    "color": "red",
+    "shape": "square"
+    },
+    {
+        "x": 7,
+        "y": 8,
+        "type": "item",
+        "color": "green",
+        "shape": "square"
+        },
+        {
+            "x": 7,
+            "y": 8,
+            "type": "item",
+            "color": "red",
+            "shape": "circle"
+            },
 {
 "x": -1,
 "y": 6,

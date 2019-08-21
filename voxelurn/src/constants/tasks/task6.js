@@ -1,6 +1,6 @@
 const task6 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Move 3 steps right then 4 steps forward and pick a yellow item from that space and in the end step in water",
+"description": "Go to location [3,1] and pick all item from that space then get two triangles from location [10,8] and stay dry",
 "robot": [
 2,
 4,
@@ -135,18 +135,40 @@ const task6 ={
 },
 {
 "x": 3,
-"y": 2,
+"y": 1,
 "type": "item",
 "color": "yellow",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 2,
+"y": 1,
 "type": "item",
 "color": "blue",
 "shape": "square"
 },
+
+{
+    "x": 3,
+    "y": 1,
+    "type": "item",
+    "color": "blue",
+    "shape": "triangle"
+    },
+    {
+        "x": 3,
+        "y": 1,
+        "type": "item",
+        "color": "red",
+        "shape": "square"
+        },
+        {
+            "x": 3,
+            "y": 1,
+            "type": "item",
+            "color": "yellow",
+            "shape": "square"
+            },
 {
 "x": 6,
 "y": 7,

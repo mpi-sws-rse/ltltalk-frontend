@@ -1,5 +1,5 @@
 const task7 ={
-"description": "Get all green item at [0,8] then move forward 4 steps to pick one red circle and then move to water tile.",
+"description": "Get all green item at [0,8] then move 3 steps right to pick one red circle and then move to water tile.",
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 "robot": [
 1,
@@ -135,28 +135,28 @@ const task7 ={
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
 "color": "red",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
 "color": "red",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
 "color": "red",
 "shape": "circle"
 },
 {
 "x": 3,
-"y": 7,
+"y": 8,
 "type": "item",
 "color": "red",
 "shape": "circle"
