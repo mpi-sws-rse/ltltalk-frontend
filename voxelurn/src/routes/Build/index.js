@@ -290,10 +290,10 @@ class Build extends Component {
       const endY = animationPath[animationPath.length - 1].y;
       return <AnimationPositionBox startX={startX} startY={startY} endX={endX} endY={endY} picks={picks} />;
     }
-    else if (status === 'ACCEPT') { 
-      let { x, y } = responses[0].path.find(move => move.action === 'destination'); 
-      return <PositionBox x={x} y={y} />; 
-    }
+    // else if (status === 'ACCEPT') { 
+    //   let { x, y } = responses[0].path.find(move => move.action === 'destination'); 
+    //   return <PositionBox x={x} y={y} />; 
+    // }
     else { 
       let { x, y } = robot;
       return <PositionBox x={x} y={y} />; 
