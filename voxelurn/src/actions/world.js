@@ -376,7 +376,8 @@ const Actions = {
 						} else {
 							/* Remove no-ops */
 							//const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-
+                            console.log("formaval is");
+                            console.log(formval);
 							const responses = formval;
 
 							console.log(query);
@@ -431,12 +432,18 @@ const Actions = {
 						.then((response) => {
 							console.log("server response")
 							console.log(response)
+							responses[0]["path"] = response["path"];
+							dispatch({
+                            	type: Constants.TRY_QUERY,
+                            	responses: responses
+                            							});
+                            return true;
 						})
 						.catch((error) => {
 							alert(`Error in sending formula in example server: ${error}`);
 						});
 							
-							// return true;
+							 //return true;
 						}
 					});
 				})
