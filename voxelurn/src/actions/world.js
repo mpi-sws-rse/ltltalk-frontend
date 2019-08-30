@@ -422,17 +422,27 @@ const Actions = {
 
 						console.log("current states...")
 						console.log(Examplecontext)
+						var all_formulas = [];
+						console.log(responses)
+
+						for (var i = 0; i < responses.length; i++){
+						    all_formulas.push(responses[i]["prettyString"]);
+						}
+
+						console.log(all_formulas);
 		
-						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formula=${JSON.stringify(
-							responses[0]['prettyString']
-						)}`;
+						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=
+						${JSON.stringify(all_formulas)}`;
+
 
 						console.log(url)
 						return EXAMPLEquery(url)
 						.then((response) => {
 							console.log("server response")
 							console.log(response)
-							responses[0]["path"] = response["path"];
+							for (var i =0; i < response["paths"].length; i++){
+							    responses[i]["path"] = response["paths"][i];
+							    }
 							dispatch({
                             	type: Constants.TRY_QUERY,
                             	responses: responses
