@@ -132,40 +132,10 @@ const Actions = {
 			let currentState = [];
 			let context = {
 				height: 9,
-				// robot: [ robot.x, robot.y, robot.items ],
 				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
 				width: 12,
 				world: []
 			};
-			// if (history.length > 0) {
-			// 	const idx =
-			// 		current_history_idx >= 0 && current_history_idx < history.length
-			// 			? current_history_idx
-			// 			: history.length - 1;
-
-			// 	currentState = history[idx].worldMap.map((c) => {
-			// 		return {
-			// 			x: c.x,
-			// 			y: c.y,
-			// 			type: c.type,
-			// 			color: c.color === null ? 'null' : c.color,
-			// 			shape: c.shape === null ? 'null' : c.shape
-			// 		};
-			// 	});
-
-			// 	waterMarkers.forEach((waterMarker) =>
-			// 		currentState.push({
-			// 			x: waterMarker[0],
-			// 			y: waterMarker[1],
-			// 			type: 'water',
-			// 			color: 'null',
-			// 			shape: 'null'
-			// 		})
-			// 	);
-
-			// 	context.world = currentState;
-			// }
-
 			currentState = worldBeforeUserDefinition.worldMap.map((c) => {
 				return {
 					x: c.x,
@@ -376,8 +346,7 @@ const Actions = {
 						} else {
 							/* Remove no-ops */
 							//const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
-                            console.log("formaval is");
-                            console.log(formval);
+
 							const responses = formval;
 
 							console.log(query);
@@ -422,38 +391,22 @@ const Actions = {
 
 						console.log("current states...")
 						console.log(Examplecontext)
-						var all_formulas = [];
-						console.log(responses)
-
-						for (var i = 0; i < responses.length; i++){
-						    all_formulas.push(responses[i]["prettyString"]);
-						}
-
-						console.log(all_formulas);
 		
-						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=
-						${JSON.stringify(all_formulas)}`;
-
+						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formula=${JSON.stringify(
+							responses[0]['prettyString']
+						)}`;
 
 						console.log(url)
 						return EXAMPLEquery(url)
 						.then((response) => {
 							console.log("server response")
 							console.log(response)
-							for (var i =0; i < response["paths"].length; i++){
-							    responses[i]["path"] = response["paths"][i];
-							    }
-							dispatch({
-                            	type: Constants.TRY_QUERY,
-                            	responses: responses
-                            							});
-                            return true;
 						})
 						.catch((error) => {
 							alert(`Error in sending formula in example server: ${error}`);
 						});
 							
-							 //return true;
+							// return true;
 						}
 					});
 				})
@@ -469,17 +422,6 @@ const Actions = {
 				});
 		};
 	},
-
-
-
-
-
-
-
-
-
-
-
 	pushToHistory: (el) => {
 		return (dispatch) => {
 			dispatch({
