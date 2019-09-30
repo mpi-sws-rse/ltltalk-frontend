@@ -1,6 +1,6 @@
 const task5 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Go to the location [1,2] and pick one green circle, one yellow triangle then take them at location [3,3].",
+"description": "Move 3 steps down then 4 steps right and pick a yellow item from that space and in the end step in water",
 "robot": [
 0,
 3,

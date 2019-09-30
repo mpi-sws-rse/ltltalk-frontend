@@ -1,6 +1,6 @@
 const task8 ={
-"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Visit at [3,4] and pick one red circle , one green square and one yellow triangle then move 3 step forward pick two red items while staying dry.",
+"water": [ [0,3],[3, 7], [5, 5], [9, 2],[9,8] ], 
+"description": "Visit at [3,4] and pick one red circle , one green square and one yellow triangle then move 3 step right pick two red items while staying dry.",
 "robot": [
 0,
 4,
@@ -158,16 +158,31 @@ const task8 ={
 "x": 3,
 "y": 4,
 "type": "item",
-"color": "blue",
+"color": "yellow",
 "shape": "triangle"
 },
 {
-"x": 3,
-"y": 8,
+"x": 7,
+"y": 4,
 "type": "item",
-"color": "blue",
+"color": "red",
 "shape": "circle"
 },
+{
+    "x": 7,
+    "y": 4,
+    "type": "item",
+    "color": "red",
+    "shape": "circle"
+    },
+    {
+        "x": 7,
+        "y": 4,
+        "type": "item",
+        "color": "red",
+        "shape": "square"
+        },
+
 {
 "x": 3,
 "y": 8,

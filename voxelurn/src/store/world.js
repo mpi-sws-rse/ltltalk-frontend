@@ -318,7 +318,7 @@ export default function reducer(state = initialState, action = {}) {
       if (state.current_history_idx >= 0) {
         history = history.slice(0, state.current_history_idx + 1)
       }
-      console.log('action.responses')
+      console.log('action.responses +=+=');
       console.log(action.responses)
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:

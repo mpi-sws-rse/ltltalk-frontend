@@ -132,40 +132,10 @@ const Actions = {
 			let currentState = [];
 			let context = {
 				height: 9,
-				// robot: [ robot.x, robot.y, robot.items ],
 				robot: [robotBeforeUserDefinition.x, robotBeforeUserDefinition.y, robotBeforeUserDefinition.items ],
 				width: 12,
 				world: []
 			};
-			// if (history.length > 0) {
-			// 	const idx =
-			// 		current_history_idx >= 0 && current_history_idx < history.length
-			// 			? current_history_idx
-			// 			: history.length - 1;
-
-			// 	currentState = history[idx].worldMap.map((c) => {
-			// 		return {
-			// 			x: c.x,
-			// 			y: c.y,
-			// 			type: c.type,
-			// 			color: c.color === null ? 'null' : c.color,
-			// 			shape: c.shape === null ? 'null' : c.shape
-			// 		};
-			// 	});
-
-			// 	waterMarkers.forEach((waterMarker) =>
-			// 		currentState.push({
-			// 			x: waterMarker[0],
-			// 			y: waterMarker[1],
-			// 			type: 'water',
-			// 			color: 'null',
-			// 			shape: 'null'
-			// 		})
-			// 	);
-
-			// 	context.world = currentState;
-			// }
-
 			currentState = worldBeforeUserDefinition.worldMap.map((c) => {
 				return {
 					x: c.x,
@@ -380,14 +350,63 @@ const Actions = {
 							const responses = formval;
 
 							console.log(query);
+							console.log("pretty string is**************")
+							console.log(responses[0]["prettyString"])
 							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: formval.length } }));
 							dispatch({
 								type: Constants.TRY_QUERY,
 								responses: responses
 							});
-							console.log('RESPONSES');
-							console.log(responses);
-							return true;
+						let currentState = [];
+						const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1;
+						const robot = history[idx].robot;
+						const robotContext = [ robot.x, robot.y, robot.items ];
+						currentState = history[idx].worldMap.map((c) => {
+							return {
+								x: c.x,
+								y: c.y,
+								type: c.type,
+								color: c.color === null ? 'null' : c.color,
+								shape: c.shape === null ? 'null' : c.shape
+							};
+						});
+
+						waterMarkers.forEach((waterMarker) =>
+							currentState.push({
+							x: waterMarker[0],
+							y: waterMarker[1],
+							type: 'water',
+							color: 'null',
+							shape: 'null'
+							})
+						);
+						let Examplecontext = {
+							height: 9,
+							robot: robotContext,
+							width: 12,
+							// world: currentState
+							world: []
+						};
+						Examplecontext.world = currentState;
+
+						console.log("current states...")
+						console.log(Examplecontext)
+		
+						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formula=${JSON.stringify(
+							responses[0]['prettyString']
+						)}`;
+
+						console.log(url)
+						return EXAMPLEquery(url)
+						.then((response) => {
+							console.log("server response")
+							console.log(response)
+						})
+						.catch((error) => {
+							alert(`Error in sending formula in example server: ${error}`);
+						});
+							
+							// return true;
 						}
 					});
 				})
@@ -403,7 +422,6 @@ const Actions = {
 				});
 		};
 	},
-
 	pushToHistory: (el) => {
 		return (dispatch) => {
 			dispatch({

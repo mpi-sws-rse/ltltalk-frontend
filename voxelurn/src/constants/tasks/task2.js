@@ -216,14 +216,14 @@ const task2 ={
 "x": 10,
 "y": 7,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {
 "x": 10,
 "y": 7,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {
