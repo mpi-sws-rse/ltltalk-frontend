@@ -142,3 +142,5 @@ function getDefaultMap(/*config = defaultConfig*/) {
 }
 
 export const worldConfig = getDefaultMap();
+export const WORLD_HEIGHT = 9;
+export const WORLD_WIDTH = 12;
