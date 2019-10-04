@@ -1102,7 +1102,56 @@ const Actions = {
 							//responses.value.path = exResponse.paths[0];
 							//responses.value.path = exResponse.paths[0];
 
-							responses[0].path = [[2, 4, "path", "null", "null", true],[3, 4, "destination", "null", "null", true]];
+							responses[0].path = [{
+                                                   "x": 2,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 },
+                                                 {
+                                                   "x": 3,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 },
+                                                 {
+                                                   "x": 4,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 },
+                                                 {
+                                                   "x": 5,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 },
+                                                 {
+                                                   "x": 6,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 },
+                                                 {
+                                                   "x": 7,
+                                                   "y": 4,
+                                                   "action": "path",
+                                                   "color": "null",
+                                                   "shape": "null",
+                                                   "possible": true
+                                                 }
+
+                                                 ];
 							responses[0].robot = {x: modified_exResponse.world.robot[0], y: modified_exResponse.world.robot[1], type:"robot", items:[]};
                             //responses[0].robot = [2,4,[]];
 							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: responses.length } }));
