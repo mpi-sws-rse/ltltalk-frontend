@@ -53,6 +53,8 @@ export default function reducer(state = initialState, action = {}) {
   let nextRobotPosition;
   let currentWorldMap;
   const currentRobot = state.robot;
+  console.log("current robot is ");
+  console.log(currentRobot);
   const currentKeyPressHist = state.keyPressHist;
   const currentRobotX = currentRobot.x;
   const currentRobotY = currentRobot.y;
@@ -161,7 +163,12 @@ export default function reducer(state = initialState, action = {}) {
         robot: state.history[state.history.length - 1].robot,
         waterMarkers: state.waterMarkers
       };
+
+      // this is a terrible mapping, but don't want to change it immediately as I don't know what it will break later
       const currentAnimation = { ...action.response };
+
+      const query = { text: action.response.query };
+
 
       const tempHistory = { ...state.history[state.history.length - 1], worldMap: formattedWorldMap, robot: formattedRobot };
       return {
@@ -172,7 +179,8 @@ export default function reducer(state = initialState, action = {}) {
         isAnimationEnabled: true,
         stateBeforeAnimation: stateBeforeAnimation,
         currentAnimation: currentAnimation,
-        currentResponse: response
+        currentResponse: response,
+        query: query
       };
 
     case Constants.START_USER_DEFINITION:
@@ -320,6 +328,9 @@ export default function reducer(state = initialState, action = {}) {
       }
       console.log('action.responses +=+=');
       console.log(action.responses)
+      console.log("history");
+      console.log(history);
+      // could manipulating history be of a help here?
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]

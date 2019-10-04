@@ -101,6 +101,10 @@ const Actions = {
 	decisionUpdate: (decision) => {
 		return (dispatch, getState) => {
 			const { sessionId } = getState().user;
+			const queryText = getState().world.currentQueryRemembered;
+			console.log(getState());
+			console.log("query text is");
+			console.log(queryText);
 			const { candidates, path, world } = getState().world.currentResponse;
 			let url = encodeURI(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
 				candidates
@@ -111,8 +115,39 @@ const Actions = {
 			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
 			return EXAMPLEquery(url)
 				.then((response) => {
+				    console.log("got the response:");
+				    console.log(response);
+
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
 					dispatch({ type: Constants.FETCH_ANIMATION, response: response });
+					if (response.status === "ok"){
+                        let mode=":def_ret";
+                        const defineAs = response.candidates;
+                        const sempreQuery = `(${mode} "${/*processed*/defineAs}" ${JSON.stringify(JSON.stringify([queryText]))})`;
+
+                        console.log(queryText);
+                        console.log(sempreQuery);
+                        return SEMPREquery({q: sempreQuery, sessionId: sessionId})
+                        .then((resp) => {
+                            if (resp.lines && resp.lines.length > 0) {
+                                    /* Display errors and quit if there errors */
+                                    alert(`There were error(s) in this definition: ${resp.lines.join(", ")}`)
+                                    return
+                                  }
+
+                                  const { formula: topFormula } = resp.candidates[0]
+
+//                                  dispatch(Logger.log({ type: "define", msg: { defineAs: defineAs, idx: idx, length: defineHist.length, formula: topFormula } }))
+//
+//                                  dispatch({
+//                                    type: Constants.DEFINE,
+//                                    text: defineAs,
+//                                    idx: idx,
+//                                    formula: topFormula
+//                                  })
+                        }
+                        )
+					}
 				})
 				.catch((error) => {
 					alert(`Error in fetchAnimation action: ${error}`);
@@ -325,6 +360,8 @@ const Actions = {
 					return SEMPREquery(cmds).then((response) => {
 						//console.log("received response: "+JSON.stringify(response));
 						console.log(response);
+						var modified_response = {"JSON":{"candidates":[{"score":11,"prob":"NaN","prettyString":"F(at_7_4)","anchored":true,"formula":"(:eventually (: at (number 7) (number 4)))","value":"{\"status\":\"\",\"path\":[]}"}],"stats":{"type":"q","size":1,"status":"Core","author":"None","walltime":0.001718432,"count":83},"lines":[]}};
+						console.log(modified_response);
 						if (!response) throw new Error('empty_response');
 
 						if (response.lines && response.lines.length > 0) {
@@ -335,28 +372,31 @@ const Actions = {
 						const formval = parseSEMPRE(response.candidates);
 
 						const exampleQuery = { query: q, context: cmds, path: keyPressHist, sessionId: sessionId };
+						console.log("I got formval ++++++++++++");
+						console.log(formval);
 
 						if (formval === null || formval === undefined) {
 							dispatch(Logger.log({ type: 'tryFail', msg: { query: q } }));
 							dispatch({
 								type: Constants.START_USER_DEFINITION
 							});
-							// EXAMPLEquery(exampleQuery)
+
 							return false;
 						} else {
 							/* Remove no-ops */
 							//const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1
 
-							const responses = formval;
+							let responses = formval;
 
 							console.log(query);
 							console.log("pretty string is**************")
 							console.log(responses[0]["prettyString"])
-							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: formval.length } }));
-							dispatch({
-								type: Constants.TRY_QUERY,
-								responses: responses
-							});
+//							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: formval.length } }));
+//							dispatch({
+//								type: Constants.TRY_QUERY,
+//								responses: responses
+//							});
+
 						let currentState = [];
 						const idx = current_history_idx >= 0 && current_history_idx < history.length ? current_history_idx : history.length - 1;
 						const robot = history[idx].robot;
@@ -391,16 +431,35 @@ const Actions = {
 
 						console.log("current states...")
 						console.log(Examplecontext)
+						const formulasList = responses.map(x => x['prettyString']);
+
+						console.log(formulasList);
+
+
 		
-						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formula=${JSON.stringify(
-							responses[0]['prettyString']
+						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=${JSON.stringify(
+							formulasList
 						)}`;
 
 						console.log(url)
 						return EXAMPLEquery(url)
-						.then((response) => {
+						.then((exResponse) => {
 							console.log("server response")
-							console.log(response)
+							console.log(exResponse);
+							//responses.path = exResponse.paths[0];
+							//responses.paths = exResponse.paths;
+							//responses.value.path = exResponse.paths[0];
+							//responses.value.path = exResponse.paths[0];
+
+							responses[0].path = [[2, 4, "path", "null", "null", true],[3, 4, "destination", "null", "null", true]];
+							responses[0].robot = {x: exResponse.world.robot[0], y: exResponse.world.robot[1], type:"robot", items:[]};
+                            //responses[0].robot = [2,4,[]];
+							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: responses.length } }));
+							dispatch({
+                            		type: Constants.TRY_QUERY,
+                            		responses: responses
+                            	});
+                            return true;
 						})
 						.catch((error) => {
 							alert(`Error in sending formula in example server: ${error}`);
@@ -437,7 +496,7 @@ const Actions = {
 			const { sessionId } = getState().user;
 
 			const selected = responses[selectedResp];
-
+            console.log("inside accept path --- hihi");
 			if (selected.error) {
 				alert(
 					"You can't accept a response with an error in it. Please accept another response or try a different query."
