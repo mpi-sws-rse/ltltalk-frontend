@@ -351,15 +351,14 @@ const Actions = {
 				status: STATUS.LOADING
 			});
 
-			return sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist })
-				.then((eh) => {
+			//return sendContext({ history, current_history_idx, sessionId, waterMarkers, keyPressHist })
+				//.then((eh) => {
 					//q = processMacros(q);
 					const query = `(:q ${JSON.stringify(q)})`;
 					const cmds = { q: query, sessionId: sessionId };
 					console.log('sending query ' + query);
-					return SEMPREquery(cmds).then((response) => {
+					//return SEMPREquery(cmds).then((response) => {
 						//console.log("received response: "+JSON.stringify(response));
-						console.log(response);
 						var modified_response = {"candidates":[{"score":11,"prob":"NaN","prettyString":"F(at_7_4)","anchored":true,"formula":"(:eventually (: at (number 7) (number 4)))","value":"{\"status\":\"\",\"path\":[]}"}],"stats":{"type":"q","size":1,"status":"Core","author":"None","walltime":0.001718432,"count":83},"lines":[]};
 						console.log(modified_response);
 						if (!modified_response) throw new Error('empty_modified_response');
@@ -437,50 +436,708 @@ const Actions = {
 
 
 		
-						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=${JSON.stringify(
-							formulasList
-						)}`;
+						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=${JSON.stringify(formulasList)}`;
 
 						console.log(url)
-						return EXAMPLEquery(url)
-						.then((exResponse) => {
-							console.log("server response")
-							console.log(exResponse);
+						//return EXAMPLEquery(url)
+						//.then((exResponse) => {
+						console.log("server response")
+							//console.log(exResponse);
+						var modified_exResponse = {
+                                                        "paths": [
+                                                          [
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 2,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 3,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 4,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 5,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 6,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "action": "path",
+                                                              "color": "null",
+                                                              "possible": "true",
+                                                              "shape": "null",
+                                                              "x": 7,
+                                                              "y": 4
+                                                            }
+                                                          ]
+                                                        ],
+                                                        "world": {
+                                                          "height": 9,
+                                                          "robot": [
+                                                            2,
+                                                            4,
+                                                            []
+                                                          ],
+                                                          "width": 12,
+                                                          "world": [
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 0,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 1,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 2,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 3,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 4,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 5,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 7,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 9,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 10,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 11,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 9
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "blue",
+                                                              "shape": "circle",
+                                                              "type": "item",
+                                                              "x": 3,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "yellow",
+                                                              "shape": "square",
+                                                              "type": "item",
+                                                              "x": 3,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "green",
+                                                              "shape": "triangle",
+                                                              "type": "item",
+                                                              "x": 10,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "red",
+                                                              "shape": "triangle",
+                                                              "type": "item",
+                                                              "x": 10,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 8
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 7
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": 7
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 7
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 0,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 1,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 2,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 3,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 4,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 7,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 10,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 11,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 6
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 5
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 5
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "red",
+                                                              "shape": "circle",
+                                                              "type": "item",
+                                                              "x": 7,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "blue",
+                                                              "shape": "circle",
+                                                              "type": "item",
+                                                              "x": 7,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "green",
+                                                              "shape": "square",
+                                                              "type": "item",
+                                                              "x": 7,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "green",
+                                                              "shape": "circle",
+                                                              "type": "item",
+                                                              "x": 7,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 4
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 9,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 10,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 11,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 3
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 2,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 3,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 4,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 5,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 7,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 2
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": 1
+                                                            },
+                                                            {
+                                                              "color": "blue",
+                                                              "shape": "square",
+                                                              "type": "item",
+                                                              "x": 11,
+                                                              "y": 1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": 0
+                                                            },
+                                                            {
+                                                              "color": "red",
+                                                              "shape": "triangle",
+                                                              "type": "item",
+                                                              "x": 4,
+                                                              "y": 0
+                                                            },
+                                                            {
+                                                              "color": "yellow",
+                                                              "shape": "triangle",
+                                                              "type": "item",
+                                                              "x": 4,
+                                                              "y": 0
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": 0
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": -1,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 0,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 1,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 2,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 3,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 4,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 5,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 6,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 7,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 8,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 9,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 10,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 11,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "wall",
+                                                              "x": 12,
+                                                              "y": -1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "water",
+                                                              "x": 3,
+                                                              "y": 7
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "water",
+                                                              "x": 5,
+                                                              "y": 1
+                                                            },
+                                                            {
+                                                              "color": "null",
+                                                              "shape": "null",
+                                                              "type": "water",
+                                                              "x": 9,
+                                                              "y": 5
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                             console.log(modified_exResponse);
 							//responses.path = exResponse.paths[0];
 							//responses.paths = exResponse.paths;
 							//responses.value.path = exResponse.paths[0];
 							//responses.value.path = exResponse.paths[0];
 
 							responses[0].path = [[2, 4, "path", "null", "null", true],[3, 4, "destination", "null", "null", true]];
-							responses[0].robot = {x: exResponse.world.robot[0], y: exResponse.world.robot[1], type:"robot", items:[]};
+							responses[0].robot = {x: modified_exResponse.world.robot[0], y: modified_exResponse.world.robot[1], type:"robot", items:[]};
                             //responses[0].robot = [2,4,[]];
 							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: responses.length } }));
 							dispatch({
                             		type: Constants.TRY_QUERY,
                             		responses: responses
                             	});
-                            return true;
-						})
-						.catch((error) => {
-							alert(`Error in sending formula in example server: ${error}`);
-						});
+                            return Promise.resolve(true);
+                            }
+						//})
+//						.catch((error) => {
+//							alert(`Error in sending formula in example server: ${error}`);
+//						});
 							
 							// return true;
-						}
-					});
-				})
-				.catch((e) => {
-					if (e.message === 'empty_response') {
-						alert('Could not contact server');
-					}
-					//alert("Query could no be processed by server.");
-					//console.log("tryQuery error?", e);
-					//console.log(JSON.stringify(e, null, 4));
-					console.log(e);
-					return null;
-				});
-		};
-	},
+						//}
+					//});
+//				})
+//				.catch((e) => {
+//					if (e.message === 'empty_response') {
+//						alert('Could not contact server');
+//					}
+//					//alert("Query could no be processed by server.");
+//					//console.log("tryQuery error?", e);
+//					//console.log(JSON.stringify(e, null, 4));
+//					console.log(e);
+//					return null;
+//				});
+		//};
+//	},
+//});
+};
+},
+
+
 	pushToHistory: (el) => {
 		return (dispatch) => {
 			dispatch({
@@ -758,5 +1415,6 @@ const Actions = {
 		};
 	}
 };
+
 
 export default Actions;
