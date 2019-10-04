@@ -360,16 +360,16 @@ const Actions = {
 					return SEMPREquery(cmds).then((response) => {
 						//console.log("received response: "+JSON.stringify(response));
 						console.log(response);
-						var modified_response = {"JSON":{"candidates":[{"score":11,"prob":"NaN","prettyString":"F(at_7_4)","anchored":true,"formula":"(:eventually (: at (number 7) (number 4)))","value":"{\"status\":\"\",\"path\":[]}"}],"stats":{"type":"q","size":1,"status":"Core","author":"None","walltime":0.001718432,"count":83},"lines":[]}};
+						var modified_response = {"candidates":[{"score":11,"prob":"NaN","prettyString":"F(at_7_4)","anchored":true,"formula":"(:eventually (: at (number 7) (number 4)))","value":"{\"status\":\"\",\"path\":[]}"}],"stats":{"type":"q","size":1,"status":"Core","author":"None","walltime":0.001718432,"count":83},"lines":[]};
 						console.log(modified_response);
-						if (!response) throw new Error('empty_response');
+						if (!modified_response) throw new Error('empty_modified_response');
 
-						if (response.lines && response.lines.length > 0) {
+						if (modified_response.lines && modified_response.lines.length > 0) {
 							/* Alert any errors in the query */
-							alert(response.lines.join('; '));
+							alert(modified_response.lines.join('; '));
 						}
 
-						const formval = parseSEMPRE(response.candidates);
+						const formval = parseSEMPRE(modified_response.candidates);
 
 						const exampleQuery = { query: q, context: cmds, path: keyPressHist, sessionId: sessionId };
 						console.log("I got formval ++++++++++++");
