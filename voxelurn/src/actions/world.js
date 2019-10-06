@@ -123,9 +123,13 @@ const Actions = {
 					if (response.status === "ok"){
                         let mode=":def_ret";
                         const defineAs = response.candidates;
-                        const sempreQuery = `(${mode} "${/*processed*/defineAs}" ${JSON.stringify(JSON.stringify([queryText]))})`;
+                        //const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
+                        console.log("define as is %s, and defineHist is %s", defineAs, JSON.stringify([queryText]));
+                        const sempreQuery = `(${mode} ${JSON.stringify(JSON.stringify([queryText]))} "${defineAs}")`;
+                        console.log("query is %s", sempreQuery);
 
                         console.log(queryText);
+
                         console.log(sempreQuery);
                         return SEMPREquery({q: sempreQuery, sessionId: sessionId})
                         .then((resp) => {
@@ -577,6 +581,7 @@ const Actions = {
 			}
 
 			//const processed = processMacros(defineAs);
+
 			const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
 
 			/* Submit the define command */
