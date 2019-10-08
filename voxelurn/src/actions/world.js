@@ -456,9 +456,10 @@ const Actions = {
 							console.log(exResponse.paths);
 
 							if (exResponse.status === "ok"){
-
-							responses[0].path = exResponse.paths[0];
-							responses[0].robot = {x: exResponse.world.robot[0], y: exResponse.world.robot[1], type:"robot", items:[]};
+                            for (var i = 0; i < responses.length; ++i){
+							    responses[i].path = exResponse.paths[i];
+							    responses[i].robot = {x: exResponse.world.robot[0], y: exResponse.world.robot[1], type:"robot", items:[]};
+							    }
                             //responses[0].robot = [2,4,[]];
 							dispatch(Logger.log({ type: 'try', msg: { query: q, responses: responses.length } }));
 							dispatch({
