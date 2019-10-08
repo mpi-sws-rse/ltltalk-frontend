@@ -121,38 +121,47 @@ const Actions = {
 					dispatch({ type: Constants.TOGGLE_LOADING, isLoading: false });
 					dispatch({ type: Constants.FETCH_ANIMATION, response: response });
 					if (response.status === "ok"){
-                        let mode=":def_ret";
-                        const defineAs = response.candidates;
-                        //const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
-                        console.log("define as is %s, and defineHist is %s", defineAs, JSON.stringify([queryText]));
-                        const sempreQuery = `(${mode} ${JSON.stringify(JSON.stringify([queryText]))} "${defineAs}")`;
-                        console.log("query is %s", sempreQuery);
 
-                        console.log(queryText);
+					    const formal_language_def = response.formatted_candidates[0]
+					    const query = `(:q ${JSON.stringify(formal_language_def)})`;
+                        const cmds = { q: query, sessionId: sessionId };
+                        console.log('sending query ' + query);
+                        return SEMPREquery(cmds).then((try_response) => {
+                            const formula = try_response.candidates[0].formula;
+                            console.log("formula is %",formula);
 
-                        console.log(sempreQuery);
-                        return SEMPREquery({q: sempreQuery, sessionId: sessionId})
-                        .then((resp) => {
-                            if (resp.lines && resp.lines.length > 0) {
-                                    /* Display errors and quit if there errors */
-                                    alert(`There were error(s) in this definition: ${resp.lines.join(", ")}`)
-                                    return
-                                  }
+                            let mode=":def_ret";
 
-                                  const { formula: topFormula } = resp.candidates[0]
+                            //const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
 
-//                                  dispatch(Logger.log({ type: "define", msg: { defineAs: defineAs, idx: idx, length: defineHist.length, formula: topFormula } }))
-//
-//                                  dispatch({
-//                                    type: Constants.DEFINE,
-//                                    text: defineAs,
-//                                    idx: idx,
-//                                    formula: topFormula
-//                                  })
+                            const sempreQuery = `(${mode} ${JSON.stringify(JSON.stringify(queryText))} ${JSON.stringify(JSON.stringify([[formal_language_def, formula]]))})`;
+                            console.log("query is %s", sempreQuery);
+
+                            console.log(queryText);
+
+                            console.log(sempreQuery);
+                            return SEMPREquery({q: sempreQuery, sessionId: sessionId})
+                            .then((resp) => {
+                                if (resp.lines && resp.lines.length > 0) {
+                                        /* Display errors and quit if there errors */
+                                        alert(`There were error(s) in this definition: ${resp.lines.join(", ")}`)
+                                        return
+                                      }
+
+                                      const { formula: topFormula } = resp.candidates[0]
+
+    //                                  dispatch(Logger.log({ type: "define", msg: { defineAs: defineAs, idx: idx, length: defineHist.length, formula: topFormula } }))
+    //
+    //                                  dispatch({
+    //                                    type: Constants.DEFINE,
+    //                                    text: defineAs,
+    //                                    idx: idx,
+    //                                    formula: topFormula
+    //                                  })
+                            })
+                          })
                         }
-                        )
-					}
-				})
+                    })
 				.catch((error) => {
 					alert(`Error in fetchAnimation action: ${error}`);
 				});
