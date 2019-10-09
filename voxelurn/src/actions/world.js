@@ -134,7 +134,7 @@ const Actions = {
 
                             //const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
 
-                            const sempreQuery = `(${mode} ${JSON.stringify(JSON.stringify(queryText))} ${JSON.stringify(JSON.stringify([[formal_language_def, formula]]))})`;
+                            const sempreQuery = `(${mode} ${JSON.stringify(queryText)} ${JSON.stringify(JSON.stringify([[formal_language_def, formula]]))})`;
                             console.log("query is %s", sempreQuery);
 
                             console.log(queryText);
