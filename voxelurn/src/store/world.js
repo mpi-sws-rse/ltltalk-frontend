@@ -19,7 +19,7 @@ const initialState = {
     formula: "(initial)" }],
   responses: [],
   pointMarkers: [], 
-  waterMarkers: [ [3, 7], [5, 1], [9, 5] ], 
+  waterMarkers: [ [3, 7], [5, 1], [9, 5], [4,4] ],
   wallMarkers: worldConfig.walls,
   current_history_idx: -1,
   status: STATUS.TRY,
@@ -326,28 +326,14 @@ export default function reducer(state = initialState, action = {}) {
       if (state.current_history_idx >= 0) {
         history = history.slice(0, state.current_history_idx + 1)
       }
-      console.log('action.responses +=+=');
-      console.log(action.responses)
-      console.log("history");
-      console.log(history);
+
       // could manipulating history be of a help here?
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]
       return { ...state, history: newHistory, responses: [], status: STATUS.TRY, query: "" }
     case Constants.DEFINE:
-      // TODO The "value" here will have to be changed
-      let collapsedHistory = [...state.history.slice(0, action.idx), {
-        text: action.text,
-        //value: state.history[state.history.length - 1].value,
-        worldMap: state.history[state.history.length - 1].worldMap,
-        robot: state.history[state.history.length - 1].robot,
-        path: [],
-        formula: action.formula
-      }]
-      if (collapsedHistory.length === 0) collapsedHistory = initialState.history
-      else if (collapsedHistory.length === 1) collapsedHistory = [...initialState.history, ...collapsedHistory]
-      return { ...state, history: collapsedHistory, defining: false, defineN: null, query: "", status: STATUS.TRY, dictionary: [] }
+      return { ...state, defining: false, defineN: null, query: "", status: STATUS.TRY, dictionary: [] }
     case Constants.SET_STATUS:
       return { ...state, status: action.status }
     ///////

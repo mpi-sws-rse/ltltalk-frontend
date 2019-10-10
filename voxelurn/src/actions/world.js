@@ -150,14 +150,12 @@ const Actions = {
 
                                       const { formula: topFormula } = resp.candidates[0]
 
-    //                                  dispatch(Logger.log({ type: "define", msg: { defineAs: defineAs, idx: idx, length: defineHist.length, formula: topFormula } }))
-    //
-    //                                  dispatch({
-    //                                    type: Constants.DEFINE,
-    //                                    text: defineAs,
-    //                                    idx: idx,
-    //                                    formula: topFormula
-    //                                  })
+                                      dispatch(Logger.log({ type: "define", msg: { defineAs: formal_language_def }}));
+
+                                      dispatch({
+                                        type: Constants.DEFINE,
+                                        text: queryText,
+                                      })
                             })
                           })
                         }
@@ -471,6 +469,11 @@ const Actions = {
                             else
                             {
                                 alert("can not find the path");
+                                dispatch({
+                                    type: Constants.TRY_QUERY,
+                                    responses: responses
+                                                            	});
+                                return true;
                             }
 
 						})
@@ -562,64 +565,7 @@ const Actions = {
 		};
 	},
 
-	define: (idx) => {
-		return (dispatch, getState) => {
-			const { sessionId } = getState().user;
-			const { history, query } = getState().world;
 
-			if (idx === history.length - 1) {
-				alert(
-					'The definition body cannot be empty. If you have tried a command, make sure to accept it first.'
-				);
-				return;
-			}
-			const text = history[idx] !== undefined ? history[idx].text : '';
-			const defineAs = text !== '' ? text : query;
-
-			const defineHist = history
-				.slice(idx + 1, history.length)
-				//.map(h => [processMacros(h.text), h.formula])
-				.map((h) => [ h.text, h.formula ])
-				.filter((h) => h.type !== 'pin');
-
-			// scope multiline definitions by default
-			let mode = ':def';
-			if (defineHist.length <= 1) {
-				mode = ':def_ret';
-			} else if (defineHist.length === history.length - 2) {
-				mode = ':def_iso';
-			}
-
-			//const processed = processMacros(defineAs);
-
-			const sempreQuery = `(${mode} "${/*processed*/ defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`;
-
-			/* Submit the define command */
-			SEMPREquery({ q: sempreQuery, sessionId: sessionId }).then((r) => {
-				if (r.lines && r.lines.length > 0) {
-					/* Display errors and quit if there errors */
-					alert(`There were error(s) in this definition: ${r.lines.join(', ')}`);
-					return;
-				}
-
-				const { formula: topFormula } = r.candidates[0];
-
-				dispatch(
-					Logger.log({
-						type: 'define',
-						msg: { defineAs: defineAs, idx: idx, length: defineHist.length, formula: topFormula }
-					})
-				);
-
-				dispatch({
-					type: Constants.DEFINE,
-					text: defineAs,
-					idx: idx,
-					formula: topFormula
-				});
-			});
-		};
-	},
 
 	revert: (idx) => {
 		return (dispatch) => {
