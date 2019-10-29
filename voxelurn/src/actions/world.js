@@ -105,14 +105,12 @@ const Actions = {
 			console.log(getState());
 			console.log("query text is");
 			console.log(queryText);
-			const { candidates, path, world } = getState().world.currentResponse;
+			const { candidates, path, world, trace, actions } = getState().world.currentResponse;
 			let url = encodeURI(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
-				candidates
-			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
+				candidates))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}&actions=${JSON.stringify(actions)}`);
+
 			console.log(url);
-			console.log(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
-				candidates
-			))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}`);
+
 			return EXAMPLEquery(url)
 				.then((response) => {
 				    console.log("got the response:");
