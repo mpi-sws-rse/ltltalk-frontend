@@ -1,6 +1,6 @@
 const task6 ={
-"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Go to location [3,1] and pick all item from that space then get two triangles from location [10,8] and stay dry",
+"water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8],[1,1]],
+"description": "get one item from [1,2] and one from [3,1]  and in the process never step on a water tile",
 "robot": [
 2,
 4,

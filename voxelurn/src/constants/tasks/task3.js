@@ -1,6 +1,6 @@
 const task3 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Get one blue square from location [11,1] and move one step down then 5 steps left to pick one green item.",
+"description": "take all green from [7,4] to water",
 "robot": [
 1,
 0,

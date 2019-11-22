@@ -1,6 +1,6 @@
 const task4 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
-"description": "Go to the location [1,2] and pick one green circle, one yellow triangle then take them at location [3,3].",
+"description": "pick two squares from [4,0]",
 "robot": [
 2,
 4,
@@ -482,6 +482,13 @@ const task4 ={
 "type": "item",
 "color": "yellow",
 "shape": "square"
+},
+{
+"x": 4,
+"y": 0,
+"type": "item",
+"color": "yellow",
+"shape": "triangle"
 },
 {
 "x": 12,

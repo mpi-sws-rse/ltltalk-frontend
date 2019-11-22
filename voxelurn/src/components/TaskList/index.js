@@ -45,6 +45,7 @@ class TaskList extends Component {
 		}
 		else {
 			var names = [
+			    'Task 0',
 				'Task 1',
 				'Task 2',
 				'Task 3',
@@ -53,8 +54,7 @@ class TaskList extends Component {
 				'Task 6',
 				'Task 7',
 				'Task 8',
-				'Task 9',
-				'Task 10'
+				'Task 9'
 			];
 			const that = this;
 

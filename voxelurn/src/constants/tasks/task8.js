@@ -1,6 +1,6 @@
 const task8 ={
-"water": [ [0,3],[3, 7], [5, 5], [9, 2],[9,8] ], 
-"description": "Visit at [3,4] and pick one red circle , one green square and one yellow triangle then move 3 step right pick two red items while staying dry.",
+"water": [ [0,4], [0,3],[1,3], [2,3], [4,3], [3,3], [5,3], [5,4], [3, 7], [5, 5], [9, 2],[9,8] ],
+"description": "reach [5,4] by only by going through the water",
 "robot": [
 0,
 4,

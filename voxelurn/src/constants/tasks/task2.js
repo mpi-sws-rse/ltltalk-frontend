@@ -1,7 +1,7 @@
 const task2 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 
-"description": "Get one red triangle at location [10,7] while staying dry.",
+"description": "bring one green from [7,4] to [3,4]",
 
 "robot": [
 2,

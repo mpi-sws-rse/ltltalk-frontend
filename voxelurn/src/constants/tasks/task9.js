@@ -1,7 +1,7 @@
 const task9 ={
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 
-"description": "Get two red items with circle or square shaped from location [9,4] then move 4 steps forward to move in water",
+"description": "first get one red item from [7,4] and afterwards one green item from [10,8]",
 "robot": [
 2,
 4,
@@ -135,29 +135,15 @@ const task9 ={
 "shape": "null"
 },
 {
-"x": 9,
-"y": 4,
+"x": 3,
+"y": 8,
 "type": "item",
-"color": "red",
-"shape": "square"
-},
-{
-"x": 9,
-"y": 4,
-"type": "item",
-"color": "red",
+"color": "green",
 "shape": "circle"
 },
 {
-"x": 9,
-"y": 4,
-"type": "item",
-"color": "green",
-"shape": "square"
-},
-{
-"x": 9,
-"y": 4,
+"x": 3,
+"y": 8,
 "type": "item",
 "color": "green",
 "shape": "square"
@@ -173,14 +159,14 @@ const task9 ={
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {
 "x": 10,
 "y": 8,
 "type": "item",
-"color": "red",
+"color": "green",
 "shape": "triangle"
 },
 {
@@ -190,6 +176,28 @@ const task9 ={
 "color": "null",
 "shape": "null"
 },
+
+{
+    "x": 7,
+    "y": 8,
+    "type": "item",
+    "color": "red",
+    "shape": "square"
+    },
+    {
+        "x": 7,
+        "y": 8,
+        "type": "item",
+        "color": "green",
+        "shape": "square"
+        },
+        {
+            "x": 7,
+            "y": 8,
+            "type": "item",
+            "color": "red",
+            "shape": "circle"
+            },
 {
 "x": -1,
 "y": 6,
@@ -299,21 +307,7 @@ const task9 ={
 "x": 7,
 "y": 4,
 "type": "item",
-"color": "blue",
-"shape": "circle"
-},
-{
-"x": 7,
-"y": 4,
-"type": "item",
-"color": "blue",
-"shape": "circle"
-},
-{
-"x": 7,
-"y": 4,
-"type": "item",
-"color": "blue",
+"color": "red",
 "shape": "square"
 },
 {
@@ -321,6 +315,20 @@ const task9 ={
 "y": 4,
 "type": "item",
 "color": "blue",
+"shape": "circle"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "green",
 "shape": "circle"
 },
 {
@@ -453,7 +461,7 @@ const task9 ={
 "x": 11,
 "y": 1,
 "type": "item",
-"color": "yellow",
+"color": "blue",
 "shape": "square"
 },
 {
@@ -474,14 +482,14 @@ const task9 ={
 "x": 4,
 "y": 0,
 "type": "item",
-"color": "red",
+"color": "yellow",
 "shape": "triangle"
 },
 {
 "x": 4,
 "y": 0,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
 {

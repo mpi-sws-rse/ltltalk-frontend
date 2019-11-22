@@ -1,9 +1,9 @@
 const task7 ={
-"description": "Get all green item at [0,8] then move 3 steps right to pick one red circle and then move to water tile.",
+"description": "get one green and one blue item from [7,4]",
 "water": [ [0,3],[3, 7], [5, 4], [9, 2],[9,8] ], 
 "robot": [
-1,
-2,
+4,
+4,
 []
 ],
 "world": [
@@ -137,36 +137,15 @@ const task7 ={
 "x": 3,
 "y": 8,
 "type": "item",
-"color": "red",
+"color": "green",
 "shape": "circle"
 },
 {
 "x": 3,
 "y": 8,
 "type": "item",
-"color": "red",
-"shape": "circle"
-},
-{
-"x": 3,
-"y": 8,
-"type": "item",
-"color": "red",
-"shape": "circle"
-},
-{
-"x": 3,
-"y": 8,
-"type": "item",
-"color": "red",
-"shape": "circle"
-},
-{
-"x": 4,
-"y": 8,
-"type": "item",
-"color": "yellow",
-"shape": "circle"
+"color": "green",
+"shape": "square"
 },
 {
 "x": 6,
@@ -196,6 +175,28 @@ const task7 ={
 "color": "null",
 "shape": "null"
 },
+
+{
+    "x": 7,
+    "y": 8,
+    "type": "item",
+    "color": "red",
+    "shape": "square"
+    },
+    {
+        "x": 7,
+        "y": 8,
+        "type": "item",
+        "color": "green",
+        "shape": "square"
+        },
+        {
+            "x": 7,
+            "y": 8,
+            "type": "item",
+            "color": "red",
+            "shape": "circle"
+            },
 {
 "x": -1,
 "y": 6,
@@ -300,6 +301,34 @@ const task7 ={
 "type": "wall",
 "color": "null",
 "shape": "null"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "red",
+"shape": "square"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "blue",
+"shape": "circle"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "green",
+"shape": "square"
+},
+{
+"x": 7,
+"y": 4,
+"type": "item",
+"color": "green",
+"shape": "circle"
 },
 {
 "x": 12,
@@ -431,8 +460,8 @@ const task7 ={
 "x": 11,
 "y": 1,
 "type": "item",
-"color": "red",
-"shape": "triangle"
+"color": "blue",
+"shape": "square"
 },
 {
 "x": 12,
@@ -449,26 +478,19 @@ const task7 ={
 "shape": "null"
 },
 {
-"x": 0,
-"y": 8,
+"x": 4,
+"y": 0,
 "type": "item",
-"color": "green",
+"color": "yellow",
 "shape": "triangle"
 },
 {
-"x": 0,
-"y": 8,
+"x": 4,
+"y": 0,
 "type": "item",
-"color": "green",
+"color": "red",
 "shape": "triangle"
 },
-{
-    "x": 0,
-    "y": 8,
-    "type": "item",
-    "color": "green",
-    "shape": "circle"
-    },
 {
 "x": 12,
 "y": 0,

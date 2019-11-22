@@ -1,7 +1,7 @@
  
 const task0 = {
 "water": [ [3, 7], [5, 1], [4, 3] ], 
-"description": "Get one green triangle from location [10,8] then move 3 steps left direction and pick one square.",
+"description": "Step into water and then visit [6,4].",
 "robot": [
 2,
 4,
