@@ -201,9 +201,12 @@ const Actions = {
 			);
 
 			context.world = currentState;
-			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
-				keyPressHistRemembered
-			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
+			let examples = [{"context":context, "init-path":keyPressHistRemembered}]
+//			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
+//				keyPressHistRemembered
+//			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
+			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${JSON.stringify(currentQueryRemembered)}&examples=${JSON.stringify(examples)}&sessionId=${sessionId}`;
+
 
 			console.log(url)
 			return EXAMPLEquery(url)
