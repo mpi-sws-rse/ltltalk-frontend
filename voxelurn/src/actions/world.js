@@ -8,6 +8,7 @@ import { persistStore } from 'redux-persist';
 import { getStore } from '../';
 import { STATUS } from 'constants/strings';
 import { worldConfig, WORLD_HEIGHT, WORLD_WIDTH } from 'constants/defaultMap';
+import { EXAMPLE_SERVER_URL } from "constants/strings"
 
 import { taskWorldConfig } from 'constants/taskWorldMap';
 
@@ -106,7 +107,7 @@ const Actions = {
 			console.log("query text is");
 			console.log(queryText);
 			const { candidates, path, world, trace, actions } = getState().world.currentResponse;
-			let url = encodeURI(`http://127.0.0.1:5000/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
+			let url = encodeURI(`${EXAMPLE_SERVER_URL}/user-decision-update?session-id=${sessionId}&decision=${decision}&sessionId=${sessionId}&candidates=${(JSON.stringify(
 				candidates))}&path=${(JSON.stringify(path))}&context=${(JSON.stringify(world))}&actions=${JSON.stringify(actions)}`);
 
 			console.log(url);
@@ -202,10 +203,7 @@ const Actions = {
 
 			context.world = currentState;
 			let examples = [{"context":context, "init-path":keyPressHistRemembered}]
-//			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${currentQueryRemembered}&path=${JSON.stringify(
-//				keyPressHistRemembered
-//			)}&context=${JSON.stringify(context)}&sessionId=${sessionId}`;
-			let url = `http://127.0.0.1:5000/get-candidate-spec?query=${JSON.stringify(currentQueryRemembered)}&examples=${JSON.stringify(examples)}&sessionId=${sessionId}`;
+			let url = `${EXAMPLE_SERVER_URL}/get-candidate-spec?query=${JSON.stringify(currentQueryRemembered)}&examples=${JSON.stringify(examples)}&sessionId=${sessionId}`;
 
 
 			console.log(url)
@@ -445,7 +443,7 @@ const Actions = {
 
 
 		
-						let url = `http://127.0.0.1:5000/get-path?context=${JSON.stringify(Examplecontext)}&formulas=${JSON.stringify(formulasList)}`;
+						let url = `${EXAMPLE_SERVER_URL}/get-path?context=${JSON.stringify(Examplecontext)}&formulas=${JSON.stringify(formulasList)}`;
 
 
 						console.log(url)
