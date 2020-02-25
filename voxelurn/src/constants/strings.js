@@ -50,5 +50,5 @@ export const REDEFINE = "Redefine"
 export const FINISH_DEFINITION = "Finish Definition"
 
 function getDomain() {
-  return window.location.href.match(/^(.*:\/\/[\w\.]+):?\/?/)[1];
+  return window.location.href.match(/^(.*:\/\/[\w\.-]+):?\/?/)[1];
 }
