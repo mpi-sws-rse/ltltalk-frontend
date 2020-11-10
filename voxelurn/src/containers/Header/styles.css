@@ -47,7 +47,7 @@
 
 
 .Header-nav {
-  align-self: flex-end;
+  align-self: flex-center;
   height: 100%;
   display: flex;
 }

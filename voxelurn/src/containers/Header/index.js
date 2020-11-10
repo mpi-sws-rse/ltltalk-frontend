@@ -10,17 +10,19 @@ import "./styles.css"
 const Header = ({ query, signedIn, sessionId, email, dispatch }) => (
   <div className="Header">
     <div className="Header-logo">
-      <span>Flipper</span>
-      <span className="Header-sublogo">talk to your robot</span>
+      <span>LTLTalk</span>
+      <span className="Header-sublogo">to your robot</span>
       <span className="Header-subsublogo"> <a href={IMPRINT}>[Imprint]</a> </span>
       <span className="Header-subsublogo"> <a href={DATA_PROTECTION}>[Data protection]</a> </span>
     </div>
     <div className="Header-nav">
       <NavLink to={{ pathname: "/about", query: query }} activeClassName="active"><div>About</div></NavLink>
       <NavLink to={{ pathname: "/build", query: query }} activeClassName="active"><div>Play</div></NavLink>
-      <NavLink to={{ pathname: "/tutorial", query: query }} activeClassName="active"><div>Tutorial</div></NavLink>
+
+      {/*<NavLink to={{ pathname: "/tutorial", query: query }} activeClassName="active"><div>Tutorial</div></NavLink>
       <NavLink to={{ pathname: "/reference", query: query }} activeClassName="active"><div>Reference</div></NavLink>
       <NavLink to={{ pathname: "/syntaxsemantics", query: query }} activeClassName="active"><div>Syntax and Semantics</div></NavLink>
+      */}
       {/* <div className="task-menu__panel"> */}
 
       {/* <NavLink id="tasks-nav" to={{ pathname: "/tasks", query: query }} activeClassName="active"><div>Tasks</div></NavLink>  */}
