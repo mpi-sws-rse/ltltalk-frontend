@@ -7,12 +7,13 @@
 const DEFAULT_IMPRINT = "/";
 const DEFAULT_DATA = "/";
 export const DEFAULT_SEMPRE_SERVER_URL = "//ltltalk.mpi-sws.org/";
+export const DEFAULT_EXAMPLES_SERVER_URL = "//ltltalk.mpi-sws.org/";
 
 //const DEFAULT_COMMUNITY_SERVER_URL = "http://jonsson.stanford.edu:8403"
 export const USER_INPUT_FIELD = "user-input-field";
 export const SEMPRE_SERVER_URL = process.env.REACT_APP_SEMPRE_SERVER ? process.env.REACT_APP_SEMPRE_SERVER : DEFAULT_SEMPRE_SERVER_URL;
 //export const EXAMPLE_SERVER_URL = getDomain()+":5000";
-export const EXAMPLE_SERVER_URL = "//tlttalk.mpi-sws.org";
+export const EXAMPLE_SERVER_URL = process.env.REACT_APP_EXAMPLES_SERVER ? process.env.REACT_APP_EXAMPLES_SERVER : DEFAULT_EXAMPLES_SERVER_URL;
 
 
 export const IMPRINT = process.env.REACT_APP_IMPRINT_LINK ? process.env.REACT_APP_IMPRINT_LINK : DEFAULT_IMPRINT;
