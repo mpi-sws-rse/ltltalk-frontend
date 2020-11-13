@@ -1,18 +1,16 @@
-# Interactive semantic parsing client
-Currently in progress, and focuses on a blocks world.
 
-## Information
-
-- The older version associated with our paper [Learning language games through interaction](http://arxiv.org/abs/1606.02447) is in the [acl16-demo branch](https://github.com/sidaw/shrdlurn/tree/acl16-demo).
-
-- The parser uses on [SEMPRE](https://github.com/percyliang/sempre) and with modifications for actions and interaction in [my fork](https://github.com/sidaw/sempre-interactive).
+Blocks world of robots, building upon the [Voxelurn world](https://github.com/sidaw/shrdlurn) 
 
 
-## Developer Instructions
 
-#### Installation
+## Installation
 
 To install, simply run `yarn install`. This will install all the needed node dependencies. (Install yarn as described [here](https://yarnpkg.com/lang/en/docs/install/).)
+
+## Running
+To start the client, run `yarn start` . This will open the default browser with the client in it. 
+(If the browser does not open, go to http://localhost:3000) 
+
 
 #### Development
 
