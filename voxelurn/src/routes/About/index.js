@@ -40,6 +40,8 @@ class Information extends Component {
             (This process is not deterministic so the number of questions can vary.)</li>
             <li> once the process is finished, try <em>take every triangle item from 10, 8</em> .
             Now, the system should be able to parse it and execute the action --> press the <b>accept</b> button.</li>
+            <li> <b>important:</b> while the definitions are meant to be shared across different users, that option is disabled in this demo.
+            That way, everybody can try the example from this Quick Start. The definitions remain in use until reloading the page.</li>
 		</ul>
         <h2>More</h2>
           <ul>
